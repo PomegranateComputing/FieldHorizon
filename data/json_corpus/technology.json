@@ -1,0 +1,47 @@
+[
+  {
+    "id": "technology_0001",
+    "group_name": "technology",
+    "category": "technology",
+    "tradition": "technological",
+    "statement": "Every technology reshapes the soul that adopts it.",
+    "gloss": "Tools modify their users.",
+    "tags": ["technology"]
+  },
+  {
+    "id": "technology_0002",
+    "group_name": "technology",
+    "category": "technology",
+    "tradition": "technological",
+    "statement": "Automation removes labor first and judgment later.",
+    "gloss": "Efficiency can outpace wisdom.",
+    "tags": ["technology"]
+  },
+  {
+    "id": "technology_0003",
+    "group_name": "technology",
+    "category": "technology",
+    "tradition": "technological",
+    "statement": "The machine extends intention but cannot supply meaning.",
+    "gloss": "Purpose remains external to mechanism.",
+    "tags": ["technology"]
+  },
+  {
+    "id": "technology_0004",
+    "group_name": "technology",
+    "category": "technology",
+    "tradition": "technological",
+    "statement": "A civilization reveals its theology through its infrastructure.",
+    "gloss": "Every network encodes values.",
+    "tags": ["technology"]
+  },
+  {
+    "id": "technology_0005",
+    "group_name": "technology",
+    "category": "technology",
+    "tradition": "technological",
+    "statement": "Data accumulation is not identical to knowledge.",
+    "gloss": "Quantity does not create understanding.",
+    "tags": ["technology"]
+  }
+]

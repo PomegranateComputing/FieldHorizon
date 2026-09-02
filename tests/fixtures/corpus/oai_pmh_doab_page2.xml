@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <responseDate>2026-07-01T10:00:05Z</responseDate>
+  <request verb="ListRecords" resumptionToken="TOKEN-PAGE-2">https://directory.doabooks.org/oai/request</request>
+  <ListRecords>
+    <record>
+      <header>
+        <identifier>oai:directory.doabooks.org:20.500.12854/54321</identifier>
+        <datestamp>2026-02-01</datestamp>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>Manifestes des avant-gardes européennes</dc:title>
+          <dc:creator>Berthier, Claude</dc:creator>
+          <dc:subject>Manifesto</dc:subject>
+          <dc:subject>Art</dc:subject>
+          <dc:date>2018</dc:date>
+          <dc:type>book</dc:type>
+          <dc:language>fre</dc:language>
+          <dc:rights>https://creativecommons.org/licenses/by-nc/4.0/</dc:rights>
+          <dc:identifier>https://library.oapen.org/handle/20.500.12854/54321</dc:identifier>
+          <dc:identifier>https://library.oapen.org/bitstream/20.500.12854/54321/1/manifestes.pdf</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <resumptionToken/>
+  </ListRecords>
+</OAI-PMH>

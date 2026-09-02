@@ -1,0 +1,73 @@
+.weather-sparkline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.weather-sparkline-tile {
+  padding: 0.6rem 0.7rem;
+}
+
+.weather-sparkline-value {
+  font-size: 1.1rem;
+  color: var(--status-live);
+  margin: 0.15rem 0 0.2rem;
+}
+
+.weather-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  /* FABLE Sec.25's own acceptance criterion ("exploite correctement un
+     écran 2560x1440") -- 900px left most of a wide/ultrawide screen as
+     dead space next to the inspector panel. 1400px keeps the radar chart
+     from stretching to an unreadable width while letting the history/
+     comparison line charts actually use a large screen. */
+  max-width: 1400px;
+}
+
+.weather-timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-scope-toggle {
+  display: flex;
+  gap: 0.4rem;
+}
+.weather-scope-toggle button {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+}
+.weather-scope-toggle button.weather-scope--active {
+  border-color: var(--status-live);
+  color: var(--status-live);
+}
+
+.weather-compare-form {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.8rem;
+  flex-wrap: wrap;
+}
+.weather-compare-form select {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem;
+  max-width: 280px;
+}
+
+.weather-empty-inline {
+  color: var(--text-meta);
+  font-size: 0.8rem;
+  margin: 0.4rem 0 0;
+}
+
+.echart-export-button {
+  margin-top: 0.4rem;
+}

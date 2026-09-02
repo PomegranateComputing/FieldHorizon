@@ -1,0 +1,36 @@
+.global-search {
+  width: 90%;
+  max-width: 640px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.global-search-results {
+  overflow-y: auto;
+  padding-bottom: 0.4rem;
+}
+
+.global-search-group-label {
+  padding: 0.6rem 1rem 0.2rem;
+  color: var(--text-meta);
+}
+
+.global-search-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.global-search-meta {
+  color: var(--text-meta);
+  margin-left: 0.5rem;
+}
+
+.global-search-event {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-machine);
+  font-size: 0.85rem;
+}

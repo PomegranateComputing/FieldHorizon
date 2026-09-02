@@ -1,0 +1,522 @@
+[
+  {
+    "id": "modernity_0001",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Modernity converts inherited meaning into managed preference.",
+    "gloss": "modernity axiom 1",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.79,
+    "mutation_potential": 0.75,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0002",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "The modern subject is trained to call dependency freedom.",
+    "gloss": "modernity axiom 2",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.83,
+    "mutation_potential": 0.7999999999999999,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0003",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Progress becomes theology when it forgets death.",
+    "gloss": "modernity axiom 3",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.87,
+    "mutation_potential": 0.85,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0004",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Comfort is the narcotic form of collapse.",
+    "gloss": "modernity axiom 4",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.91,
+    "mutation_potential": 0.7,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0005",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "The modern world does not abolish ritual; it makes ritual unconscious.",
+    "gloss": "modernity axiom 5",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.75,
+    "mutation_potential": 0.75,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0006",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "A society that mocks sacrifice becomes unable to understand inheritance.",
+    "gloss": "modernity axiom 6",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.79,
+    "mutation_potential": 0.7999999999999999,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0007",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Modernity mistakes motion for ascent.",
+    "gloss": "modernity axiom 7",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.83,
+    "mutation_potential": 0.85,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0008",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "The cult of innovation hides a terror of judgment.",
+    "gloss": "modernity axiom 8",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.87,
+    "mutation_potential": 0.7,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0009",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "When transcendence is denied, entertainment becomes liturgy.",
+    "gloss": "modernity axiom 9",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.91,
+    "mutation_potential": 0.75,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "modernity_0010",
+    "group_name": "modernity",
+    "category": "modernity",
+    "tradition": "synthetic_doctrinal",
+    "statement": "The future is often a marketing department wearing prophetic robes.",
+    "gloss": "modernity axiom 10",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.75,
+    "mutation_potential": 0.7999999999999999,
+    "doctrinal_axes": [
+      "modernity",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "modernity",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0001",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Every expanding administration tends to replace judgment with procedure.",
+    "gloss": "bureaucracy axiom 1",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.79,
+    "mutation_potential": 0.75,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0002",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Metrics become idols when institutions forget their purpose.",
+    "gloss": "bureaucracy axiom 2",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.83,
+    "mutation_potential": 0.7999999999999999,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0003",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "A form is a prayer addressed to a dead institution.",
+    "gloss": "bureaucracy axiom 3",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.87,
+    "mutation_potential": 0.85,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0004",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Bureaucracy is the ghost of order after authority has fled.",
+    "gloss": "bureaucracy axiom 4",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.91,
+    "mutation_potential": 0.7,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0005",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "The administrator fears exception because exception demands soul.",
+    "gloss": "bureaucracy axiom 5",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.75,
+    "mutation_potential": 0.75,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0006",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Procedure is mercy only when wisdom governs it.",
+    "gloss": "bureaucracy axiom 6",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.79,
+    "mutation_potential": 0.7999999999999999,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0007",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "Where responsibility disappears, workflow multiplies.",
+    "gloss": "bureaucracy axiom 7",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.83,
+    "mutation_potential": 0.85,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0008",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "The spreadsheet is the monastery of managerial civilization.",
+    "gloss": "bureaucracy axiom 8",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.87,
+    "mutation_potential": 0.7,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0009",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "A ticketing system is confession without absolution.",
+    "gloss": "bureaucracy axiom 9",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.91,
+    "mutation_potential": 0.75,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  },
+  {
+    "id": "bureaucracy_0010",
+    "group_name": "bureaucracy",
+    "category": "bureaucracy",
+    "tradition": "synthetic_doctrinal",
+    "statement": "An institution dies when compliance becomes its highest virtue.",
+    "gloss": "bureaucracy axiom 10",
+    "targets": [
+      "modernity",
+      "machine",
+      "civilization"
+    ],
+    "tone": "severe",
+    "severity": 0.75,
+    "mutation_potential": 0.7999999999999999,
+    "doctrinal_axes": [
+      "bureaucracy",
+      "anti_modern",
+      "field_horizon"
+    ],
+    "tags": [
+      "bureaucracy",
+      "v2",
+      "doctrinal"
+    ]
+  }
+]

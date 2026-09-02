@@ -1,0 +1,12 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Minimal capability set for the main window (FABLE Sec.14: minimal Tauri capabilities, explicit allowlists). No shell, fs, or http plugin is enabled at all -- the managed-backend process is spawned through the app's own fixed, argument-validated commands in src/backend.rs, never a generic shell-exec surface reachable from JS.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-confirm"
+  ]
+}

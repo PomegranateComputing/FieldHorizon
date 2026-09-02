@@ -1,0 +1,12 @@
+{
+  "name": "@field-horizon/contract",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Generates TypeScript types from openapi.json (the frozen API contract). Standalone from the apps/desktop UI scaffold (Phase UI-3) -- this exists solely so the contract can be typed and CI-checked before there is a real consumer of it.",
+  "scripts": {
+    "generate": "openapi-typescript openapi.json -o types.gen.ts"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.4.0"
+  }
+}

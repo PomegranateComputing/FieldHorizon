@@ -1,0 +1,208 @@
+# Field Horizon -- Autonomous Open Corpus Harvester
+# Operating policy.
+#
+# config/corpus_sources.yaml says WHICH catalogues may be contacted.
+# This file says what the harvester is allowed to DO. It is the file to
+# read when answering "what can this system do without me watching it".
+#
+# The contact address is NOT here. It comes from the environment:
+#
+#     export FIELDHORIZON_HARVESTER_CONTACT="you@example.org"
+#
+# It goes into the User-Agent of every request, because institutional
+# harvesting policies require a reachable operator, and hardcoding a
+# personal address into a repository is not acceptable.
+
+# ---------------------------------------------------------------------
+# Defaults for `corpus sync` when no flag overrides them
+# ---------------------------------------------------------------------
+
+# seed    -- small, high-confidence starter corpus (trust >= 0.85)
+# broad   -- multilingual exploration with diversity quotas (recommended)
+# archive -- bulk dumps; NEVER launched implicitly, needs an explicit budget
+profile: broad
+
+# local_research_us    -- accepts US-established public domain, marked
+#                         LOCAL_US_ONLY and barred from worldwide exports
+# release_worldwide    -- only licences that establish worldwide scope
+# strict_public_domain -- public domain / PDM / CC0 only, nothing else
+rights_profile: local_research_us
+
+# ---------------------------------------------------------------------
+# Budget. `max_total_corpus_bytes` and `min_free_disk_bytes` are NOT
+# optional: `sync`, `resume`, and `daemon-once` refuse to start without
+# both. That refusal is deliberate -- an unbounded harvester eventually
+# fills the disk, and doing that to someone's workstation is not an
+# acceptable failure mode.
+#
+# The values below were computed for a machine with ~34 GB free and are
+# deliberately timid. `field-horizon corpus health` will suggest values
+# for your own disk; adopt them consciously, not by default.
+# ---------------------------------------------------------------------
+budget:
+  max_items_per_run: 50
+  max_download_bytes_per_run: 536870912     # 512 MiB per run
+  max_total_corpus_bytes: 4294967296        # 4 GiB ceiling for the whole corpus
+  min_free_disk_bytes: 8589934592           # 8 GiB always kept free
+  max_concurrency: 2
+  per_source_concurrency: 1
+  requests_per_minute: 12                   # global default; per-source overrides win
+  max_retries: 3
+  request_timeout: 30
+  decompressed_size_limit: 536870912        # 512 MiB after decompression
+  max_candidates_per_source: 500            # discovery breadth per source per run
+  max_file_bytes: 67108864                  # 64 MiB single-file ceiling
+
+# ---------------------------------------------------------------------
+# Curation. Relative weights, not a probability distribution -- they need
+# not sum to 1. Negative weights are penalties.
+#
+# The diversity terms score the CORPUS, not the document: a French text
+# is worth more when the corpus is 90% English, and the same document's
+# score changes as the corpus fills. Without them, any relevance score
+# over Western library catalogues converges on the same three hundred
+# famous English books.
+# ---------------------------------------------------------------------
+selection_weights:
+  license_certainty: 0.16
+  source_confidence: 0.10
+  expected_quality: 0.10
+  metadata_completeness: 0.06
+  novelty: 0.12
+  language_diversity: 0.10
+  geographic_diversity: 0.05
+  chronological_diversity: 0.05
+  author_diversity: 0.05
+  tradition_diversity: 0.05
+  thematic_relevance: 0.14
+  canonical_value: 0.06
+  download_cost: -0.05
+  duplication_risk: -0.10
+  ocr_risk: -0.06
+
+# Same seed + same corpus state + same candidate pool = same selection.
+# Changing the seed re-rolls the controlled exploration jitter.
+selection_seed: 20260731
+exploration: 0.05
+
+# Priority languages. Others are accepted -- the pipeline handles them --
+# but score lower on language coverage until the priorities are present.
+languages: [fr, en, de, es, it, la]
+
+# ---------------------------------------------------------------------
+# Quality. NOTE the absence of a minimum word count: declarations,
+# manifestos, charters, speeches, and poems are legitimately short, and a
+# blind length gate would delete the manifesto half of the corpus.
+# Length is judged against the document's own declared form instead.
+# ---------------------------------------------------------------------
+quality:
+  min_score: 0.45
+  max_unreadable_ratio: 0.01
+  max_mojibake_ratio: 0.002
+  min_alpha_ratio: 0.55
+  max_repetition_ratio: 0.35
+  min_language_confidence: 0.35
+  # Catalogues mislabel language constantly, especially for multilingual
+  # and Latin texts. A mismatch is recorded and costs a few points; the
+  # DETECTED language is what gets stored either way.
+  reject_on_language_mismatch: false
+
+# ---------------------------------------------------------------------
+# books / manifesto classification
+# ---------------------------------------------------------------------
+classification:
+  # >= this score is manifesto. 0.5 is the neutral point.
+  manifesto_threshold: 0.5
+  # Consult the local model when one is reachable. Its verdict is
+  # WEIGHTED, never obeyed, and is capped so it cannot overturn confident
+  # deterministic agreement. With no model reachable the deterministic
+  # path takes over silently and the system keeps working.
+  use_llm: true
+  # Empty means "whatever ollama.default_model in config.yaml says".
+  model: ""
+
+# ---------------------------------------------------------------------
+# Rights maintenance
+# ---------------------------------------------------------------------
+# `corpus audit-rights` marks any document whose licence evidence has not
+# been re-verified within this many days as STALE and removes it from the
+# active index. Files, blobs, sidecars, and every prior decision row are
+# preserved -- de-indexing is not deletion.
+evidence_freshness_days: 90
+
+# `corpus daemon-once` exits without working if the last run finished
+# less than this many hours ago, so a timer that fires more often than
+# intended costs nothing.
+sync_interval_hours: 24
+
+# ---------------------------------------------------------------------
+# Export guard
+# ---------------------------------------------------------------------
+export:
+  # Leave false. True would allow US-only public-domain material into a
+  # worldwide release, which is the exact mistake the LOCAL_US_ONLY scope
+  # exists to prevent.
+  allow_local_us_in_worldwide: false
+  require_attribution_file: true
+  include_quarantined: false
+
+# ---------------------------------------------------------------------
+# Network conduct
+# ---------------------------------------------------------------------
+# Leave true. Disabling it does not bypass authentication, paywalls, or
+# rate limits (nothing here can), but it does make the harvester an
+# impolite guest on servers that asked to be left alone.
+respect_robots: true
+
+user_agent_version: "1.0"
+
+# ---------------------------------------------------------------------
+# OCR: NOT IMPLEMENTED.
+#
+# The key exists so its absence is explicit rather than mysterious. No
+# OCR engine is installed and none is invoked. A PDF whose text layer is
+# unusable is rejected to QUALITY_REJECTED with the reason
+# "poor_pdf_text_layer" rather than silently OCR'd at unknown quality.
+# Institution-provided OCR text (Gallica's text mode, for instance) is
+# used where offered -- that is different, and preferred.
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# ARCHIVE CANARY
+#
+# A bounded rehearsal of archive mode. Run this BEFORE archive and read
+# its report before trusting archive with a real budget -- the difference
+# between finding a resume bug at 1000 documents and finding it at
+# 400,000.
+#
+# Every value is a ceiling, not a target. It is deliberately not enough
+# to build a corpus with; it is enough to prove the machinery survives
+# interruption, disk pressure, a provider going away mid-run, and its own
+# checkpoints.
+#
+# `archive` itself is never entered implicitly and is not enabled here.
+# Nothing in this file starts a global archive run.
+# ---------------------------------------------------------------------
+archive_canary:
+  max_items: 1000
+  max_download_bytes: 21474836480          # 20 GB
+  min_free_disk_bytes: 53687091200         # 50 GB
+  # One worker. Concurrency is the fastest way to turn a polite harvester
+  # into a denial-of-service against an institution giving files away.
+  max_concurrency: 1
+  # Frequent enough that an interruption costs minutes of re-work, not a
+  # night of it.
+  checkpoint_every_items: 25
+  # The only non-numeric bound, and the one that matters most: a rights
+  # violation during a bulk run is not a statistic to report at the end.
+  # It is a reason to stop immediately.
+  stop_on_rights_violation: true
+
+ocr:
+  # Three gates, all of which must open. This one is the operator's.
+  enabled: false
+  # Per-run ceiling. Deliberately tiny: OCR is the only operation in this
+  # harvester costed in CPU-hours rather than bytes, and a corpus-wide OCR
+  # run should be a decision somebody made, not something discovered
+  # afterwards. Documents past the ceiling stay in OCR_PENDING -- a
+  # non-error state -- and are picked up by a later run.
+  max_documents_per_run: 5

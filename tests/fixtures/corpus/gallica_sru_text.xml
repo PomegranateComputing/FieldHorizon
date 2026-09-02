@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<srw:searchRetrieveResponse xmlns:ns6="http://gallica.bnf.fr/namespaces/gallica/" xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw="http://www.loc.gov/zing/srw/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <srw:version>1.2</srw:version>
+    <srw:echoedSearchRetrieveRequest>
+        <srw:query>gallica all "domaine public" and dc.type all "monographie" and dc.language all "fre"</srw:query>
+        <srw:version>1.2</srw:version>
+    </srw:echoedSearchRetrieveRequest>
+    <srw:numberOfRecords>535800</srw:numberOfRecords>
+    <srw:extraResponseData>&lt;numberOfRecordsDecollapser&gt;612546&lt;/numberOfRecordsDecollapser&gt;</srw:extraResponseData>
+    <srw:records>
+        <srw:record>
+            <srw:recordSchema>http://www.openarchives.org/OAI/2.0/OAIdc.xsd</srw:recordSchema>
+            <srw:recordPacking>xml</srw:recordPacking>
+            <srw:recordData>
+                <oai_dc:dc>
+                    <dc:creator>Chassiron, Pierre-Charles-Mathieu Martin (1753-1826 ; baron de). Auteur du texte</dc:creator>
+                    <dc:date>1818</dc:date>
+                    <dc:description>Avec mode texte</dc:description>
+                    <dc:format>[4]-48 p. ; in-8</dc:format>
+                    <dc:format>Nombre total de vues : 60</dc:format>
+                    <dc:identifier>https://gallica.bnf.fr/ark:/12148/bpt6k57100852</dc:identifier>
+                    <dc:language>fre</dc:language>
+                    <dc:language>français</dc:language>
+                    <dc:publisher>L. Colas (Paris)</dc:publisher>
+                    <dc:publisher>Mme Huzard (Paris)</dc:publisher>
+                    <dc:relation>Notice du catalogue : http://catalogue.bnf.fr/ark:/12148/cb30226993w</dc:relation>
+                    <dc:rights>domaine public</dc:rights>
+                    <dc:rights>public domain</dc:rights>
+                    <dc:source>Bibliothèque nationale de France, département Droit, économie, politique, F-31338</dc:source>
+                    <dc:title>Essais sur la législation et les règlemens nécessaires en France aux cours d'eau et rivières non navigables et flottables, et qui ne sont pas du domaine public . Par M. de Chassiron,...</dc:title>
+                    <dc:type>text</dc:type>
+                    <dc:type>monographie imprimée</dc:type>
+                    <dc:type>monographie imprimée</dc:type>
+                </oai_dc:dc>
+            </srw:recordData>
+            <srw:recordIdentifier>ark</srw:recordIdentifier>
+            <srw:recordPosition>0</srw:recordPosition>
+            <srw:extraRecordData>
+                <epubFile></epubFile>
+                <highres>https://gallica.bnf.fr/ark:/12148/bpt6k57100852.highres</highres>
+                <infoSupModifiable></infoSupModifiable>
+                <link>https://gallica.bnf.fr/ark:/12148/bpt6k57100852</link>
+                <lowres>https://gallica.bnf.fr/ark:/12148/bpt6k57100852.lowres</lowres>
+                <medres>https://gallica.bnf.fr/ark:/12148/bpt6k57100852.medres</medres>
+                <nqamoyen>81.54</nqamoyen>
+                <provenance>Gallica</provenance>
+                <thumbnail>https://gallica.bnf.fr/ark:/12148/bpt6k57100852.thumbnail</thumbnail>
+                <typedoc>monographies</typedoc>
+                <uri>bpt6k57100852</uri>
+            </srw:extraRecordData>
+        </srw:record>
+        <srw:record>
+            <srw:recordSchema>http://www.openarchives.org/OAI/2.0/OAIdc.xsd</srw:recordSchema>
+            <srw:recordPacking>xml</srw:recordPacking>
+            <srw:recordData>
+                <oai_dc:dc>
+                    <dc:date>1935</dc:date>
+                    <dc:format>1 vol. (71 p.) ; in-8</dc:format>
+                    <dc:format>Nombre total de vues : 76</dc:format>
+                    <dc:identifier>https://gallica.bnf.fr/ark:/12148/bpt6k3412727h</dc:identifier>
+                    <dc:language>fre</dc:language>
+                    <dc:language>français</dc:language>
+                    <dc:publisher>Carus (Paris)</dc:publisher>
+                    <dc:relation>Notice du catalogue : http://catalogue.bnf.fr/ark:/12148/cb333566938</dc:relation>
+                    <dc:rights>domaine public</dc:rights>
+                    <dc:rights>public domain</dc:rights>
+                    <dc:source>Bibliothèque nationale de France, département Droit, économie, politique, 8-F-36868</dc:source>
+                    <dc:title>Domaine public et domaine privé... : droit administratif</dc:title>
+                    <dc:type>text</dc:type>
+                    <dc:type>monographie imprimée</dc:type>
+                    <dc:type>monographie imprimée</dc:type>
+                </oai_dc:dc>
+            </srw:recordData>
+            <srw:recordIdentifier>ark</srw:recordIdentifier>
+            <srw:recordPosition>1</srw:recordPosition>
+            <srw:extraRecordData>
+                <epubFile></epubFile>
+                <highres>https://gallica.bnf.fr/ark:/12148/bpt6k3412727h.highres</highres>
+                <infoSupModifiable></infoSupModifiable>
+                <link>https://gallica.bnf.fr/ark:/12148/bpt6k3412727h</link>
+                <lowres>https://gallica.bnf.fr/ark:/12148/bpt6k3412727h.lowres</lowres>
+                <medres>https://gallica.bnf.fr/ark:/12148/bpt6k3412727h.medres</medres>
+                <nqamoyen>0.0</nqamoyen>
+                <provenance>Gallica</provenance>
+                <thumbnail>https://gallica.bnf.fr/ark:/12148/bpt6k3412727h.thumbnail</thumbnail>
+                <typedoc>monographies</typedoc>
+                <uri>bpt6k3412727h</uri>
+            </srw:extraRecordData>
+        </srw:record>
+        <srw:record>
+            <srw:recordSchema>http://www.openarchives.org/OAI/2.0/OAIdc.xsd</srw:recordSchema>
+            <srw:recordPacking>xml</srw:recordPacking>
+            <srw:recordData>
+                <oai_dc:dc>
+                    <dc:contributor>Ecole universelle (France). Éditeur scientifique</dc:contributor>
+                    <dc:date>1934</dc:date>
+                    <dc:format>1 vol. (71 p.) ; in-12</dc:format>
+                    <dc:format>Nombre total de vues : 76</dc:format>
+                    <dc:identifier>https://gallica.bnf.fr/ark:/12148/bpt6k34127441</dc:identifier>
+                    <dc:language>fre</dc:language>
+                    <dc:language>français</dc:language>
+                    <dc:publisher>Carus (Paris)</dc:publisher>
+                    <dc:relation>Notice du catalogue : http://catalogue.bnf.fr/ark:/12148/cb33330828h</dc:relation>
+                    <dc:rights>domaine public</dc:rights>
+                    <dc:rights>public domain</dc:rights>
+                    <dc:source>Bibliothèque nationale de France, département Droit, économie, politique, 8-F-36558</dc:source>
+                    <dc:title>Domaine public et domaine privé : droit administratif</dc:title>
+                    <dc:type>text</dc:type>
+                    <dc:type>monographie imprimée</dc:type>
+                    <dc:type>monographie imprimée</dc:type>
+                </oai_dc:dc>
+            </srw:recordData>
+            <srw:recordIdentifier>ark</srw:recordIdentifier>
+            <srw:recordPosition>2</srw:recordPosition>
+            <srw:extraRecordData>
+                <epubFile></epubFile>
+                <highres>https://gallica.bnf.fr/ark:/12148/bpt6k34127441.highres</highres>
+                <infoSupModifiable></infoSupModifiable>
+                <link>https://gallica.bnf.fr/ark:/12148/bpt6k34127441</link>
+                <lowres>https://gallica.bnf.fr/ark:/12148/bpt6k34127441.lowres</lowres>
+                <medres>https://gallica.bnf.fr/ark:/12148/bpt6k34127441.medres</medres>
+                <nqamoyen>0.0</nqamoyen>
+                <provenance>Gallica</provenance>
+                <thumbnail>https://gallica.bnf.fr/ark:/12148/bpt6k34127441.thumbnail</thumbnail>
+                <typedoc>monographies</typedoc>
+                <uri>bpt6k34127441</uri>
+            </srw:extraRecordData>
+        </srw:record>
+    </srw:records>
+    <srw:nextRecordPosition>4</srw:nextRecordPosition>
+</srw:searchRetrieveResponse>

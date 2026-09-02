@@ -1,0 +1,65 @@
+{
+ "jobs": {
+  "articlesmultistreamdumprecombine": {
+   "status": "done",
+   "updated": "2026-07-06 13:01:38",
+   "files": {
+    "frwikisource-20260701-pages-articles-multistream.xml.bz2": {
+     "size": 2801978811,
+     "url": "/frwikisource/20260701/frwikisource-20260701-pages-articles-multistream.xml.bz2",
+     "md5": "e3677f219ba38b29c8960928c105b2c0",
+     "sha1": "6b2b4d6012eb54bc8091246c0cfe57513c75799f"
+    },
+    "frwikisource-20260701-pages-articles-multistream-index.txt.bz2": {
+     "size": 28109745,
+     "url": "/frwikisource/20260701/frwikisource-20260701-pages-articles-multistream-index.txt.bz2",
+     "md5": "811b7d5d05d365c36c1964d3305897d3",
+     "sha1": "4a365a1264fc6b76d36cf941fe5a43a6fadba6e1"
+    }
+   }
+  },
+  "articlesdumprecombine": {
+   "status": "done",
+   "updated": "2026-07-06 12:34:01",
+   "files": {
+    "frwikisource-20260701-pages-articles.xml.bz2": {
+     "size": 2557358375,
+     "url": "/frwikisource/20260701/frwikisource-20260701-pages-articles.xml.bz2",
+     "md5": "14ee51e72c5fbbb8cc98888cd40670d2",
+     "sha1": "5769802f4d6c21b0abe846bb9158299df0c8eb90"
+    }
+   }
+  },
+  "articlesmultistreamdump": {
+   "status": "done",
+   "updated": "2026-07-06 13:00:03",
+   "files": {
+    "frwikisource-20260701-pages-articles-multistream1.xml-p1p1500000.bz2": {
+     "size": 823145562,
+     "url": "/frwikisource/20260701/frwikisource-20260701-pages-articles-multistream1.xml-p1p1500000.bz2",
+     "md5": "a249b12aaf61850e70c230b8e7e2eb98",
+     "sha1": "f62ef6c09bde2c43aab92a769a00e32b9ed7f395"
+    },
+    "frwikisource-20260701-pages-articles-multistream-index1.txt-p1p1500000.bz2": {
+     "size": 7401790,
+     "url": "/frwikisource/20260701/frwikisource-20260701-pages-articles-multistream-index1.txt-p1p1500000.bz2",
+     "md5": "94bbc4bad42d174ce6c1dabe27faae3f",
+     "sha1": "2a1986a65b9dc8daa45e136f9d9f7fa52445689f"
+    }
+   }
+  },
+  "metacurrentdumprecombine": {
+   "status": "done",
+   "updated": "2026-07-06 14:34:29",
+   "files": {
+    "frwikisource-20260701-pages-meta-current.xml.bz2": {
+     "size": 2625272965,
+     "url": "/frwikisource/20260701/frwikisource-20260701-pages-meta-current.xml.bz2",
+     "md5": "217de16a27fdf039b86101b6c47e0962",
+     "sha1": "63b70f9905aab1d653ceadd5bb0095faa826363b"
+    }
+   }
+  }
+ },
+ "version": "0.8"
+}

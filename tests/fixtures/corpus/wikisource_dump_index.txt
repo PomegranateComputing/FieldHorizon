@@ -1,0 +1,16 @@
+379126:2006:L’Aigle et l’Escarbot (Collinet)
+379126:2007:Le Lion et le Moucheron (Collinet)
+379126:2008:L’Âne chargé d’éponges, et l’Âne chargé de sel (Collinet)
+379126:2009:Le Lion et le Rat (Collinet)
+379126:2010:La Colombe et la Fourmi
+379126:2011:L’Astrologue qui se laisse tomber dans un puits (Collinet)
+379126:2012:Le Lièvre et les Grenouilles (Collinet)
+379126:2013:Le Coq et le Renard (Collinet)
+1407610:6710:Page:Baus - Étude sur le corset.djvu/1
+1407610:6711:Page:Baus - Étude sur le corset.djvu/11
+1407610:6713:Page:Baus - Étude sur le corset.djvu/12
+629:1315:Auteur:Arthur Rimbaud
+629:1316:Auteur:Charles Baudelaire
+836627:3876:Catégorie:Guy de Maupassant
+629:3:MediaWiki:Monobook.css
+297482:1881:Les Fougerêts : Patrimoine et identité d’une commune de Haute-Bretagne

@@ -1,0 +1,227 @@
+[
+  {
+    "id": "culture_war_0001",
+    "group_name": "culture_war",
+    "category": "elite_capture",
+    "tradition": "political_sociology",
+    "statement": "Elite institutions are perceived as extracting obedience while presenting themselves as moral authorities.",
+    "gloss": "Distilled from raw polemical sentence: The cult of political elites is cultural suicide.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "elite_capture"
+    ],
+    "tags": [
+      "culture_war",
+      "elite_capture"
+    ]
+  },
+  {
+    "id": "culture_war_0002",
+    "group_name": "culture_war",
+    "category": "anti_modernity",
+    "tradition": "political_sociology",
+    "statement": "Late modernity transforms moral confusion into administrative doctrine.",
+    "gloss": "Distilled from raw polemical sentence: Enough with this woke nonsense that is anti-human.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "anti_modernity"
+    ],
+    "tags": [
+      "culture_war",
+      "anti_modernity"
+    ]
+  },
+  {
+    "id": "culture_war_0003",
+    "group_name": "culture_war",
+    "category": "censorship",
+    "tradition": "political_sociology",
+    "statement": "Censorship often arrives disguised as protection from harm.",
+    "gloss": "Distilled from raw polemical sentence: Enough with this DEI nonsense that censors free speech.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "censorship"
+    ],
+    "tags": [
+      "culture_war",
+      "censorship"
+    ]
+  },
+  {
+    "id": "culture_war_0004",
+    "group_name": "culture_war",
+    "category": "secular_religion",
+    "tradition": "political_sociology",
+    "statement": "Modern ideology often behaves like religion while denying transcendence.",
+    "gloss": "Distilled from raw polemical sentence: The cult of woke is a mental illness.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "secular_religion"
+    ],
+    "tags": [
+      "culture_war",
+      "secular_religion"
+    ]
+  },
+  {
+    "id": "culture_war_0005",
+    "group_name": "culture_war",
+    "category": "civilizational_decay",
+    "tradition": "political_sociology",
+    "statement": "Civilizational decline becomes visible when inherited standards are treated as oppression.",
+    "gloss": "Distilled from raw polemical sentence: This woke erodes civilization is why society is collapsing.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "civilizational_decay"
+    ],
+    "tags": [
+      "culture_war",
+      "civilizational_decay"
+    ]
+  },
+  {
+    "id": "culture_war_0006",
+    "group_name": "culture_war",
+    "category": "meritocracy",
+    "tradition": "political_sociology",
+    "statement": "A civilization weakens when competence becomes secondary to symbolic compliance.",
+    "gloss": "Distilled from raw polemical sentence: Woke modernity with its media bias replaces merit with mediocrity every single day.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "meritocracy"
+    ],
+    "tags": [
+      "culture_war",
+      "meritocracy"
+    ]
+  },
+  {
+    "id": "culture_war_0007",
+    "group_name": "culture_war",
+    "category": "institutional_decay",
+    "tradition": "political_sociology",
+    "statement": "Institutions decay when formation is replaced by ideological management.",
+    "gloss": "Distilled from raw polemical sentence: Media bias celebrates weakness and no one wants to admit it.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "institutional_decay"
+    ],
+    "tags": [
+      "culture_war",
+      "institutional_decay"
+    ]
+  },
+  {
+    "id": "culture_war_0008",
+    "group_name": "culture_war",
+    "category": "culture_war",
+    "tradition": "political_sociology",
+    "statement": "Culture war rhetoric reveals unresolved conflicts over authority, identity, and legitimacy.",
+    "gloss": "Distilled from raw polemical sentence: Smash the pronouns that is a mental illness.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "culture_war"
+    ],
+    "tags": [
+      "culture_war",
+      "culture_war"
+    ]
+  },
+  {
+    "id": "culture_war_0009",
+    "group_name": "culture_war",
+    "category": "technology_power",
+    "tradition": "political_sociology",
+    "statement": "Technological power becomes political power when platforms govern speech and memory.",
+    "gloss": "Distilled from raw polemical sentence: The big tech censorship agenda creates division everywhere faster than you can say hypocrisy.",
+    "targets": [
+      "modernity",
+      "elite_capture",
+      "institutional_decay"
+    ],
+    "tone": "severe",
+    "severity": 0.72,
+    "mutation_potential": 0.66,
+    "doctrinal_axes": [
+      "anti_modern",
+      "civilization",
+      "technology_power"
+    ],
+    "tags": [
+      "culture_war",
+      "technology_power"
+    ]
+  }
+]

@@ -1,0 +1,55 @@
+.provenance-form {
+  display: flex;
+  gap: 0.6rem;
+  margin: 1rem 0;
+  max-width: 640px;
+}
+.provenance-form input {
+  flex: 1;
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.4rem 0.6rem;
+}
+
+.provenance-error {
+  color: var(--status-danger);
+}
+
+.provenance-panel {
+  border: var(--border-width) solid var(--border-default);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 900px;
+}
+
+.provenance-lineage-tree {
+  font-size: 0.75rem;
+  color: var(--status-live);
+  white-space: pre;
+  overflow-x: auto;
+  margin: 0.6rem 0 0;
+}
+
+.provenance-fields {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.8rem;
+  font-size: 0.78rem;
+  margin: 0.5rem 0 0;
+}
+.provenance-fields dt {
+  color: var(--text-meta);
+}
+.provenance-fields dd {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.provenance-fields dd.provenance-warning {
+  color: var(--status-danger);
+}
+
+.provenance-section-label {
+  margin-top: 1rem;
+}

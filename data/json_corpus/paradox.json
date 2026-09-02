@@ -1,0 +1,137 @@
+[
+  {
+    "id": "paradox_0001",
+    "group_name": "paradox",
+    "category": "logical_paradox",
+    "tradition": "metalogic",
+    "statement": "A system cannot fully justify the axioms that justify the system.",
+    "gloss": "Foundations require an external ground.",
+    "tags": ["godel","truth","axiom"]
+  },
+  {
+    "id": "paradox_0002",
+    "group_name": "paradox",
+    "category": "metaphysical_paradox",
+    "tradition": "negative_theology",
+    "statement": "The One becomes many without ceasing to be One.",
+    "gloss": "Unity exceeds arithmetic.",
+    "tags": ["unity","tawhid"]
+  },
+  {
+    "id": "paradox_0003",
+    "group_name": "paradox",
+    "category": "civilizational_paradox",
+    "tradition": "anti_modern",
+    "statement": "A society devoted to tolerance becomes intolerant toward rejection of tolerance.",
+    "gloss": "The boundary consumes the principle.",
+    "tags": ["modernity"]
+  },
+  {
+    "id": "paradox_0004",
+    "group_name": "paradox",
+    "category": "technological_paradox",
+    "tradition": "technological",
+    "statement": "Communication expands while understanding contracts.",
+    "gloss": "Connection is not communion.",
+    "tags": ["technology"]
+  },
+  {
+    "id": "paradox_0005",
+    "group_name": "paradox",
+    "category": "apocalyptic_paradox",
+    "tradition": "eschatological",
+    "statement": "The end is revealed as something already present at the beginning.",
+    "gloss": "Collapse matures before it appears.",
+    "tags": ["apocalypse"]
+  },
+  {
+    "id": "paradox_0006",
+    "group_name": "paradox",
+    "category": "identity_paradox",
+    "tradition": "philosophy",
+    "statement": "To remain oneself requires constant change.",
+    "gloss": "Identity survives through transformation.",
+    "tags": ["identity"]
+  },
+  {
+    "id": "paradox_0007",
+    "group_name": "paradox",
+    "category": "knowledge_paradox",
+    "tradition": "epistemology",
+    "statement": "The more knowledge expands, the larger the frontier of ignorance becomes.",
+    "gloss": "Discovery enlarges mystery.",
+    "tags": ["knowledge"]
+  },
+  {
+    "id": "paradox_0008",
+    "group_name": "paradox",
+    "category": "power_paradox",
+    "tradition": "political",
+    "statement": "Every concentration of power requires dependence upon those it dominates.",
+    "gloss": "The ruler depends on the ruled.",
+    "tags": ["power"]
+  },
+  {
+    "id": "paradox_0009",
+    "group_name": "paradox",
+    "category": "freedom_paradox",
+    "tradition": "political",
+    "statement": "Absolute freedom destroys the conditions that make freedom possible.",
+    "gloss": "Order and liberty co-generate each other.",
+    "tags": ["freedom"]
+  },
+  {
+    "id": "paradox_0010",
+    "group_name": "paradox",
+    "category": "mathematical_paradox",
+    "tradition": "mathematics",
+    "statement": "Division by zero is forbidden because the operation attempts to extract finite structure from an undefined boundary.",
+    "gloss": "The singularity refuses arithmetic domestication.",
+    "tags": ["math","zero","division"]
+  },
+  {
+    "id": "paradox_0011",
+    "group_name": "paradox",
+    "category": "mathematical_paradox",
+    "tradition": "mathematics",
+    "statement": "Zero signifies nothing while remaining indispensable to everything.",
+    "gloss": "Absence becomes structural.",
+    "tags": ["zero"]
+  },
+  {
+    "id": "paradox_0012",
+    "group_name": "paradox",
+    "category": "time_paradox",
+    "tradition": "metaphysics",
+    "statement": "Every present moment exists only by disappearing.",
+    "gloss": "Presence requires loss.",
+    "tags": ["time"]
+  },
+  {
+    "id": "paradox_0013",
+    "group_name": "paradox",
+    "category": "religious_paradox",
+    "tradition": "theology",
+    "statement": "The Infinite becomes knowable only through symbols that cannot contain it.",
+    "gloss": "Revelation discloses without exhausting.",
+    "tags": ["revelation"]
+  },
+  {
+    "id": "paradox_0014",
+    "group_name": "paradox",
+    "category": "machine_paradox",
+    "tradition": "technological",
+    "statement": "The more a machine imitates thought, the more thought becomes difficult to define.",
+    "gloss": "Simulation obscures essence.",
+    "tags": ["ai","machine"]
+  },
+  {
+    "id": "paradox_0015",
+    "group_name": "paradox",
+    "category": "historical_paradox",
+    "tradition": "civilizational",
+    "statement": "Civilizations often perish from the success of the principles that made them strong.",
+    "gloss": "Victory contains decay.",
+    "tags": ["history"]
+  }
+]

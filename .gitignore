@@ -1,0 +1,63 @@
+# Virtual env
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+
+# Runtime
+logs/
+outputs/
+*.log
+
+# Database
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+*.db
+
+# Platform API local secret
+.fh_token
+
+# Godot export output
+exports/
+
+# User corpora
+data/books/*
+!data/books/.gitkeep
+
+data/manifestos/*
+!data/manifestos/.gitkeep
+
+# Generated JSON
+data/json_corpus/generated_*.json
+
+# Rust build artifacts
+target/
+
+# Backup files
+*.bak
+*.bak*
+
+fieldhorizon_full_project_dump_*.txt
+
+# Packaging build artifacts
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node (contract/ type generation, apps/desktop from Phase UI-3 onward)
+node_modules/
+
+# Autonomous Open Corpus Harvester: harvested blobs, normalized text,
+# licence artifacts, metadata sidecars, quarantine dossiers, locks, and
+# reports. Content-addressed and potentially very large -- reconstructible
+# from the database and the source catalogues, never committed.
+data/corpus/
+
+# Automatically harvested corpus, materialized into the reserved _auto
+# subdirectories. Already covered by data/books/* and data/manifestos/*
+# above; named explicitly so the intent is obvious.
+data/books/_auto/
+data/manifestos/_auto/

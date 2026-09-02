@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- An ALTO page in the shape institutional OCR actually produces:
+     the words live in CONTENT attributes, not in text nodes, so a naive
+     text walk over this file returns an empty string. -->
+<alto xmlns="http://www.loc.gov/standards/alto/ns-v3#">
+  <Description>
+    <MeasurementUnit>pixel</MeasurementUnit>
+    <OCRProcessing ID="OCR1">
+      <ocrProcessingStep>
+        <processingSoftware>
+          <softwareName>Institutional OCR</softwareName>
+          <softwareVersion>2.1</softwareVersion>
+        </processingSoftware>
+      </ocrProcessingStep>
+    </OCRProcessing>
+  </Description>
+  <Layout>
+    <Page ID="P7" PHYSICAL_IMG_NR="7" WIDTH="1401" HEIGHT="2271">
+      <PrintSpace>
+        <TextBlock ID="TB1" HPOS="120" VPOS="180" WIDTH="1100" HEIGHT="90">
+          <TextLine ID="TL1" HPOS="120" VPOS="180">
+            <String ID="S1" CONTENT="DÉCLARATION" WC="0.98"/>
+            <SP/>
+            <String ID="S2" CONTENT="DES" WC="0.99"/>
+            <SP/>
+            <String ID="S3" CONTENT="DROITS" WC="0.97"/>
+          </TextLine>
+        </TextBlock>
+        <TextBlock ID="TB2" HPOS="120" VPOS="320" WIDTH="1100" HEIGHT="400">
+          <TextLine ID="TL2" HPOS="120" VPOS="320">
+            <String ID="S4" CONTENT="Les" WC="0.99"/>
+            <SP/>
+            <String ID="S5" CONTENT="hommes" WC="0.98"/>
+            <SP/>
+            <String ID="S6" CONTENT="naissent" WC="0.96"/>
+            <SP/>
+            <String ID="S7" CONTENT="libres" WC="0.99"/>
+          </TextLine>
+          <TextLine ID="TL3" HPOS="120" VPOS="380">
+            <String ID="S8" CONTENT="et" WC="0.99"/>
+            <SP/>
+            <String ID="S9" CONTENT="demeurent" WC="0.95"/>
+            <SP/>
+            <String ID="S10" CONTENT="égaux" WC="0.94"/>
+            <SP/>
+            <String ID="S11" CONTENT="en" WC="0.99"/>
+            <SP/>
+            <String ID="S12" CONTENT="droits." WC="0.97"/>
+          </TextLine>
+        </TextBlock>
+        <!-- An illustration block carries no String elements at all and
+             must not produce a stray blank block. -->
+        <Illustration ID="IL1" HPOS="200" VPOS="800" WIDTH="600" HEIGHT="400"/>
+      </PrintSpace>
+    </Page>
+  </Layout>
+</alto>

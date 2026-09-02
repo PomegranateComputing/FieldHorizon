@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Produces apps/desktop/dist -- the static output fieldhorizon/server.py
+# mounts at /ui (Phase UI-3 item 2). Also the frontend half of what `tauri
+# build` packages for the desktop target.
+
+cd "$(git rev-parse --show-toplevel)/apps/desktop"
+
+if [ ! -d node_modules ]; then
+    echo "installing frontend dependencies (node_modules missing)..." >&2
+    npm install
+fi
+
+npm run build
+echo "built: apps/desktop/dist"

@@ -1,0 +1,79 @@
+.semantics-kind-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.semantics-kind-tabs button {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+.semantics-kind-tabs button.semantics-kind-tab--active {
+  border-color: var(--status-live);
+  color: var(--status-live);
+}
+
+.semantics-top-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 900px;
+}
+
+.semantics-top-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.semantics-top-list button {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.semantics-top-list button.semantics-top-item--active {
+  border-color: var(--status-live);
+  color: var(--status-live);
+}
+
+.semantics-graph-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 1000px;
+}
+
+.semantics-density-warning {
+  color: var(--status-warning);
+  font-size: 0.8rem;
+}
+
+.semantics-node {
+  background: var(--surface-panel-opaque);
+  border: var(--border-width) solid var(--border-default);
+  padding: 0.35rem 0.6rem;
+  width: 160px;
+  cursor: pointer;
+}
+.semantics-node--focus {
+  border-width: 2px;
+}
+.semantics-node-label {
+  font-size: 0.78rem;
+  color: var(--text-primary);
+}
+.semantics-node-count {
+  font-size: 0.7rem;
+  color: var(--text-meta);
+}
+
+.semantics-empty-inline {
+  color: var(--text-meta);
+  font-size: 0.8rem;
+  margin: 0;
+}

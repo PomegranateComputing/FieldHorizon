@@ -1,0 +1,66 @@
+/**
+ * Motion explains a state change (FABLE Sec.6.5) -- nothing here is
+ * decorative-only. Ported from the real site's own idiom (styles.css:287,
+ * 495-501, 542-545): progressive reveal, a pulsing liveness dot, and a
+ * global prefers-reduced-motion guard the site already honors.
+ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.status-dot--active {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(145, 245, 168, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(145, 245, 168, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(145, 245, 168, 0);
+  }
+}
+
+/**
+ * A subtle status-change flash for the console/inspector when a contradiction
+ * surfaces -- FABLE Sec.6.5's "changement subtil lors d'une contradiction,"
+ * not a permanent effect: it runs once and settles.
+ */
+@keyframes contradiction-flash {
+  0% {
+    background-color: rgba(195, 30, 78, 0.18);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+.flash-contradiction {
+  animation: contradiction-flash 1.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

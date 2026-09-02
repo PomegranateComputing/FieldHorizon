@@ -1,0 +1,390 @@
+[
+ {
+  "uuid": "cf38ee05-4341-4fd3-8a07-60b3d697571e",
+  "name": "Experiencing Hektor",
+  "handle": "20.500.12657/31698",
+  "type": "item",
+  "expand": [
+   "parentCollection",
+   "parentCollectionList",
+   "parentCommunityList",
+   "all"
+  ],
+  "lastModified": "2024-03-25 09:51:13.857",
+  "parentCollection": null,
+  "parentCollectionList": null,
+  "parentCommunityList": null,
+  "bitstreams": [
+   {
+    "uuid": "a9e4fbfc-9ec9-443e-b2d3-2e47be791c89",
+    "name": "625763.pdf.txt",
+    "handle": null,
+    "type": "bitstream",
+    "expand": [
+     "parent",
+     "policies",
+     "all"
+    ],
+    "bundleName": "TEXT",
+    "description": "Extracted text",
+    "format": "Text",
+    "mimeType": "text/plain",
+    "sizeBytes": 894553,
+    "parentObject": null,
+    "retrieveLink": "/rest/bitstreams/a9e4fbfc-9ec9-443e-b2d3-2e47be791c89/retrieve",
+    "checkSum": {
+     "value": "3598ab3e721e10e138bada7c629a7801",
+     "checkSumAlgorithm": "MD5"
+    },
+    "sequenceId": 3,
+    "code": "Other open license",
+    "policies": null,
+    "link": "/rest/bitstreams/a9e4fbfc-9ec9-443e-b2d3-2e47be791c89",
+    "metadata": [
+     {
+      "key": "dc.description",
+      "value": "Extracted text",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "description"
+     },
+     {
+      "key": "dc.source",
+      "value": "Written by FormatFilter org.dspace.app.mediafilter.PDFFilter on 2020-04-14T12:54:22Z (GMT).",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "source"
+     },
+     {
+      "key": "dc.title",
+      "value": "625763.pdf.txt",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "title"
+     }
+    ]
+   },
+   {
+    "uuid": "a99f2c0e-a1ab-4e07-a785-9e2cd178a8f6",
+    "name": "9781474245463.pdf.txt",
+    "handle": null,
+    "type": "bitstream",
+    "expand": [
+     "parent",
+     "policies",
+     "all"
+    ],
+    "bundleName": "TEXT",
+    "description": "Extracted text",
+    "format": "Text",
+    "mimeType": "text/plain",
+    "sizeBytes": 877363,
+    "parentObject": null,
+    "retrieveLink": "/rest/bitstreams/a99f2c0e-a1ab-4e07-a785-9e2cd178a8f6/retrieve",
+    "checkSum": {
+     "value": "218ad416c6129cba0d4106940260270c",
+     "checkSumAlgorithm": "MD5"
+    },
+    "sequenceId": 17,
+    "code": "Other open license",
+    "policies": null,
+    "link": "/rest/bitstreams/a99f2c0e-a1ab-4e07-a785-9e2cd178a8f6",
+    "metadata": [
+     {
+      "key": "dc.description",
+      "value": "Extracted text",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "description"
+     },
+     {
+      "key": "dc.source",
+      "value": "Written by FormatFilter org.dspace.app.mediafilter.PDFFilter on 2022-12-03T02:20:04Z (GMT).",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "source"
+     },
+     {
+      "key": "dc.title",
+      "value": "9781474245463.pdf.txt",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "title"
+     }
+    ]
+   },
+   {
+    "uuid": "67056e91-c09d-4b54-9e43-1737049abaef",
+    "name": "9781474245463.pdf",
+    "handle": null,
+    "type": "bitstream",
+    "expand": [
+     "parent",
+     "policies",
+     "all"
+    ],
+    "bundleName": "ORIGINAL",
+    "description": "",
+    "format": "Adobe PDF",
+    "mimeType": "application/pdf",
+    "sizeBytes": 6139991,
+    "parentObject": null,
+    "retrieveLink": "/rest/bitstreams/67056e91-c09d-4b54-9e43-1737049abaef/retrieve",
+    "checkSum": {
+     "value": "a9116fab5e5c22ae8e80d62773feb5d6",
+     "checkSumAlgorithm": "MD5"
+    },
+    "sequenceId": 10,
+    "code": "CC-BY-NC-ND",
+    "policies": null,
+    "link": "/rest/bitstreams/67056e91-c09d-4b54-9e43-1737049abaef",
+    "metadata": [
+     {
+      "key": "dc.description",
+      "value": "",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "description"
+     },
+     {
+      "key": "dc.rights.uri",
+      "value": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "language": null,
+      "schema": "dc",
+      "qualifier": "uri",
+      "element": "rights"
+     },
+     {
+      "key": "dc.source",
+      "value": "9781474245463.pdf",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "source"
+     },
+     {
+      "key": "dc.title",
+      "value": "9781474245463.pdf",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "title"
+     },
+     {
+      "key": "oapen.relation.isbn",
+      "value": "9781474245463",
+      "language": null,
+      "schema": "oapen",
+      "qualifier": "isbn",
+      "element": "relation"
+     }
+    ]
+   },
+   {
+    "uuid": "e67d7fab-b609-4e65-938f-7901964a6819",
+    "name": "9781474245456.epub",
+    "handle": null,
+    "type": "bitstream",
+    "expand": [
+     "parent",
+     "policies",
+     "all"
+    ],
+    "bundleName": "ORIGINAL",
+    "description": "",
+    "format": "EPUB",
+    "mimeType": "application/epub+zip",
+    "sizeBytes": 2306017,
+    "parentObject": null,
+    "retrieveLink": "/rest/bitstreams/e67d7fab-b609-4e65-938f-7901964a6819/retrieve",
+    "checkSum": {
+     "value": "dfee1f1b430fd61a859b7fb408dec4ae",
+     "checkSumAlgorithm": "MD5"
+    },
+    "sequenceId": 11,
+    "code": "CC-BY-NC-ND",
+    "policies": null,
+    "link": "/rest/bitstreams/e67d7fab-b609-4e65-938f-7901964a6819",
+    "metadata": [
+     {
+      "key": "dc.description",
+      "value": "",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "description"
+     },
+     {
+      "key": "dc.rights.uri",
+      "value": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "language": null,
+      "schema": "dc",
+      "qualifier": "uri",
+      "element": "rights"
+     },
+     {
+      "key": "dc.source",
+      "value": "9781474245456.epub",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "source"
+     },
+     {
+      "key": "dc.title",
+      "value": "9781474245456.epub",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "title"
+     },
+     {
+      "key": "oapen.relation.isbn",
+      "value": "9781474245456",
+      "language": null,
+      "schema": "oapen",
+      "qualifier": "isbn",
+      "element": "relation"
+     }
+    ]
+   },
+   {
+    "uuid": "981a715b-81e6-4e0e-a2b7-6e38a33064aa",
+    "name": "9781474245463.pdf.jpg",
+    "handle": null,
+    "type": "bitstream",
+    "expand": [
+     "parent",
+     "policies",
+     "all"
+    ],
+    "bundleName": "THUMBNAIL",
+    "description": "",
+    "format": "JPEG",
+    "mimeType": "image/jpeg",
+    "sizeBytes": 16100,
+    "parentObject": null,
+    "retrieveLink": "/rest/bitstreams/981a715b-81e6-4e0e-a2b7-6e38a33064aa/retrieve",
+    "checkSum": {
+     "value": "2f0342dc5fac27ec9de5518b5e568787",
+     "checkSumAlgorithm": "MD5"
+    },
+    "sequenceId": 12,
+    "code": "All rights reserved",
+    "policies": null,
+    "link": "/rest/bitstreams/981a715b-81e6-4e0e-a2b7-6e38a33064aa",
+    "metadata": [
+     {
+      "key": "dc.description",
+      "value": "",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "description"
+     },
+     {
+      "key": "dc.rights.uri",
+      "value": "All rights reserved",
+      "language": null,
+      "schema": "dc",
+      "qualifier": "uri",
+      "element": "rights"
+     },
+     {
+      "key": "dc.source",
+      "value": "9781474245463.jpg",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "source"
+     },
+     {
+      "key": "dc.title",
+      "value": "9781474245463.pdf.jpg",
+      "language": null,
+      "schema": "dc",
+      "qualifier": null,
+      "element": "title"
+     }
+    ]
+   }
+  ],
+  "archived": "true",
+  "withdrawn": "false",
+  "link": "/rest/items/cf38ee05-4341-4fd3-8a07-60b3d697571e",
+  "metadata": [
+   {
+    "key": "dc.contributor.author",
+    "value": "Kozak, Lynn",
+    "language": "",
+    "schema": "dc",
+    "qualifier": "author",
+    "element": "contributor"
+   },
+   {
+    "key": "dc.date.issued",
+    "value": "2016",
+    "language": "",
+    "schema": "dc",
+    "qualifier": "issued",
+    "element": "date"
+   },
+   {
+    "key": "dc.identifier.uri",
+    "value": "http://library.oapen.org/handle/20.500.12657/31698",
+    "language": "",
+    "schema": "dc",
+    "qualifier": "uri",
+    "element": "identifier"
+   },
+   {
+    "key": "dc.language",
+    "value": "English",
+    "language": "",
+    "code": "eng",
+    "schema": "dc",
+    "qualifier": null,
+    "element": "language"
+   },
+   {
+    "key": "dc.title",
+    "value": "Experiencing Hektor",
+    "language": "",
+    "schema": "dc",
+    "qualifier": null,
+    "element": "title"
+   },
+   {
+    "key": "dc.type",
+    "value": "book",
+    "language": "",
+    "schema": "dc",
+    "qualifier": null,
+    "element": "type"
+   },
+   {
+    "key": "oapen.identifier.doi",
+    "value": "10.5040/9781474245470",
+    "language": "",
+    "schema": "oapen",
+    "qualifier": "doi",
+    "element": "identifier"
+   },
+   {
+    "key": "publisher.name",
+    "value": "Bloomsbury Academic",
+    "language": null,
+    "schema": "publisher",
+    "qualifier": null,
+    "element": "name"
+   }
+  ]
+ }
+]

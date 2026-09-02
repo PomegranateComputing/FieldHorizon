@@ -1,0 +1,135 @@
+.retrieval-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.retrieval-query-input {
+  flex: 1;
+  min-width: 240px;
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.4rem 0.6rem;
+}
+.retrieval-form input[type="number"],
+.retrieval-form input[type="text"] {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem;
+  width: 90px;
+}
+.retrieval-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.retrieval-config-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.retrieval-config-column {
+  min-width: 260px;
+}
+
+.retrieval-weights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+.retrieval-weight-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 40px;
+  align-items: center;
+  gap: 0.5rem;
+}
+.retrieval-weight-value {
+  text-align: right;
+  color: var(--text-secondary);
+}
+
+.retrieval-presets {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.retrieval-presets input,
+.retrieval-presets select {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.3rem 0.5rem;
+}
+
+.retrieval-error {
+  color: var(--status-danger);
+}
+
+.retrieval-results-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.retrieval-plan-meta {
+  font-size: 0.72rem;
+  color: var(--text-meta);
+  margin-bottom: 0.6rem;
+}
+
+.retrieval-candidate-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.retrieval-candidate {
+  border: var(--border-width) solid var(--border-default);
+  padding: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+.retrieval-candidate--excluded {
+  border-color: var(--status-warning);
+  opacity: 0.85;
+}
+
+.retrieval-candidate-header {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  font-size: 0.72rem;
+  color: var(--status-live);
+}
+
+.retrieval-exclusion-reason {
+  color: var(--status-warning);
+  font-size: 0.72rem;
+  margin-top: 0.3rem;
+}
+
+.retrieval-candidate-content {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0.4rem 0;
+}
+
+.retrieval-components {
+  width: 100%;
+  font-size: 0.68rem;
+  color: var(--text-meta);
+  border-collapse: collapse;
+}
+.retrieval-components td {
+  padding: 0.1rem 0.5rem 0.1rem 0;
+}
+
+.retrieval-section-label {
+  margin: 1rem 0 0.4rem;
+}

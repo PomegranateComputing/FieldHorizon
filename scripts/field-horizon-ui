@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+set -euo pipefail
+set -m # job control: each backgrounded job below gets its own process group,
+       # so cleanup can kill the whole group (npm + vite + esbuild's helper,
+       # etc.) by negative PID instead of just the one PID `$!` captures --
+       # npm's dev-server child ends up reparented away from npm almost
+       # immediately, so killing by PID alone leaves it running orphaned.
+
+# Dev mode (FABLE Sec.21): backend + frontend + streamed logs, from the repo
+# root, with real prerequisite checks and clean process teardown -- never a
+# destructive install, never leaving an orphaned child behind.
+
+cd "$(git rev-parse --show-toplevel)"
+
+PORT="${FIELD_HORIZON_PORT:-8777}"
+TOKEN_FILE="${FIELD_HORIZON_TOKEN_FILE:-.fh_token}"
+
+echo "== Field Horizon // Command Interface -- dev =="
+
+if [ ! -f config.yaml ]; then
+    echo "error: config.yaml not found in $(pwd) -- run this from a real Field Horizon checkout." >&2
+    exit 1
+fi
+
+if [ -x .venv/bin/python ]; then
+    PYTHON=.venv/bin/python
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON=python3
+else
+    echo "error: no Python interpreter found (.venv/bin/python or python3 on PATH)." >&2
+    exit 1
+fi
+
+if ! "$PYTHON" -c "import fieldhorizon" >/dev/null 2>&1; then
+    echo "error: the fieldhorizon package isn't importable with $PYTHON." >&2
+    echo "  hint: pip install -e '.[dev]'" >&2
+    exit 1
+fi
+
+if ! command -v npm >/dev/null 2>&1; then
+    echo "error: npm not found on PATH -- Node.js is required for the frontend." >&2
+    exit 1
+fi
+
+if [ ! -d apps/desktop/node_modules ]; then
+    echo "installing frontend dependencies (apps/desktop/node_modules missing)..." >&2
+    (cd apps/desktop && npm install)
+fi
+
+echo "backend:  $PYTHON -m fieldhorizon.cli serve --port $PORT --token-file $TOKEN_FILE"
+echo "frontend: npm run dev (apps/desktop, http://localhost:1420)"
+echo
+
+BACKEND_PID=""
+FRONTEND_PID=""
+CLEANED_UP=""
+
+# `npm run dev` (FRONTEND_PID) spawns vite, which spawns esbuild -- and npm's
+# own process exits/reparents its child away almost immediately, so by the
+# time cleanup runs, vite's ppid no longer points back to FRONTEND_PID at
+# all. Reparenting changes ppid but not the process group `set -m` above
+# assigned when the job was backgrounded, so signaling the whole group
+# (negative PID) still reaches every descendant regardless of who reparented
+# to whom.
+kill_tree() {
+    local pid="$1"
+    if [ -z "$pid" ]; then
+        return
+    fi
+    kill -TERM -- "-$pid" 2>/dev/null || true
+}
+
+cleanup() {
+    if [ -n "$CLEANED_UP" ]; then
+        return
+    fi
+    CLEANED_UP=1
+    echo
+    echo "shutting down..."
+    kill_tree "$FRONTEND_PID"
+    kill_tree "$BACKEND_PID"
+}
+trap cleanup EXIT INT TERM
+
+# Process substitution (not a `| sed` pipe) so $! below captures the real
+# backend/frontend PID, not sed's -- piping directly into `&` would make
+# `kill "$BACKEND_PID"` kill the sed prefixer and orphan the actual process.
+# PYTHONUNBUFFERED=1 and sed -u: both python and sed fully buffer their
+# output once it isn't a tty (which it never is once redirected through
+# process substitution), so without both of these the log lines only appear
+# in bursts or when each process exits, not as they're actually produced.
+PYTHONUNBUFFERED=1 "$PYTHON" -m fieldhorizon.cli serve --port "$PORT" --token-file "$TOKEN_FILE" \
+    > >(sed -u 's/^/[backend]  /') 2>&1 &
+BACKEND_PID=$!
+
+(cd apps/desktop && npm run dev) > >(sed -u 's/^/[frontend] /') 2>&1 &
+FRONTEND_PID=$!
+
+wait "$BACKEND_PID" "$FRONTEND_PID"

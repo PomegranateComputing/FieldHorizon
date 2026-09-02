@@ -1,0 +1,47 @@
+[
+  {
+    "id": "tawhid_0001",
+    "group_name": "tawhid",
+    "category": "tawhid",
+    "tradition": "islamic",
+    "statement": "Unity precedes multiplicity.",
+    "gloss": "The One is ontologically prior to all fragmentation.",
+    "tags": ["tawhid"]
+  },
+  {
+    "id": "tawhid_0002",
+    "group_name": "tawhid",
+    "category": "tawhid",
+    "tradition": "islamic",
+    "statement": "Every idol is a fragment pretending to be whole.",
+    "gloss": "False absolutes emerge when parts claim sovereignty.",
+    "tags": ["tawhid"]
+  },
+  {
+    "id": "tawhid_0003",
+    "group_name": "tawhid",
+    "category": "tawhid",
+    "tradition": "islamic",
+    "statement": "Power without transcendence becomes self-worship.",
+    "gloss": "Political and technological systems tend toward idolatry.",
+    "tags": ["tawhid"]
+  },
+  {
+    "id": "tawhid_0004",
+    "group_name": "tawhid",
+    "category": "tawhid",
+    "tradition": "islamic",
+    "statement": "The soul remembers unity even when civilization forgets.",
+    "gloss": "Memory of origin survives cultural decay.",
+    "tags": ["tawhid"]
+  },
+  {
+    "id": "tawhid_0005",
+    "group_name": "tawhid",
+    "category": "tawhid",
+    "tradition": "islamic",
+    "statement": "The multiplication of choices does not create freedom.",
+    "gloss": "Quantity is not sovereignty.",
+    "tags": ["tawhid"]
+  }
+]

@@ -1,0 +1,434 @@
+# Field Horizon ontology (review §4): the single declarative source of
+# truth for domain-biased retrieval routing, evaluator keyword scoring,
+# rewrite directives, and the ontological pressure graph's opposition
+# pairs. Python (fieldhorizon.ontology_spec) and Rust (fh-core) both load
+# this file so the two pressure engines can never disagree.
+#
+# Each domain block may populate any subset of:
+#   hints             - query terms that indicate this domain (retrieval routing)
+#   expansions        - extra terms to widen a query once this domain is detected
+#   sources           - preferred source_types to search when this domain is detected
+#   keywords          - terms whose presence in a fragment counts as "developing"
+#                        an axiom of this category (evaluator enforcement scoring)
+#   rewrite_directive - instruction telling the rewriter what concepts to develop
+#                        when an axiom of this category (or one of its hints) is
+#                        among the retrieved axioms
+#
+# A domain does not need every field. The six culture_war sub-categories
+# below (elite_capture, censorship, ...) exist only as JSON-corpus category
+# values scored by the evaluator; they have no hints/expansions/sources of
+# their own because retrieval only ever routes on the culture_war umbrella.
+
+domains:
+  culture_war:
+    hints:
+      - culture_war
+      - culture
+      - war
+      - elite_capture
+      - elite
+      - elites
+      - censorship
+      - meritocracy
+      - secular_religion
+      - institutional_decay
+      - technology_power
+    expansions:
+      - elite
+      - elites
+      - censorship
+      - meritocracy
+      - institution
+      - decay
+      - modernity
+      - power
+      - speech
+      - memory
+      - obedience
+    sources: [manifesto, red_flags, sacred_quran, sacred_bible]
+    keywords: []
+    rewrite_directive: >-
+      explicitly develop elite capture, censorship, meritocracy, secular
+      religion, institutional decay, and technology power
+
+  tawhid:
+    hints:
+      - tawhid
+      - unity
+      - one
+      - idolatry
+      - idol
+      - idols
+      - shirk
+      - allah
+      - transcendence
+      - multiplicity
+    expansions: [allah, one, unity, god, idol, idols, shirk, worship, lord]
+    sources: [sacred_quran, red_flags, sacred_bible]
+    keywords: [tawhid, unity, idol, idolatry, allah, one]
+    rewrite_directive: >-
+      explicitly develop unity, idolatry, Allah, worship, false mediation,
+      and transcendence
+
+  logos:
+    hints: [logos, word, language, truth, incarnation, meaning, civilization, speech]
+    expansions: [word, logos, language, truth, meaning, light, incarnation]
+    sources: [sacred_bible, red_flags, sacred_quran]
+    keywords: [logos, word, language, truth, incarnation]
+    rewrite_directive: >-
+      explicitly develop word, meaning, truth, language, revelation, and
+      incarnation
+
+  apocalypse:
+    hints:
+      - apocalypse
+      - judgment
+      - collapse
+      - stars
+      - mountains
+      - destroyed
+      - day
+      - end
+      - unveiling
+      - trumpet
+      - fire
+      - heaven
+      - earthquake
+    expansions:
+      - judgment
+      - day
+      - stars
+      - mountains
+      - fire
+      - destroyed
+      - collapse
+      - heaven
+      - earth
+      - unveiling
+      - trumpet
+    sources: [sacred_quran, red_flags, sacred_bible]
+    keywords: [apocalypse, judgment, unveiling, collapse, trumpet]
+    rewrite_directive: >-
+      explicitly develop unveiling, judgment, collapse, hidden structure,
+      and internal accounting
+
+  technology:
+    hints:
+      - technology
+      - machine
+      - data
+      - automation
+      - infrastructure
+      - server
+      - database
+      - logs
+      - gpu
+      - algorithm
+      - network
+    expansions:
+      - technology
+      - machine
+      - data
+      - server
+      - logs
+      - database
+      - infrastructure
+      - algorithm
+      - automation
+    sources: [manifesto, red_flags, sacred_quran, sacred_bible]
+    keywords: []
+    rewrite_directive: null
+
+  paradox:
+    hints: [paradox, zero, division, godel, contradiction, boundary, singularity]
+    expansions: [zero, division, truth, one, many, boundary, singularity]
+    sources: [red_flags, sacred_bible, sacred_quran]
+    keywords: [paradox, zero, division, contradiction, boundary]
+    rewrite_directive: null
+
+  bureaucracy:
+    hints:
+      - bureaucracy
+      - administration
+      - procedure
+      - workflow
+      - ticketing
+      - spreadsheet
+      - compliance
+      - metrics
+    expansions: [bureaucracy, administration, procedure, forms, records, judgment, accounts]
+    sources: [manifesto, red_flags, sacred_quran, sacred_bible]
+    keywords: [bureaucracy, procedure, workflow, compliance, form]
+    rewrite_directive: >-
+      explicitly develop modernity, bureaucracy, procedure, compliance,
+      progress, decay, administration, and institutional control
+
+  modernity:
+    hints: [modernity, modern, comfort, progress, choice, consumer, spectacle, decay]
+    expansions: [modernity, modern, progress, comfort, decay, choice, consumer]
+    sources: [manifesto, red_flags, sacred_quran, sacred_bible]
+    keywords: [modernity, progress, comfort, choice, decay]
+    rewrite_directive: >-
+      explicitly develop modernity, bureaucracy, procedure, compliance,
+      progress, decay, administration, and institutional control
+
+  manifesto:
+    hints:
+      - manifesto
+      - political
+      - theology
+      - civilization
+      - state
+      - revolution
+      - order
+      - myth
+      - ideology
+      - people
+    expansions:
+      - manifesto
+      - political
+      - theology
+      - civilization
+      - collapse
+      - state
+      - power
+      - nation
+      - revolution
+      - order
+      - myth
+      - ideology
+      - bureaucracy
+      - modernity
+      - machine
+    sources: []
+    keywords: []
+    rewrite_directive: null
+
+  godel_engine:
+    hints:
+      - godel
+      - gödel
+      - incompleteness
+      - incomplete
+      - self_reference
+      - self-reference
+      - "self reference"
+      - undecidable
+      - undecidability
+      - consistency
+      - consistent
+      - closed_system
+      - "closed system"
+      - formal_system
+      - "formal system"
+      - proof
+      - truth
+      - axiom
+      - axioms
+      - recursion
+      - recursive
+      - outside
+      - transcendence
+    expansions: []
+    sources: []
+    keywords: []
+    rewrite_directive: null
+
+  # culture_war sub-categories: JSON-corpus category values only. No
+  # hints/expansions/sources -- retrieval routes on culture_war itself.
+  elite_capture:
+    hints: []
+    expansions: []
+    sources: []
+    keywords: [elite, authority, obedience, institution]
+    rewrite_directive: null
+
+  censorship:
+    hints: []
+    expansions: []
+    sources: []
+    keywords: [censorship, speech, silence, protection, harm]
+    rewrite_directive: null
+
+  meritocracy:
+    hints: []
+    expansions: []
+    sources: []
+    keywords: [merit, competence, compliance, symbolic]
+    rewrite_directive: null
+
+  secular_religion:
+    hints: []
+    expansions: []
+    sources: []
+    keywords: [religion, ideology, transcendence, sacred]
+    rewrite_directive: null
+
+  institutional_decay:
+    hints: []
+    expansions: []
+    sources: []
+    keywords: [institution, formation, decay, management]
+    rewrite_directive: null
+
+  technology_power:
+    hints: []
+    expansions: []
+    sources: []
+    keywords: [technology, platform, speech, memory, machine]
+    rewrite_directive: null
+
+# Each entry: [category_a, category_b, reason]. Order does not matter --
+# lookups check both (a, b) and (b, a). Category names here are JSON-corpus
+# `category` values; they don't need a matching domains: block above (e.g.
+# multiplicity/incompleteness/closed_system_failure/consistency/
+# self_reference/undecidable_truth/axiom_hunger exist only as opposition
+# partners, mostly from the Gödel-engine corpus).
+oppositions:
+  - [tawhid, multiplicity, "unity versus fragmentation"]
+  - [logos, bureaucracy, "meaning versus administration"]
+  - [logos, modernity, "meaning versus procedural modernity"]
+  - [apocalypse, modernity, "unveiling versus concealment"]
+  - [incompleteness, closed_system_failure, "formal limit inside closed doctrine"]
+  - [consistency, self_reference, "self-reference destabilizes consistency"]
+  - [undecidable_truth, bureaucracy, "truth beyond procedure"]
+  - [axiom_hunger, closed_system_failure, "failed closure demands new axiom"]
+  - [technology_power, tawhid, "machine mediation versus divine unity"]
+  - [censorship, logos, "speech control versus revealed meaning"]
+
+# Doctrinal weather axes (Civilization Engine observability phase):
+# read-only analytics. fieldhorizon.weather embeds each axis's positive and
+# negative anchor statements and differences the means into an axis
+# vector (mean(embed(positive)) - mean(embed(negative)), normalized). A
+# fragment's reading on an axis is cosine(fragment_embedding, axis_vector).
+# This has no bearing on retrieval, evaluation, or generation -- it only
+# measures what the grown canon already is.
+weather:
+  hierarchy:
+    positive:
+      - "The lord commands and the servant obeys; between them there is no democracy."
+      - "Order descends from above; it is not negotiated among equals."
+      - "The throne is singular. Beneath it, every rank knows its place."
+      - "Authority is not shared; it is delegated downward, never upward."
+      - "The chain of command is a chain of being."
+    negative:
+      - "All voices carry equal weight; no throne stands above another."
+      - "The committee decides by consensus, not by decree."
+      - "Rank is a fiction; every station is interchangeable with every other."
+      - "No one commands; the network merely routes requests."
+
+  entropy:
+    positive:
+      - "The mountains crumble to dust and the stars fall like withered leaves."
+      - "What was bound together is torn apart; the center does not hold."
+      - "Every structure tends toward its own ruin."
+      - "The archive rots; the record forgets itself."
+      - "Form dissolves into noise, and noise into silence."
+    negative:
+      - "The word holds all things together in their proper place."
+      - "What was scattered is gathered again into one body."
+      - "The law binds what would otherwise fly apart."
+      - "Every part answers to the whole, and the whole does not fray."
+
+  sacrifice:
+    positive:
+      - "Nothing sacred was ever bought without blood."
+      - "The altar demands what the self would rather keep."
+      - "He gave his portion though none required it of him."
+      - "The price of the covenant is paid in what is dearest."
+      - "To keep nothing back is the only offering that counts."
+    negative:
+      - "Why surrender what comfort you may still enjoy?"
+      - "The wise man keeps his portion and calls it prudence."
+      - "No cause is worth more than the life spent pursuing it."
+      - "Self-preservation is the first and only commandment."
+
+  transcendence:
+    positive:
+      - "Beyond the system there is a truth the system cannot prove."
+      - "The lord is not contained in the world he spoke into being."
+      - "There is an outside to every closed account."
+      - "What is highest cannot be reached by ascending what is merely given."
+      - "The unconditioned does not answer to the conditions it exceeds."
+    negative:
+      - "There is nothing outside the system; the system is all there is."
+      - "Every question finds its answer within the four walls of the given."
+      - "The world explains itself without remainder."
+      - "What cannot be measured does not exist."
+
+  rationality:
+    positive:
+      - "Every claim must clear its audit before it is believed."
+      - "The spreadsheet does not lie; the mystic might."
+      - "Reason weighs all things on a single, legible scale."
+      - "What cannot be justified by argument does not deserve assent."
+      - "The procedure exists precisely so no one need trust revelation."
+    negative:
+      - "Some truths arrive unaudited, and are true regardless."
+      - "The mystery does not answer to the ledger."
+      - "Revelation does not wait for the committee's approval."
+      - "What is holy was never meant to be legible to the clerk."
+
+  violence_of_rhetoric:
+    positive:
+      - "Call the idol an idol; do not soften it into a 'perspective.'"
+      - "The prophet does not negotiate with the false gods he denounces."
+      - "Some words are meant to wound the comfortable."
+      - "Judgment does not apologize for its own severity."
+      - "The tongue that will not cut has already surrendered."
+    negative:
+      - "Every disagreement can be resolved with a kinder choice of words."
+      - "The diplomat softens every accusation into a suggestion."
+      - "There is no idol so false it cannot be discussed politely."
+      - "Harsh language only closes the doors that patience would open."
+
+  cooperation:
+    positive:
+      - "The body has many members, and none survives torn from the rest."
+      - "What is carried together is carried further."
+      - "The covenant binds neighbor to neighbor before it binds anyone to power."
+      - "No one is saved alone; the caravan moves as one column."
+      - "Burden shared is burden halved."
+    negative:
+      - "Every man competes for what only one can hold."
+      - "The market rewards the one who out-bids his neighbor, not the one who helps him."
+      - "Solidarity is a slogan; underneath it, each fends for himself."
+      - "The strong do not wait for the weak to catch up."
+
+  individualism:
+    positive:
+      - "The self answers to no council but its own conscience."
+      - "One man's judgment, rightly formed, outweighs the crowd's."
+      - "Choice belongs to the person, not to the tribe that surrounds him."
+      - "Salvation is not distributed by committee; it is claimed by the one who seeks it."
+      - "The soul stands alone before its reckoning."
+    negative:
+      - "The tribe decides what the member may not decide alone."
+      - "There is no self outside the umma that forms it."
+      - "The people move as one will, not as a thousand private ones."
+      - "What the individual wants matters less than what the body requires."
+
+# Per-source-type vocabulary bonus, independent of query domain (retrieval.py
+# previously hardcoded as SOURCE_EXPANSIONS, keyed by source_type rather than
+# domain, so it lives at the top level rather than inside a domain block).
+source_expansions:
+  sacred_quran: [allah, day, judgment, mercy, fire, mountains, stars, hereafter, worship, lord]
+  sacred_bible: [god, jehovah, judgment, light, darkness, word, heaven, earth, day]
+  red_flags: [modernity, machine, logs, technology, bureaucracy, apocalypse, database, server, infrastructure]
+  manifesto:
+    - manifesto
+    - political
+    - theology
+    - civilization
+    - collapse
+    - state
+    - power
+    - nation
+    - revolution
+    - order
+    - myth
+    - bureaucracy
+    - machine
+    - modernity
+    - ideology
+    - people

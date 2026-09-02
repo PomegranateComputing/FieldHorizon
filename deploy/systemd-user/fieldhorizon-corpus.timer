@@ -1,0 +1,32 @@
+# Timer for the Field Horizon corpus harvester.
+#
+# DISABLED BY DEFAULT. Installing the unit files does not start anything;
+# tools/install_corpus_timer.sh only enables the timer when you pass
+# --enable, and prints the command to do it later otherwise.
+
+[Unit]
+Description=Field Horizon corpus harvester schedule
+Documentation=file://%h/Projects/FieldHorizon/docs/CORPUS_OPERATIONS.md
+
+[Timer]
+# Daily. The harvester's own sync_interval_hours is the real gate -- a
+# timer that fires more often than that costs one process start and an
+# immediate exit, so the two settings cannot fight.
+OnCalendar=daily
+
+# Spread the start across an hour so a machine with several timers does
+# not run everything at midnight, and so institutional servers do not see
+# every Field Horizon installation arrive at once.
+RandomizedDelaySec=3600
+
+# Catch up after the machine was off. Without this a laptop that is never
+# on at the scheduled time simply never harvests.
+Persistent=true
+
+# systemd refuses to start a second instance of a oneshot service that is
+# already running, so an overrunning harvest cannot be doubled up. The
+# harvester's own PID lockfile is the second line of defence.
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target

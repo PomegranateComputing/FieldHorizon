@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fieldhorizon"
+version = "3.2.0"
+description = "Field Horizon: a closed, local, reflective doctrine-synthesis engine."
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "requests==2.34.2",
+    "PyYAML==6.0.3",
+    "rich==15.0.0",
+    "numpy==2.5.1",
+    "fastapi==0.139.2",
+    "uvicorn==0.51.0",
+    "pydantic==2.13.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.15.20",
+    "mypy==2.2.0",
+    "httpx==0.28.1",
+]
+vec = [
+    "sqlite-vec==0.1.9",
+]
+
+[project.scripts]
+field-horizon = "fieldhorizon.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["fieldhorizon*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+# `tests/` is not a package, so without this mypy reaches files under it by
+# two names at once ("corpus_helpers" and "tests.corpus_helpers") and refuses
+# to check anything at all.
+explicit_package_bases = true
+mypy_path = "."

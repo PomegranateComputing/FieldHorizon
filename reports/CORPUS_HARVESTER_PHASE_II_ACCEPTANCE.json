@@ -1,0 +1,312 @@
+{
+  "sources": {
+    "standard_ebooks_github": {
+      "role": "DISCOVERY+METADATA+RIGHTS_EVIDENCE+CONTENT_HOSTING",
+      "documents": 10,
+      "requests": 22,
+      "bytes": 261385,
+      "seconds": 41.2,
+      "verdicts": [
+        {
+          "title": "Suspense",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "Hadji Murád",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "The Black Gang",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "Hypatia",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "The Titan",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "The Story of Utopias",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "Sybil",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "The Life of Buffalo Bill",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "The Breaking of the Storm",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        },
+        {
+          "title": "’Midst the Wild Carpathians",
+          "license": "public-domain-us",
+          "scope": "LOCAL_US_ONLY",
+          "limiting": [
+            "source_text"
+          ],
+          "us": "accept",
+          "worldwide": "quarantine",
+          "content_provider": "standard_ebooks_github",
+          "has_download": true
+        }
+      ]
+    },
+    "wikisource_fr_dump": {
+      "role": "DISCOVERY+METADATA+CONTENT_HOSTING+BULK_SNAPSHOT",
+      "release": "frwikisource/20260701",
+      "documents": 20,
+      "transclusion_shells_skipped": 176,
+      "dump_total_bytes": 2801978811,
+      "requests": 7,
+      "bytes": 848149,
+      "fraction_of_dump_read": 0.0303,
+      "seconds": 31.0,
+      "verdicts_summary": "20/20 unknown, us=quarantine, limited by WORK",
+      "with_per_work_determination": 0
+    },
+    "doab_oapen": {
+      "role": "DOAB=DISCOVERY+METADATA / OAPEN=CONTENT+RENDERED_TEXT / rights=nobody",
+      "documents": 40,
+      "bridged_to_oapen": 1,
+      "no_content_provider": 49,
+      "access_blocked": 0,
+      "pre_extracted_text": 1,
+      "content_signal": {
+        "host": "directory.doabooks.org",
+        "search": true,
+        "ai_input": null,
+        "ai_train": false,
+        "use": "reference",
+        "obligations": [
+          "no-ai-training",
+          "use:reference"
+        ],
+        "unknown": [],
+        "raw": "search=yes,ai-train=no,use=reference"
+      },
+      "requests": 17,
+      "bytes": 474618,
+      "seconds": 115.6,
+      "verdicts": [
+        {
+          "title": "A World of Nourishment",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "Chapter Il cantiere di restauro, luogo di formazione e di ed",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "La peur chez les Grecs",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "Bioetica, ambiente e alimentazione : Per una nuova discussio",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "Circular Composites",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "Faith and Secularisation in Religious Colleges and Universit",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "Experiencing Hektor",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        },
+        {
+          "title": "Soviet Nightingales",
+          "license": "unknown",
+          "scope": "WORLDWIDE",
+          "limiting": [
+            "work"
+          ],
+          "us": "quarantine",
+          "worldwide": "quarantine",
+          "content_provider": "",
+          "has_download": false
+        }
+      ]
+    },
+    "gallica_text": {
+      "role": "DISCOVERY+METADATA+RIGHTS_EVIDENCE (no CONTENT_HOSTING)",
+      "documents": 8,
+      "content_fetch": "refused as declared: Gallica text mode for ark:/12148/bpt6k57100852 is behind an altcha anti-bot challenge. The harvester does not solve challenges. This document remains METADATA_ONLY with full rights evidence recorded.",
+      "requests": 1,
+      "bytes": 26026,
+      "seconds": 13.9,
+      "enabled": true,
+      "end_to_end": {
+        "states": {
+          "METADATA_ONLY": 6
+        },
+        "plans": {
+          "METADATA_ONLY": 6
+        },
+        "plan_parked": {
+          "METADATA_ONLY": 6
+        },
+        "errors": 0,
+        "downloaded": 0,
+        "requests": 1,
+        "bytes": 16347,
+        "seconds": 2
+      }
+    }
+  },
+  "totals": {
+    "documents": 78,
+    "requests": 47,
+    "bytes": 1610178,
+    "seconds": 201.0
+  },
+  "phase": "II — Source Graph, Rights Lattice and Institutional Scale",
+  "date": "2026-08-01",
+  "branch": "feature/autonomous-open-corpus-phase-ii",
+  "commits": 15,
+  "tests": 1288,
+  "schema_version": 6,
+  "notes": {
+    "doab_no_content_provider": "49 counts every record on the OAI page; documents is capped at 40 for reporting.",
+    "gallica": "0 documents downloaded BY DESIGN: the adapter declares no CONTENT_HOSTING.",
+    "wikisource_rights": "20/20 quarantine, limited by WORK. Correct: a transcriber licenses only their transcription and cannot establish the status of the work transcribed.",
+    "plan_wiring": "build_plan() now runs between RIGHTS_ACCEPTED and QUEUED. The gap named in the first draft of this report is closed; gallica_text is enabled and parks.",
+    "timer": "not installed, not enabled, not active. No cron entries."
+  }
+}

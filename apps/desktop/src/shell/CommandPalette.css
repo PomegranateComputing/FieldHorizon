@@ -1,0 +1,60 @@
+.palette-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  z-index: 200;
+}
+
+.command-palette {
+  width: 90%;
+  max-width: 560px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.command-palette-input {
+  background: transparent;
+  border: none;
+  border-bottom: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.9rem 1rem;
+  font-family: var(--font-machine);
+  font-size: 1rem;
+}
+.command-palette-input:focus-visible {
+  outline: none;
+}
+
+.command-palette-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.3rem 0;
+  overflow-y: auto;
+}
+
+.command-palette-item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-machine);
+  font-size: 0.85rem;
+}
+.command-palette-item--active {
+  background: var(--surface-raised);
+}
+.command-palette-item--destructive {
+  color: var(--status-danger);
+}
+.command-palette-empty {
+  padding: 0.6rem 1rem;
+  color: var(--text-meta);
+}

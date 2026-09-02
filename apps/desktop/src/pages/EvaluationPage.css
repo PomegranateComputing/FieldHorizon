@@ -1,0 +1,110 @@
+.evaluation-intro {
+  color: var(--text-meta);
+  font-size: 0.8rem;
+  max-width: 700px;
+}
+
+.evaluation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 700px;
+  margin: 1rem 0;
+}
+
+.evaluation-textarea {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.6rem;
+  font-family: var(--font-machine);
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+.evaluation-form button {
+  align-self: flex-start;
+}
+
+.evaluation-error {
+  color: var(--status-danger);
+}
+
+.evaluation-result {
+  padding: 1rem;
+  max-width: 700px;
+}
+
+.evaluation-verdict-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.evaluation-verdict {
+  font-family: var(--font-literary);
+  font-size: 1.4rem;
+  letter-spacing: 0.03em;
+}
+.evaluation-verdict--canon {
+  color: var(--status-live);
+}
+.evaluation-verdict--useful_fragment {
+  color: var(--bone);
+}
+.evaluation-verdict--heresy {
+  color: var(--status-warning);
+}
+.evaluation-verdict--noise {
+  color: var(--status-danger);
+}
+
+.evaluation-final-score {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.evaluation-section-label {
+  margin-top: 1rem;
+}
+
+.evaluation-score-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.evaluation-score-row {
+  display: flex;
+  gap: 0.8rem;
+  font-size: 0.82rem;
+}
+.evaluation-score-row .type-label {
+  flex: 1;
+  color: var(--text-secondary);
+}
+
+.evaluation-weight {
+  color: var(--text-meta);
+  font-size: 0.72rem;
+}
+
+.evaluation-method {
+  margin-top: 0.6rem;
+  font-size: 0.7rem;
+  color: var(--text-meta);
+}
+
+.evaluation-notes-list {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--status-warning);
+}

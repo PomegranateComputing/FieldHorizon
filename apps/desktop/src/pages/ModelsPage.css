@@ -1,0 +1,86 @@
+.models-intro {
+  color: var(--text-meta);
+  font-size: 0.8rem;
+  max-width: 700px;
+}
+
+.models-kind-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.models-kind-tabs button {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+.models-kind-tabs button.models-kind-tab--active {
+  border-color: var(--status-live);
+  color: var(--status-live);
+}
+
+.models-layout {
+  display: flex;
+  gap: 1rem;
+  max-width: 1000px;
+  align-items: flex-start;
+}
+
+.models-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.models-list-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.models-active-badge {
+  color: var(--status-live);
+  font-size: 0.68rem;
+}
+.models-inactive-badge {
+  color: var(--text-meta);
+  font-size: 0.68rem;
+}
+
+.models-detail {
+  flex: 1;
+  padding: 0.8rem;
+}
+
+.models-detail-fields {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+}
+.models-detail-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.15rem 0;
+  border-bottom: var(--border-width) solid var(--border-default);
+}
+.models-detail-row dt {
+  color: var(--text-meta);
+  width: 130px;
+  flex-shrink: 0;
+}
+.models-detail-row dd {
+  margin: 0;
+  color: var(--text-secondary);
+  word-break: break-all;
+}

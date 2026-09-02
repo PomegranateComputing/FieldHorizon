@@ -1,0 +1,116 @@
+/**
+ * Panel/border/shadow/texture treatment (FABLE Sec.6.3-6.4), ported from the
+ * real site's own idiom: near-zero radius on every rectangular surface,
+ * hairline borders, near-invisible additive texture that never competes with
+ * legibility (styles.css:38-46, 65-75, 77-85).
+ */
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-base);
+}
+
+/*
+ * FABLE Sec.16: visible focus. Nothing in this codebase ever set
+ * `outline: none`, so keyboard focus was never actively suppressed -- but it
+ * also was never styled, leaving every focusable element at whatever bare
+ * default the browser/OS happens to render on a near-black background,
+ * inconsistent and easy to lose. :focus-visible (not :focus) so a mouse
+ * click doesn't draw a ring a pointer user never asked for -- only real
+ * keyboard/programmatic focus does.
+ */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.panel {
+  background: var(--surface-panel);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius);
+}
+
+.panel-strong {
+  background: var(--surface-panel-opaque);
+  border: var(--border-width) solid var(--border-strong);
+  border-radius: var(--radius);
+}
+
+.panel-shadow {
+  box-shadow: var(--shadow);
+}
+
+hr,
+.divider {
+  border: none;
+  border-top: var(--border-width) solid var(--border-default);
+  margin: 0;
+}
+
+/**
+ * Live-status affordance (styles.css:287, 401's --terminal cursor, :500's
+ * .pulse-dot) -- the connection indicator and the console's "active"
+ * markers reuse this directly rather than inventing a new one.
+ */
+.status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-live);
+}
+
+/**
+ * Near-invisible additive texture (grain + scanline + grid), opt-in per
+ * surface via these utility classes rather than applied globally -- FABLE
+ * Sec.6.4: "aucun effet ne doit nuire a la lisibilite," so these stay purely
+ * decorative and never carry information.
+ */
+.texture-grain {
+  position: relative;
+}
+.texture-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");
+}
+
+.texture-scanline {
+  position: relative;
+}
+.texture-scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(to bottom, transparent 49%, rgba(145, 245, 168, 0.018) 50%, transparent 51%);
+  background-size: 100% 5px;
+  mix-blend-mode: screen;
+}
+
+.texture-grid {
+  position: relative;
+}
+.texture-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent 86%);
+}

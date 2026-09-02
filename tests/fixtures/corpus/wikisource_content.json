@@ -1,0 +1,30 @@
+{
+  "batchcomplete": true,
+  "query": {
+    "pages": [
+      {
+        "pageid": 101,
+        "ns": 0,
+        "title": "Manifeste du surréalisme",
+        "fullurl": "https://fr.wikisource.org/wiki/Manifeste_du_surr%C3%A9alisme",
+        "revisions": [
+          {
+            "timestamp": "2025-11-02T14:00:00Z",
+            "slots": {
+              "main": {
+                "contentmodel": "wikitext",
+                "content": "{{TextQuality|75%}}\n== Manifeste du surréalisme ==\n\nNous déclarons que l'imagination seule me rend compte de ce qui '''peut être'''. Le surréalisme repose sur la croyance à la réalité supérieure de certaines formes d'associations négligées jusqu'à lui.\n\nNous exigeons la fin du règne de la logique. Il faut détruire les habitudes de l'esprit qui nous enchaînent. [[Rêve|Le rêve]] et la veille doivent se confondre.\n\nNous proclamons une ère nouvelle. Tout membre du mouvement doit se soumettre à cette discipline de l'esprit. Nos ennemis sont le réalisme mesquin et la raison raisonnante.\n\n<ref>Note de l'éditeur, supprimée.</ref>\n\nArticle premier. — La production surréaliste est automatique.\nArticle II. — Nul ne peut se réclamer du mouvement sans y adhérer pleinement.\nArticle III. — Le rêve prime sur l'observation.\n\nÀ bas la littérature de circonstance. Debout, les esprits libres ! Nous appelons chacun à l'action immédiate et à la transformation de la vie.\n\nLa poésie doit être faite par tous. Nous rejetons le compromis. Nous condamnons l'académisme sous toutes ses formes. Vive le surréalisme !\n\n[[Catégorie:Manifestes]]\n\n\nNous affirmons que l'esprit libre ne se soumet à aucune autorité extérieure. La raison raisonnante a régné trop longtemps sur les productions de l'esprit, et il est temps de lui opposer la force des images. Le merveilleux est toujours beau, n'importe quel merveilleux est beau, il n'y a même que le merveilleux qui soit beau.\n\nNous déclarons que le langage a été donné à l'homme pour qu'il en fasse un usage surréaliste. Celui qui se contente de décrire ce qu'il voit renonce à la moitié de ses moyens. L'imagination seule rend compte de ce qui peut être, et c'est assez pour lever un peu le terrible interdit.\n\nTout membre de l'association doit se garder de la littérature de circonstance et du compromis avec le goût établi. Nous exigeons de chacun une fidélité entière aux principes énoncés ici. Nos adversaires sont ceux qui font profession de bon sens et qui appellent raison leur propre timidité.\n\nDebout, les esprits libres ! Nous appelons chacun à l'action immédiate. Une ère nouvelle commence, et elle commence par notre propre acte. Vive le surréalisme, à bas les académies et les prudences.\n"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "pageid": 999,
+        "ns": 0,
+        "title": "Une page absente",
+        "missing": true
+      }
+    ]
+  }
+}

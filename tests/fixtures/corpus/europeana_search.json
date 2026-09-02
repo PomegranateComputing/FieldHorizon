@@ -1,0 +1,47 @@
+{
+  "apikey": "REDACTED",
+  "success": true,
+  "requestNumber": 1,
+  "itemsCount": 3,
+  "totalResults": 3,
+  "nextCursor": "AoJ4nZ2Y",
+  "items": [
+    {
+      "id": "/9200396/BibliographicResource_3000118435146",
+      "title": ["Das Kommunistische Manifest"],
+      "dcCreator": ["Marx, Karl"],
+      "dcSubject": ["Politik", "Sozialismus"],
+      "dcType": ["Text"],
+      "language": ["de"],
+      "year": ["1848"],
+      "rights": ["http://creativecommons.org/publicdomain/mark/1.0/"],
+      "edmIsShownAt": ["https://www.example-library.eu/item/12345"],
+      "edmIsShownBy": ["https://content.example-library.eu/full/12345.txt"],
+      "dataProvider": ["Example National Library"],
+      "country": ["Germany"]
+    },
+    {
+      "id": "/2020601/InCopyrightItem",
+      "title": ["A Twentieth-Century Novel"],
+      "dcCreator": ["Author, Modern"],
+      "dcType": ["Text"],
+      "language": ["en"],
+      "year": ["1961"],
+      "rights": ["http://rightsstatements.org/vocab/InC/1.0/"],
+      "edmIsShownAt": ["https://www.example-library.eu/item/67890"],
+      "edmIsShownBy": ["https://content.example-library.eu/full/67890.pdf"],
+      "dataProvider": ["Example National Library"]
+    },
+    {
+      "id": "/1111111/OffAllowlistItem",
+      "title": ["A Public Domain Text On An Unapproved Host"],
+      "dcCreator": ["Anon"],
+      "dcType": ["Text"],
+      "language": ["fr"],
+      "rights": ["http://creativecommons.org/publicdomain/zero/1.0/"],
+      "edmIsShownAt": ["https://www.example-library.eu/item/11111"],
+      "edmIsShownBy": ["https://random-untrusted-host.example.net/file.txt"],
+      "dataProvider": ["Somewhere Else"]
+    }
+  ]
+}

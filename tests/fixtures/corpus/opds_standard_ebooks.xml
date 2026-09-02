@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:opds="http://opds-spec.org/2010/catalog"
+      xmlns:schema="http://schema.org/">
+  <id>https://standardebooks.org/feeds/opds/all</id>
+  <title>Standard Ebooks</title>
+  <updated>2026-07-01T00:00:00Z</updated>
+  <link rel="self" href="/feeds/opds/all" type="application/atom+xml;profile=opds-catalog"/>
+  <link rel="next" href="/feeds/opds/all?page=2" type="application/atom+xml;profile=opds-catalog"/>
+
+  <entry>
+    <id>https://standardebooks.org/ebooks/jean-jacques-rousseau/the-social-contract</id>
+    <title>The Social Contract</title>
+    <author><name>Jean-Jacques Rousseau</name></author>
+    <contributor><name>G. D. H. Cole</name></contributor>
+    <dc:language>en</dc:language>
+    <dc:issued>1762</dc:issued>
+    <updated>2026-02-10T00:00:00Z</updated>
+    <summary>A treatise on political right and the general will.</summary>
+    <category term="Political science" label="Political science"/>
+    <category term="Philosophy" label="Philosophy"/>
+    <rights>Public domain in the United States. Users located outside of the United States must check their local laws before using this ebook. Original content released to the public domain via the Creative Commons CC0 1.0 Universal Public Domain Dedication.</rights>
+    <link rel="alternate" type="text/html" href="/ebooks/jean-jacques-rousseau/the-social-contract"/>
+    <link rel="http://opds-spec.org/acquisition/open-access"
+          href="/ebooks/jean-jacques-rousseau/the-social-contract/downloads/social-contract.epub"
+          type="application/epub+zip" length="284000"/>
+    <link rel="http://opds-spec.org/acquisition/open-access"
+          href="/ebooks/jean-jacques-rousseau/the-social-contract/downloads/social-contract.txt"
+          type="text/plain" length="410000"/>
+  </entry>
+
+  <entry>
+    <id>https://standardebooks.org/ebooks/mary-shelley/frankenstein</id>
+    <title>Frankenstein</title>
+    <author><name>Mary Shelley</name></author>
+    <dc:language>en</dc:language>
+    <dc:issued>1818</dc:issued>
+    <category term="Fiction" label="Fiction"/>
+    <category term="Novel" label="Novel"/>
+    <rights>CC0 1.0 Universal</rights>
+    <link rel="alternate" type="text/html" href="/ebooks/mary-shelley/frankenstein"/>
+    <link rel="http://opds-spec.org/acquisition/open-access"
+          href="/ebooks/mary-shelley/frankenstein/downloads/frankenstein.epub"
+          type="application/epub+zip" length="512000"/>
+  </entry>
+
+  <entry>
+    <id>https://example.org/ebooks/restricted-title</id>
+    <title>A Borrowable Title</title>
+    <author><name>Anonymous</name></author>
+    <dc:language>en</dc:language>
+    <rights>All rights reserved</rights>
+    <link rel="http://opds-spec.org/acquisition/borrow"
+          href="/borrow/restricted" type="application/epub+zip"/>
+  </entry>
+</feed>

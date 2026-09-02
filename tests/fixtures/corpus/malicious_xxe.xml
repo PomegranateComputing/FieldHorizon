@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE feed [
+  <!ENTITY xxe SYSTEM "file:///etc/passwd">
+  <!ENTITY lol "lol">
+  <!ENTITY lol2 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
+  <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
+]>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>&xxe;</title>
+  <entry><id>evil</id><title>&lol3;</title></entry>
+</feed>

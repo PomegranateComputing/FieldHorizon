@@ -1,0 +1,131 @@
+.dreams-section-label {
+  margin: 1.2rem 0 0.5rem;
+}
+
+.dreams-run-list,
+.dreams-proposal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 900px;
+}
+
+.dreams-run-card {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+}
+.dreams-run-card--selected {
+  border-color: var(--status-live);
+}
+
+.dreams-run-header {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.78rem;
+  flex-wrap: wrap;
+}
+
+.dreams-event-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0 0;
+  border-top: var(--border-width) solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+}
+
+.dreams-proposal-card {
+  padding: 0.7rem 0.8rem;
+}
+
+.dreams-proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.82rem;
+  flex-wrap: wrap;
+}
+
+.dreams-proposal-toggle {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-machine);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.dreams-proposal-json {
+  margin: 0.6rem 0;
+  padding: 0.6rem;
+  border: var(--border-width) solid var(--border-default);
+  font-size: 0.72rem;
+  max-height: 300px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+
+.dreams-proposal-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.dreams-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.dreams-modal {
+  max-width: 560px;
+  width: 90%;
+  padding: 1.2rem;
+}
+
+.dreams-modal-warning {
+  color: var(--status-warning);
+}
+
+.dreams-modal-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+  justify-content: flex-end;
+}
+
+.dreams-apply-confirm {
+  border-color: var(--status-danger);
+  color: var(--status-danger);
+}
+
+.dreams-apply-success {
+  color: var(--status-live);
+}
+
+.dreams-apply-error {
+  color: var(--status-danger);
+  padding: 0.6rem;
+  border: var(--border-width) solid var(--status-danger);
+  max-height: 240px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font-size: 0.72rem;
+}

@@ -1,0 +1,12 @@
+{
+  "batchcomplete": true,
+  "continue": {"cmcontinue": "page|4d414e49464553544f|9999", "continue": "-||"},
+  "query": {
+    "categorymembers": [
+      {"pageid": 101, "ns": 0, "title": "Manifeste du surréalisme"},
+      {"pageid": 102, "ns": 0, "title": "Discours de la méthode"},
+      {"pageid": 103, "ns": 14, "title": "Catégorie:Philosophie"},
+      {"pageid": 104, "ns": 0, "title": "Manifeste du surréalisme/Chapitre 1"}
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+/**
+ * Two type registers (FABLE Sec.6.2), both sourced from the real site's own
+ * usage patterns (styles.css), not invented:
+ *
+ *   Literary (--font-literary, serif) -- titles, manifestos, module names,
+ *   startup screen, quotes, long syntheses. Large, tight line-height,
+ *   negative letter-spacing: monumental, not default-browser (see the site's
+ *   own h1/h2 treatment, styles.css:202-212, 299-304).
+ *
+ *   Machine (--font-machine, monospace) -- ids, logs, scores, queries,
+ *   paths, events, timestamps, fragments, structured data, system info.
+ *   Small, uppercase, wide letter-spacing when used as a label (see the
+ *   site's kicker/eyebrow/tag/dossier-row treatment throughout styles.css).
+ *
+ * Everything else (nav, buttons, body chrome) uses --font-ui (sans) as the
+ * neutral default -- neither register, just UI chrome.
+ */
+
+body {
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+.type-literary {
+  font-family: var(--font-literary);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+}
+
+.type-quote {
+  font-family: var(--font-literary);
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.type-mono,
+code,
+kbd,
+pre,
+.type-machine {
+  font-family: var(--font-machine);
+  font-size: 0.85em;
+}
+
+/**
+ * The recurring "machine register" label recipe from the site (kickers,
+ * status lines, tags, timestamps): uppercase, wide letter-spacing, small --
+ * this is the exact texture to reuse for the app's own ids/badges/timestamps.
+ */
+.type-label {
+  font-family: var(--font-machine);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  color: var(--text-meta);
+}

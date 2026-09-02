@@ -1,0 +1,86 @@
+.cycles-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1rem 0 1.5rem;
+  max-width: 720px;
+}
+.cycles-query-input {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.5rem 0.7rem;
+}
+.cycles-model-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.5rem;
+}
+.cycles-model-fields input {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+}
+.cycles-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cycles-error {
+  color: var(--status-danger);
+}
+.cycles-success {
+  color: var(--status-live);
+}
+
+.cycles-live {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cycles-panel {
+  border: var(--border-width) solid var(--border-default);
+  padding: 0.8rem;
+}
+
+.cycles-kv-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.cycles-agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.cycles-agent-card {
+  border: var(--border-width) solid var(--border-default);
+  padding: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--status-live);
+}
+
+.cycles-canon-outcome .type-mono {
+  color: var(--status-live);
+  font-size: 1.1rem;
+  margin-top: 0.4rem;
+}
+
+.cycles-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  font-size: 0.7rem;
+  color: var(--status-live);
+  max-height: 260px;
+  overflow-y: auto;
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "seed_tawhid_001",
+    "group": "islam",
+    "category": "tawhid_negation",
+    "tradition": "islamic_negative_theology",
+    "statement": "The One is not multiplied by the mirrors that fail to contain Him.",
+    "gloss": "A negative-theological axiom for refusing idolatrous representation.",
+    "targets": ["idolatry", "false_transcendence"],
+    "tone": "severe-metaphysical",
+    "severity": 0.72,
+    "mutation_potential": 0.81,
+    "doctrinal_axes": ["unity", "negation", "transcendence"],
+    "tags": ["tawhid", "negation", "apophatic"]
+  },
+  {
+    "id": "seed_logos_001",
+    "group": "judeo_christian",
+    "category": "logos_axiom",
+    "tradition": "logos_theology",
+    "statement": "The Word becomes flesh only to expose the poverty of every empire that speaks without sacrifice.",
+    "gloss": "A Field Horizon synthesis of Logos theology and anti-imperial apocalyptic critique.",
+    "targets": ["empire", "empty_language"],
+    "tone": "apocalyptic-theological",
+    "severity": 0.76,
+    "mutation_potential": 0.83,
+    "doctrinal_axes": ["logos", "incarnation", "judgment"],
+    "tags": ["logos", "apocalypse", "sacrifice"]
+  },
+  {
+    "id": "seed_modernity_001",
+    "group": "modernity",
+    "category": "bureaucratic_demonology",
+    "tradition": "anti_modern",
+    "statement": "A society that abolishes mystery does not become rational; it becomes administratively possessed.",
+    "gloss": "Modern bureaucracy as parody of spiritual order.",
+    "targets": ["bureaucracy", "technocracy", "disenchantment"],
+    "tone": "hostile-philosophical",
+    "severity": 0.79,
+    "mutation_potential": 0.86,
+    "doctrinal_axes": ["modernity", "possession", "disenchantment"],
+    "tags": ["bureaucracy", "modernity", "demonology"]
+  }
+]

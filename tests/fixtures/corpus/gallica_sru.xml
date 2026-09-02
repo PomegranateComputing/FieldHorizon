@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<srw:searchRetrieveResponse xmlns:srw="http://www.loc.gov/zing/srw/">
+  <srw:version>1.2</srw:version>
+  <srw:numberOfRecords>250</srw:numberOfRecords>
+  <srw:records>
+    <srw:record>
+      <srw:recordSchema>dc</srw:recordSchema>
+      <srw:recordData>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>Déclaration des droits de l'homme et du citoyen</dc:title>
+          <dc:creator>Assemblée nationale constituante</dc:creator>
+          <dc:date>1789</dc:date>
+          <dc:type>monographie</dc:type>
+          <dc:language>fre</dc:language>
+          <dc:format>text/html</dc:format>
+          <dc:rights>domaine public</dc:rights>
+          <dc:identifier>https://gallica.bnf.fr/ark:/12148/bpt6k1234567</dc:identifier>
+        </oai_dc:dc>
+      </srw:recordData>
+    </srw:record>
+
+    <srw:record>
+      <srw:recordData>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>Un ouvrage consultable seulement en ligne</dc:title>
+          <dc:creator>Auteur, Anonyme</dc:creator>
+          <dc:date>1952</dc:date>
+          <dc:type>monographie</dc:type>
+          <dc:language>fre</dc:language>
+          <dc:rights>Consultable en ligne</dc:rights>
+          <dc:identifier>https://gallica.bnf.fr/ark:/12148/bpt6k7654321</dc:identifier>
+        </oai_dc:dc>
+      </srw:recordData>
+    </srw:record>
+
+    <srw:record>
+      <srw:recordData>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>Un enregistrement sans ARK</dc:title>
+          <dc:rights>domaine public</dc:rights>
+          <dc:identifier>https://example.org/no-ark</dc:identifier>
+        </oai_dc:dc>
+      </srw:recordData>
+    </srw:record>
+  </srw:records>
+  <srw:nextRecordPosition>4</srw:nextRecordPosition>
+</srw:searchRetrieveResponse>

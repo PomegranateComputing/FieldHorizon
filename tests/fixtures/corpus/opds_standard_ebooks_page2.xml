@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The final page: entries but no rel="next", which is how an OPDS
+     catalogue signals exhaustion. -->
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/terms/">
+  <id>https://standardebooks.org/feeds/opds/all?page=2</id>
+  <title>Standard Ebooks</title>
+  <updated>2026-07-01T00:00:00Z</updated>
+  <link rel="self" href="/feeds/opds/all?page=2" type="application/atom+xml;profile=opds-catalog"/>
+
+  <entry>
+    <id>https://standardebooks.org/ebooks/thomas-paine/common-sense</id>
+    <title>Common Sense</title>
+    <author><name>Thomas Paine</name></author>
+    <dc:language>en</dc:language>
+    <dc:issued>1776</dc:issued>
+    <category term="Political science" label="Political science"/>
+    <category term="Pamphlet" label="Pamphlet"/>
+    <rights>CC0 1.0 Universal</rights>
+    <link rel="alternate" type="text/html" href="/ebooks/thomas-paine/common-sense"/>
+    <link rel="http://opds-spec.org/acquisition/open-access"
+          href="/ebooks/thomas-paine/common-sense/downloads/common-sense.txt"
+          type="text/plain" length="92000"/>
+  </entry>
+</feed>

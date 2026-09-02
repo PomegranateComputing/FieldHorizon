@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+  <teiHeader>
+    <fileDesc>
+      <titleStmt><title>A Critical Edition That Must Not Leak Into The Body</title></titleStmt>
+      <publicationStmt><p>Metadata that is apparatus, not the work.</p></publicationStmt>
+      <sourceDesc><p>Transcribed from the 1651 folio.</p></sourceDesc>
+    </fileDesc>
+  </teiHeader>
+  <text>
+    <front>
+      <head>Of the Naturall Condition of Mankind</head>
+    </front>
+    <body>
+      <div type="chapter" n="1">
+        <head>Chapter the First</head>
+        <p>Nature hath made men so equall, in the faculties of body, and mind;
+        as that though there bee found one man sometimes manifestly stronger
+        in body, or of quicker mind then another; yet when all is reckoned
+        together, the difference between man, and man, is not so
+        considerable.<note place="foot">An editorial note which is apparatus and must be dropped.</note></p>
+        <fw type="header">RUNNING HEAD THAT MUST BE DROPPED</fw>
+        <p>From this equality of ability, ariseth equality of hope in the
+        attaining of our Ends. And therefore if any two men desire the same
+        thing, which neverthelesse they cannot both enjoy, they become
+        enemies.</p>
+      </div>
+      <div type="chapter" n="2">
+        <head>Chapter the Second</head>
+        <p>Hereby it is manifest, that during the time men live without a
+        common Power to keep them all in awe, they are in that condition
+        which is called Warre; and such a warre, as is of every man,
+        against every man.</p>
+      </div>
+    </body>
+    <back><p>An appendix that TEI marks as back matter.</p></back>
+  </text>
+</TEI>

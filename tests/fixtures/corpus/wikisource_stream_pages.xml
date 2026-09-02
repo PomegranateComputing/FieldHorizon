@@ -1,0 +1,223 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" version="0.11" xml:lang="fr">
+  <siteinfo>
+    <sitename>Wikisource</sitename>
+    <dbname>frwikisource</dbname>
+    <base>https://fr.wikisource.org/wiki/Wikisource:Accueil</base>
+    <generator>MediaWiki 1.45.0-wmf.10</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="0" case="first-letter" />
+      <namespace key="102" case="first-letter">Auteur</namespace>
+      <namespace key="104" case="first-letter">Page</namespace>
+      <namespace key="112" case="first-letter">Livre</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>La Colombe et la Fourmi</title>
+    <ns>0</ns>
+    <id>2010</id>
+    <revision>
+      <id>12793453</id>
+      <parentid>7393702</parentid>
+      <timestamp>2022-10-31T15:21:17Z</timestamp>
+      <contributor>
+        <username>Hsarrazin</username>
+        <id>11839</id>
+      </contributor>
+      <minor />
+      <comment>lien vers élément &quot;oeuvre&quot; de wikidata</comment>
+      <origin>12793453</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="47" sha1="ad3gm4t48dntdhb16z8gguouztdsmrv" xml:space="preserve">{{Œuvre}}
+[[Catégorie:Fables de La Fontaine]]</text>
+      <sha1>ad3gm4t48dntdhb16z8gguouztdsmrv</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>L’Aigle et l’Escarbot (Collinet)</title>
+    <ns>0</ns>
+    <id>2006</id>
+    <redirect title="L’Aigle et l’Escarbot" />
+    <revision>
+      <id>2597794</id>
+      <parentid>574476</parentid>
+      <timestamp>2011-06-20T17:23:29Z</timestamp>
+      <contributor>
+        <username>Zyephyrus</username>
+        <id>366</id>
+      </contributor>
+      <comment>redirection</comment>
+      <origin>2597794</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="39" sha1="f8cwlndg776pdt4t5rxavytaukrziou" xml:space="preserve">#REDIRECT [[L’Aigle et l’Escarbot]]</text>
+      <sha1>f8cwlndg776pdt4t5rxavytaukrziou</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Histoire de la philosophie moderne</title>
+    <ns>0</ns>
+    <id>2026</id>
+    <revision>
+      <id>15225945</id>
+      <parentid>13181184</parentid>
+      <timestamp>2025-07-16T14:53:03Z</timestamp>
+      <contributor>
+        <username>Favete linguistis</username>
+        <id>129184</id>
+      </contributor>
+      <origin>15225945</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="190" sha1="s8w8hrcy1qxymd8gk48osrm5cziyecv" xml:space="preserve">{{TextQuality|25%}}
+&lt;pages index=&quot;Höffding - Histoire de la philosophie moderne.djvu&quot;/&gt;
+
+[[Catégorie:XIXe siècle]]
+[[Catégorie:Histoire de la philosophie]]
+[[Catégorie:Bon pour export]]</text>
+      <sha1>s8w8hrcy1qxymd8gk48osrm5cziyecv</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Patrimoine et Identité/Conclusion</title>
+    <ns>0</ns>
+    <id>2024</id>
+    <revision>
+      <id>15109920</id>
+      <parentid>1323976</parentid>
+      <timestamp>2025-05-11T16:52:54Z</timestamp>
+      <contributor>
+        <username>Le ciel est par dessus le toit</username>
+        <id>1752</id>
+      </contributor>
+      <origin>15109920</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="6027" sha1="8bpeu61y0p3jwlmow1ns3cb7yrd0vxi" xml:space="preserve">__EXPECTWITHOUTSCANS__
+&lt;div class=&quot;text&quot;&gt;
+{{chapitre|[[Les Fougerêts : Patrimoine et identité d’une commune de Haute-Bretagne.|Les Fougerêts]]|[[oldwikisource:Yoann Sevestre|Yoann Sevestre]]|Conclusion|}}
+
+===Conclusion===
+
+Le patrimoine de la commune des [http://fr.wikipedia.org/wiki/Les_Fougerêts Fougerêts] présente de nombreuses spécificités. La nature et le paysage en sont des éléments forts en raison d’une situation géographique particulière et d’une vocation économique majeure. L’implantation de l’homme, observable dans son habitat, est marquée par l'emploi des richesses naturelles et par une organisation sociale essentiellement agricole. Les pratiques, les usages et les croyances, caractéristiques de la communauté locale, sont également  imprégnées de l’omniprésence de la nature, des activités le plus souvent collectives et de la religion. 
+Ces éléments patrimoniaux sont sujets aux interventions des différents acteurs locaux du patrimoine. La Municipalité, les associations et les particuliers participent, en général, plus ou moins activement à leur connaissance, préservation et transmission. Les acteurs du patrimoine fougerêtais tendent à mettre en place les conditions nécessaires à  un développement local dynamique basé sur le tourisme. L’ensemble de ces interventions permet, enfin, de dégager certaines caractéristiques identitaires.
+Ces observations des éléments patrimoniaux et des actions locales ont l’avantage de m’avoir permis de réfléchir sur l’identité fougerêtaise et sur son avenir. Cette identité fougerêtaise présente de nombreux caractères ruraux même si cette ruralité a évolué depuis une quarantaine d’années. L’identité rurale s’appuie sur un patrimoine spécifique, omniprésent et à propos duquel il existe un attachement. L’identité fougerêtaise est également bretonne, en ce sens que les usages, pratiques et croyances, éléments du patrimoine ethnologique, sont spécifiques. La bretonnité s’affirme également par un sentiment d’appartenance véhiculé par des formes expressions particulières héritées du renouveau culturel des années soixante et soixante-dix. 
+
+Le patrimoine de la commune des [http://fr.wikipedia.org/wiki/Les_Fougerêts Fougerêts] ne présente pas de réelles originalités. Il me semble au contraire qu’il s’inscrit dans plusieurs ensembles. J’ai pu souligner certaines illustrations d’un patrimoine de Haute-Bretagne, par exemple, encore aujourd’hui, la forte présence du Gallo et l’attachement au chant, à la danse et à la musique. Mais je pense que le patrimoine des Fougerêts est encore plus précisément caractéristique du patrimoine du pays d’Oust et de Vilaine. J’ai pu relever quelques éléments majeurs de ce patrimoine. D’une façon générale, il s’agit des cours d’eau, de l’habitat rural et paysan, d’une architecture religieuse modeste mais fortement implantée et d’un important fond ethnologique, particulièrement  diversifié. Les [http://fr.wikipedia.org/wiki/Les_Fougerêts Fougerêts] est une commune où les éléments patrimoniaux, résistant au temps, ont été l’objet d’attentions toutes particulières de la part des associations, des particuliers et des Municipalités. Cet intérêt croissant pour l’ensemble des formes culturelles du patrimoine est un élément fort à la fois des acteurs du « pays » mais aussi de son identité. 
+
+L’étude du patrimoine et de l’identité de la commune des [http://fr.wikipedia.org/wiki/Les_Fougerêts Fougerêts] m’ont permis de mieux comprendre les relations, anciennes et actuelles, qui existent entre l’homme, son milieu et ses comportements. Les éléments patrimoniaux des Fougerêts que j’ai étudiés, sont les stigmates de ces relations. Ce qui m’a particulièrement interpellé, c’est à la fois l’abondance de ces traces et ce qu’elles impliquent. En effet, je pense avoir montré comment les Fougerêtais ont su conserver une identité propre résolument ouverte sur l’avenir mais qui est fortement héritière d’un passé, d’un patrimoine commun. Il s’agit, pour moi, d’illustrer au point de vue local, ce qui existe dans les Pays de Vilaine mais aussi, d’une manière plus générale, en Bretagne.
+
+==='''Sommaire:'''===
+----
+
+* [[Patrimoine et Identité/Introduction|Introduction]]
+* [[Patrimoine et Identité/Methodologie|Methodologie]]
+** Les Pays de Vilaine.
+** Les promenades, les fougerêtais et les archives : les sources du patrimoine des Fougerêts et leurs critiques.
+** Les problèmes et les avantages de l’étude du patrimoine local.
+* [[Patrimoine et Identité/Le patrimoine des Fougerêts| Le patrimoine des Fougerêts.]]
+** [[Patrimoine et Identité/Un patrimoine paysager et naturel| Un patrimoine paysager et naturel.]]
+** [[Patrimoine et Identité/L’habitat fougerêtais, un patrimoine de « belles pierres. »|L’habitat fougerêtais, un patrimoine de « belles pierres. »]]
+** [[Patrimoine et Identité/Un patrimoine religieux|Un patrimoine religieux.]]
+** [[Patrimoine et Identité/Un patrimoine ethnologique|Un patrimoine ethnologique.]]
+* [[Patrimoine et Identité/Les acteurs locaux fougeretais|Les acteurs locaux fougeretais.]]
+** [[Patrimoine et Identité/La municipalité|La municipalité.]]
+** [[Patrimoine et Identité/Les associations et les particuliers|Les associations et les particuliers.]]
+* [[Patrimoine et Identité/Patrimoine, identité et avenir|Patrimoine, identité et avenir.]]
+** [[Patrimoine et Identité/Le patrimoine, marqueur identitaire| Le patrimoine, marqueur identitaire.]]
+** [[Patrimoine et Identité/L'avenir du patrimoine aux Fougerêts| L'avenir du patrimoine aux Fougerêts.]]
+* [[Patrimoine et Identité/Conclusion|Conclusion.]]
+* [[Patrimoine et Identité/Les Sources|Les Sources.]]
+* [[Patrimoine et Identité/Bibliographie|Bibliographie.]]
+* [[les Fougerêts : Patrimoine et identité d’une commune de Haute-Bretagne.| Page d'accueil.]]</text>
+      <sha1>8bpeu61y0p3jwlmow1ns3cb7yrd0vxi</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>Page:Baus - Étude sur le corset.djvu/1</title>
+    <ns>104</ns>
+    <id>6710</id>
+    <revision>
+      <id>13575663</id>
+      <parentid>13007510</parentid>
+      <timestamp>2023-10-03T06:47:54Z</timestamp>
+      <contributor>
+        <username>Newnewlaw</username>
+        <id>42296</id>
+      </contributor>
+      <minor />
+      <origin>13575663</origin>
+      <model>proofread-page</model>
+      <format>text/x-wiki</format>
+      <text bytes="1929" sha1="i4z6ivrd3go3hjowfyq6wdfi2t5xprl" xml:space="preserve">&lt;noinclude&gt;&lt;pagequality level=&quot;4&quot; user=&quot;Hsarrazin&quot; /&gt;&lt;/noinclude&gt;&lt;nowiki/&gt;
+&lt;div class=titre&gt;
+{{Brn|1}}
+{{Centré|'''{{Esp|UNIVERSITÉ DE BORDEAUX|6}}'''|fs=120%}}
+ {{—|4|m=1em}}
+{{Centré|{{Esp|FACULTÉ DE MÉDECINE ET DE PHARMACIE|8}}|fs=120%}}
+{{—|4|m=1em}}
+ {|style=&quot;width:100%; margin:auto; &quot; 
+|-
+|style=&quot;width:90%; padding-left:10%; &quot; |{{Centré|{{T|ANNÉE 1909-1910|110}}}}
+|style=&quot;width:10%; &quot; |{{Droite|{{T|'''{{no}}{{lié}}26'''|110}}|1}}
+|}
+{{—|4|m=1em}} 
+
+{{Centré|'''{{espacé|ÉTUDE}}'''|fs=180%}} 
+{{Interligne|0.5em|}}
+{{Centré|SUR|fs=95%}}
+{{Centré|{{Esp|'''LE CORSET'''|10}}|fs=400%}}
+{{—|4|m=1em}} 
+{{Centré|{{T|'''THÈSE POUR LE DOCTORAT EN MÉDECINE'''|110}}}}
+{{Centré|{{T|présentée et soutenue publiquement le 14 Janvier 1910|95}}}}
+{{Interligne|1em}}
+{{Centré|PAR|fs=95%}} 
+{{Interligne|1em}} 
+{{Centré|{{T|'''Gabriel-Virgile-Joseph BAUS'''|150}}}}
+{{Centré|Né à Toulon (Var), le 1{{er}} Avril 1883|fs=95%}} 
+{{Centré|{{sc|élève du service de santé de la marine}}|fs=95% }}
+{{—|4|m=2em}} 
+{|style=&quot;width:100%;margin:auto;&quot; 
+|-
+|rowspan=4|Examinateur de la Thèse
+|rowspan=4|&lt;math&gt;\left\{ \begin{matrix}\ \\ \\ \\ \\ \end{matrix} \right.&lt;/math&gt;
+|MM.
+|BERGONIÉ
+|professeur.
+|
+|''Président''
+|-
+|{{Caché|MM.}}
+|DEMONS
+|professeur.
+|rowspan=3|&lt;math&gt;\left. \begin{matrix}\ \\ \\ \\ \end{matrix} \right\}&lt;/math&gt;
+|rowspan=3|''Juges.''
+|-
+|{{Caché|MM.}}
+|ABADIE
+|{{Pointsdesuite|agrégé}}
+|-
+|{{Caché|MM.}}
+|CRUCHET
+|{{Pointsdesuite|agrégé}}
+|}
+
+
+{{Centré|{{T|'''Le Candidat répondra aux questions qui lui seront faites sur les diverses parties de l’Enseignement médical.'''|110}}}}
+{{Sep4}}
+{{Centré|{{espacé|BORDEAUX}}|fs=110%}} 
+{{Interligne|0.25em}}
+{{Centré|{{T|IMPRIMERIE MODERNE – A. DESTOUT {{sc|aîné}} &amp; {{Cie}}|95}}}} 
+{{Interligne|0.25em}}
+{{Centré|{{T|139, Rue Sainte-Catherine et 8, Rue Paul-Bert|90}}}}
+{{Interligne|0.25em}}
+{{—|3}}
+{{Interligne|0.25em}}
+{{Centré|{{T|1910|110}}}}&lt;/div&gt;
+{{SautDePage}}&lt;noinclude&gt;
+&lt;references/&gt;&lt;/noinclude&gt;</text>
+      <sha1>i4z6ivrd3go3hjowfyq6wdfi2t5xprl</sha1>
+    </revision>
+  </page>
+</mediawiki>

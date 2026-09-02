@@ -1,0 +1,47 @@
+[
+  {
+    "id": "logos_0001",
+    "group_name": "logos",
+    "category": "logos",
+    "tradition": "christian",
+    "statement": "The Word precedes every system that claims to explain reality.",
+    "gloss": "Meaning exists before administration.",
+    "tags": ["logos"]
+  },
+  {
+    "id": "logos_0002",
+    "group_name": "logos",
+    "category": "logos",
+    "tradition": "christian",
+    "statement": "Language becomes corruption when detached from sacrifice.",
+    "gloss": "Speech without truth degenerates into manipulation.",
+    "tags": ["logos"]
+  },
+  {
+    "id": "logos_0003",
+    "group_name": "logos",
+    "category": "logos",
+    "tradition": "christian",
+    "statement": "The Word judges every empire by incarnation.",
+    "gloss": "Truth eventually demands embodiment.",
+    "tags": ["logos"]
+  },
+  {
+    "id": "logos_0004",
+    "group_name": "logos",
+    "category": "logos",
+    "tradition": "christian",
+    "statement": "An idea that never accepts flesh remains a ghost.",
+    "gloss": "Reality tests doctrine.",
+    "tags": ["logos"]
+  },
+  {
+    "id": "logos_0005",
+    "group_name": "logos",
+    "category": "logos",
+    "tradition": "christian",
+    "statement": "The collapse of language precedes the collapse of civilizations.",
+    "gloss": "Civilizations die symbolically before they die materially.",
+    "tags": ["logos"]
+  }
+]

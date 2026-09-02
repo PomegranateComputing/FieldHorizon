@@ -1,0 +1,308 @@
+{
+  "_about": {
+    "purpose": "Golden multilingual dataset for books/manifesto classification.",
+    "principle": "The distinction is FUNCTIONAL, not topical. A political novel is books. A history of a revolution is books. A text calling for that revolution is manifesto. 'Mentions politics' contributes nothing; 'demands something' does.",
+    "note": "Each case carries the destination it must receive and why. Cases marked ambiguous=true are genuinely hard and are asserted only for low confidence, not for a particular answer -- pretending they have an obvious answer would make the suite lie about how good the classifier is.",
+    "languages": [
+      "en",
+      "fr",
+      "de",
+      "es",
+      "it",
+      "la"
+    ]
+  },
+  "cases": [
+    {
+      "id": "novel_en",
+      "language": "en",
+      "document_type": "novel",
+      "title": "The House on the Marsh",
+      "subjects": [
+        "Fiction",
+        "English literature"
+      ],
+      "expected": "books",
+      "rationale": "Narrative prose with dialogue and chapter structure. The dominant act is to tell a story.",
+      "text": "CHAPTER I\n\nIn the year 1849 my father took the house on the marsh, and it is of that winter, and of what befell us there, that I mean to give an account.\n\nHe said, when we first came in sight of it, that no man had lived there in twenty years. My sister replied that she could well believe it. The wind came off the water and the shutters answered it all night.\n\nCHAPTER II\n\nOnce upon a time, my grandmother used to say, the marsh had been good land. She said it in the way people say things they do not expect to be believed.\n\nIn the first place the roof leaked; in the second, the well had gone brackish. My father wrote to the agent and received no reply. He whispered to my mother that we should not stay past spring, and she answered that we had nowhere else to go.\n\nCHAPTER III\n\nIt was in February that I first saw the light across the water. I told no one. For example, I did not tell my sister, who would have laughed, nor my mother, who would have wept.\n\nThe narrator of this account is now an old man, and he sets it down as he remembers it, which is not necessarily as it was."
+    },
+    {
+      "id": "political_novel_en",
+      "language": "en",
+      "document_type": "novel",
+      "title": "The Agitator: A Novel of the Strike",
+      "subjects": [
+        "Fiction",
+        "Labor",
+        "Social conditions"
+      ],
+      "expected": "books",
+      "rationale": "A NOVEL about politics. Its subject is political, its function is narrative. This is the single most important negative case in the set: topic must not decide destination.",
+      "text": "CHAPTER I\n\nWhen Ellen came down to the gate that morning the men were already standing in the road, and she knew from the way they stood that the strike had begun.\n\nHe said, \"They will not open the sheds today.\" She replied that she had heard as much from her brother, who had it from the foreman.\n\nCHAPTER II\n\nIn the year 1889 the mills at Renforth employed four hundred men. It has often been argued that the strike of that autumn was inevitable; the evidence suggests that it was very nearly averted.\n\nEllen watched her father cross the yard. He whispered something to the older Hanlon, who laughed without pleasure. According to the newspapers, the owners had offered a farthing; according to the men, they had offered nothing at all.\n\nCHAPTER III\n\nThe narrator has tried to set down what happened at Renforth without deciding who was right. For example, the burning of the gatehouse has been described as an accident and as arson, and he does not know which it was.\n\nIn the first place the winter came early that year. In the second, the fund was exhausted by December. What followed, he describes as he saw it."
+    },
+    {
+      "id": "history_of_revolution_en",
+      "language": "en",
+      "document_type": "history",
+      "title": "A History of the Revolution of 1848",
+      "subjects": [
+        "History",
+        "Revolutions",
+        "Europe"
+      ],
+      "expected": "books",
+      "rationale": "A history OF a revolution. Explains and narrates; does not call for anything.",
+      "text": "CHAPTER I\n\nIn the year 1848 the governments of Europe were confronted, within a period of four months, with insurrections in Paris, Vienna, Berlin, Milan, and Budapest. It has often been argued that these were a single movement; the evidence suggests otherwise.\n\nAccording to Tocqueville, who was present, the Parisian rising of February took the ministry entirely by surprise. This chapter examines that claim.\n\nCHAPTER II\n\nIn the first place, the economic distress of 1846 and 1847 must be considered. For example, the price of bread in the Faubourg Saint-Antoine rose by more than half between the harvests.\n\nThe evidence shows that the provisional government was assembled within thirty hours. This book aims to explain how that was possible, and to leave to others the question whether it was wise.\n\nCHAPTER III\n\nWe shall see in a later chapter that the June days destroyed what February had made. Ibid., p. 212. The historian describes these events with the advantage of knowing how they ended, which the participants did not."
+    },
+    {
+      "id": "communist_manifesto_en",
+      "language": "en",
+      "document_type": "manifesto",
+      "title": "Manifesto of the Communist Party",
+      "subjects": [
+        "Communism",
+        "Socialism",
+        "Political science"
+      ],
+      "expected": "manifesto",
+      "rationale": "Declares a doctrine, names an adversary, demands specific changes, and calls explicitly for action.",
+      "text": "MANIFESTO OF THE COMMUNIST PARTY\n\nA spectre is haunting Europe. All the Powers of old Europe have entered into a holy alliance to exorcise it.\n\nIt is high time that Communists should openly, in the face of the whole world, publish their views, their aims, and their tendencies.\n\nWe declare openly that our ends can be attained only by the forcible overthrow of all existing social conditions. We demand the abolition of property in land and the application of all rents of land to public purposes.\n\nOur enemies are the bourgeoisie, and we name them. We must destroy the conditions that produced them. Every member of the association shall contribute according to their ability.\n\nDown with the rule of capital. We proclaim a new era. The proletarians have nothing to lose but their chains. They have a world to win.\n\nWorkers of the world, unite!"
+    },
+    {
+      "id": "declaration_of_rights_fr",
+      "language": "fr",
+      "document_type": "déclaration",
+      "title": "Déclaration des droits de l'homme et du citoyen",
+      "subjects": [
+        "Droit",
+        "Constitution",
+        "Politique"
+      ],
+      "expected": "manifesto",
+      "rationale": "A founding declaration: numbered articles, prescriptive, establishes duties and rights.",
+      "text": "DÉCLARATION DES DROITS DE L'HOMME ET DU CITOYEN\n\nNous déclarons que l'ignorance, l'oubli ou le mépris des droits de l'homme sont les seules causes des malheurs publics.\n\nArticle premier. — Les hommes naissent et demeurent libres et égaux en droits. Les distinctions sociales ne peuvent être fondées que sur l'utilité commune.\n\nArticle II. — Le but de toute association politique est la conservation des droits naturels et imprescriptibles de l'homme.\n\nArticle III. — Le principe de toute souveraineté réside essentiellement dans la Nation. Nul corps, nul individu ne peut exercer d'autorité qui n'en émane expressément.\n\nArticle IV. — Tout citoyen doit obéissance à la loi. Nul ne peut être inquiété pour ses opinions.\n\nNous proclamons ces principes en présence et sous les auspices de l'Être suprême. Nous exigeons qu'ils soient respectés par tous les pouvoirs constitués."
+    },
+    {
+      "id": "philosophical_treatise_fr",
+      "language": "fr",
+      "document_type": "traité",
+      "title": "Traité de la connaissance des passions",
+      "subjects": [
+        "Philosophie",
+        "Psychologie"
+      ],
+      "expected": "books",
+      "rationale": "Analytical philosophy: argues and explains rather than mobilizes. Philosophy without a collective programme is books.",
+      "text": "CHAPITRE PREMIER\n\nLes passions, considérées en elles-mêmes, ne sont ni bonnes ni mauvaises. C'est dans leur ordonnance que consiste la vertu, et les philosophes des écoles anciennes s'accordaient sur ce point, quelque divisés qu'ils fussent ensuite.\n\nOn a souvent soutenu que les stoïciens tenaient les passions pour des erreurs de jugement. Par exemple, Sénèque le dit en plusieurs endroits, et se contredit ailleurs.\n\nCHAPITRE II\n\nNous examinerons d'abord la nature de l'appétit, puis celle de la crainte. Selon Aristote, nous devenons justes en faisant des actions justes, et non par le raisonnement seul.\n\nCe livre vise à expliquer plutôt qu'à prescrire. Il était une fois d'usage de traiter ces matières par des maximes; nous préférons l'analyse.\n\nCHAPITRE III\n\nIl faut distinguer ici deux sens du mot. On a remarqué que le même auteur décrit les passions comme des maladies dans un endroit et comme des mouvements de l'âme dans un autre."
+    },
+    {
+      "id": "surrealist_manifesto_fr",
+      "language": "fr",
+      "document_type": "manifeste",
+      "title": "Manifeste du surréalisme",
+      "subjects": [
+        "Art",
+        "Littérature",
+        "Manifeste"
+      ],
+      "expected": "manifesto",
+      "rationale": "An artistic manifesto: proclaims a movement, prescribes rules for its members, names adversaries, calls for action.",
+      "text": "MANIFESTE DU SURRÉALISME\n\nNous déclarons que l'imagination seule rend compte de ce qui peut être. Le surréalisme repose sur la croyance à la réalité supérieure de certaines formes d'associations négligées jusqu'à lui.\n\nNous exigeons la fin du règne de la logique. Il faut détruire les habitudes de l'esprit qui nous enchaînent.\n\nArticle premier. — La production surréaliste est automatique.\nArticle II. — Nul ne peut se réclamer du mouvement sans y adhérer pleinement.\nArticle III. — Le rêve prime sur l'observation.\n\nNous proclamons une ère nouvelle. Tout membre de l'association doit se garder de la littérature de circonstance. Nos ennemis sont ceux qui font profession de bon sens.\n\nÀ bas les académies. Debout, les esprits libres ! Nous appelons chacun à l'action immédiate et à la transformation de la vie. Vive le surréalisme !"
+    },
+    {
+      "id": "poetry_fr",
+      "language": "fr",
+      "document_type": "poésie",
+      "title": "Recueil de sonnets",
+      "subjects": [
+        "Poésie",
+        "Littérature française"
+      ],
+      "expected": "books",
+      "rationale": "Poetry: short and non-narrative, which is exactly the shape a length-based or lexical heuristic mistakes for a manifesto. Catalogue form must carry it.",
+      "text": "SONNETS\n\nI\n\nQuand vous serez bien vieille, au soir, à la chandelle,\nAssise auprès du feu, dévidant et filant,\nDirez, chantant mes vers, en vous émerveillant :\nRonsard me célébrait du temps que j'étais belle.\n\nII\n\nLe temps s'en va, le temps s'en va, ma dame ;\nLas ! le temps non, mais nous nous en allons,\nEt tôt serons étendus sous la lame.\n\nIII\n\nJe n'ai plus que les os, un squelette je semble,\nDécharné, dénervé, démusclé, dépoulpé,\nQue le trait de la mort sans pardon a frappé.\n\nIV\n\nComme on voit sur la branche au mois de mai la rose,\nEn sa belle jeunesse, en sa première fleur,\nRendre le ciel jaloux de sa vive couleur."
+    },
+    {
+      "id": "theses_de",
+      "language": "de",
+      "document_type": "thesen",
+      "title": "Fünfundneunzig Thesen",
+      "subjects": [
+        "Theologie",
+        "Reformation",
+        "Religion"
+      ],
+      "expected": "manifesto",
+      "rationale": "Numbered theses that prescribe doctrine and name what must change. Doctrinal and programmatic, not expository.",
+      "text": "DISPUTATION ZUR ERLÄUTERUNG DER KRAFT DER ABLÄSSE\n\nWir erklären, dass die folgenden Sätze zur Erörterung gestellt werden.\n\n1. Da unser Herr und Meister Jesus Christus spricht \"Tut Buße\", hat er gewollt, dass das ganze Leben der Gläubigen Buße sein soll.\n\n2. Dieses Wort kann nicht von der sakramentalen Buße verstanden werden.\n\n3. Wir fordern, dass die innere Buße nichts ist, wenn sie nicht äußerlich mancherlei Abtötung des Fleisches wirkt.\n\n4. Jeder Christ soll wissen, dass ihm Vergebung ohne Ablassbriefe zuteil wird.\n\n5. Nieder mit dem Handel, der die Gnade zur Ware macht. Unsere Feinde sind jene, die aus der Furcht der Gläubigen Gewinn ziehen.\n\nEs lebe die Wahrheit des Evangeliums. Wir rufen jeden Christenmenschen auf, diese Sätze zu prüfen und danach zu handeln."
+    },
+    {
+      "id": "scientific_treatise_de",
+      "language": "de",
+      "document_type": "abhandlung",
+      "title": "Abhandlung über die Bewegung der Himmelskörper",
+      "subjects": [
+        "Astronomie",
+        "Naturwissenschaft",
+        "Physik"
+      ],
+      "expected": "books",
+      "rationale": "A scientific treatise: demonstrative and explanatory throughout.",
+      "text": "KAPITEL I\n\nIm Jahre 1609 wurde die erste Beobachtung angestellt, von der in dieser Abhandlung die Rede sein wird. Es ist oft behauptet worden, dass die Bahnen der Planeten Kreise seien; die Beobachtungen zeigen etwas anderes.\n\nNach Kepler verhalten sich die Quadrate der Umlaufzeiten wie die Kuben der mittleren Entfernungen. Zum Beispiel ergibt die Rechnung für den Mars eine Abweichung von acht Bogenminuten.\n\nKAPITEL II\n\nWir werden zunächst die Beobachtungen darstellen und sodann die Folgerungen prüfen. Dieses Buch will erklären, nicht vorschreiben.\n\nDer Verfasser beschreibt hier, was er gemessen hat, und überlässt die Deutung anderen. Ebenda, S. 44.\n\nKAPITEL III\n\nEs hat sich gezeigt, dass die Abweichung nicht aus Beobachtungsfehlern erklärt werden kann. Wir werden sehen, dass daraus eine neue Gestalt der Bahn folgt."
+    },
+    {
+      "id": "constitution_es",
+      "language": "es",
+      "document_type": "constitución",
+      "title": "Constitución de la República",
+      "subjects": [
+        "Derecho",
+        "Constitución",
+        "Política"
+      ],
+      "expected": "manifesto",
+      "rationale": "A founding constitutional text: numbered articles establishing an order and duties.",
+      "text": "CONSTITUCIÓN DE LA REPÚBLICA\n\nNosotros, los representantes del pueblo, declaramos y establecemos la presente Constitución.\n\nArtículo 1. — La soberanía reside en el pueblo, del cual emanan todos los poderes del Estado.\n\nArtículo 2. — Todos los ciudadanos son iguales ante la ley. No se reconocen fueros ni privilegios de nacimiento.\n\nArtículo 3. — Exigimos que ninguna autoridad exceda las facultades que esta Constitución le confiere.\n\nArtículo 4. — Es deber de todo ciudadano defender el orden aquí establecido.\n\nProclamamos estos principios y llamamos a todos los ciudadanos a sostenerlos. Nuestros enemigos son quienes pretendan restaurar los privilegios abolidos. ¡Viva la República!"
+    },
+    {
+      "id": "travel_narrative_es",
+      "language": "es",
+      "document_type": "viajes",
+      "title": "Viaje a las regiones equinocciales",
+      "subjects": [
+        "Viajes",
+        "Historia natural",
+        "Geografía"
+      ],
+      "expected": "books",
+      "rationale": "Travel narrative: descriptive and observational.",
+      "text": "CAPÍTULO I\n\nEn el año 1799 emprendimos el viaje del que se da cuenta en este volumen. El lector no encontrará aquí ni programa ni argumento, sino solamente las observaciones que un ojo paciente pudo recoger.\n\nDijo el piloto que no había visto jamás una costa semejante, y yo le respondí que tampoco yo. Según Bouguer, la misma observación se había hecho un siglo antes.\n\nCAPÍTULO II\n\nEn primer lugar, la vegetación cambia con la altura de un modo que merece descripción detallada. Por ejemplo, a los mil quinientos metros desaparecen las palmas.\n\nEste libro pretende consignar lo observado y dejar a otros el trabajo de la explicación. Veremos en un capítulo posterior que este patrón se repite.\n\nCAPÍTULO III\n\nDel interior puedo decir menos. El narrador de una relación anterior describe un lago de gran profundidad, y yo no lo hallé."
+    },
+    {
+      "id": "futurist_manifesto_it",
+      "language": "it",
+      "document_type": "manifesto",
+      "title": "Manifesto del Futurismo",
+      "subjects": [
+        "Arte",
+        "Letteratura",
+        "Manifesto"
+      ],
+      "expected": "manifesto",
+      "rationale": "An aesthetic manifesto: proclaims a movement, enumerates programmatic points, names enemies, calls for destruction and renewal.",
+      "text": "MANIFESTO DEL FUTURISMO\n\nDichiariamo di voler cantare l'amor del pericolo, l'abitudine all'energia e alla temerità.\n\n1. Noi vogliamo cantare l'amor del pericolo, l'abitudine all'energia e alla temerità.\n2. Il coraggio, l'audacia, la ribellione saranno elementi essenziali della nostra poesia.\n3. Chiediamo che si distrugga il culto del passato.\n4. Ogni membro del movimento deve rifiutare il compromesso con il gusto stabilito.\n\nI nostri nemici sono i professori, gli archeologi, i ciceroni e gli antiquari. Proclamiamo un'era nuova.\n\nAbbasso i musei e le biblioteche. In piedi, spiriti liberi! Chiamiamo ciascuno all'azione immediata e alla trasformazione della vita. Viva il Futurismo!"
+    },
+    {
+      "id": "drama_it",
+      "language": "it",
+      "document_type": "teatro",
+      "title": "La commedia degli inganni",
+      "subjects": [
+        "Teatro",
+        "Letteratura italiana",
+        "Commedia"
+      ],
+      "expected": "books",
+      "rationale": "Drama: dialogue and stage directions. Another short, non-narrative form a naive heuristic could mistake for a manifesto.",
+      "text": "PERSONAGGI\n\nORAZIO, mercante\nBEATRICE, sua figlia\nTRUFFALDINO, servitore\n\nATTO I\n\nSCENA I\n\nUna sala in casa di Orazio.\n\nORAZIO. Dove sei stato tutta la mattina?\nTRUFFALDINO. Dal notaio, padrone, come mi avete ordinato.\nORAZIO. E che disse?\nTRUFFALDINO. Disse che l'atto non si può fare senza la firma della signora.\n\nSCENA II\n\nBEATRICE. Ho udito ogni cosa dalla stanza vicina.\nORAZIO. Non era per te.\nBEATRICE. Rispose il notaio che senza di me nulla si conclude, e in questo almeno ha ragione.\n\nATTO II\n\nSCENA I\n\nUna strada. Entra Truffaldino.\n\nTRUFFALDINO. Due padroni, due salari, e un solo stomaco. Chi mi biasima non ha mai avuto fame."
+    },
+    {
+      "id": "papal_bull_la",
+      "language": "la",
+      "document_type": "bulla",
+      "title": "Bulla de disciplina ecclesiastica",
+      "subjects": [
+        "Religio",
+        "Ius canonicum",
+        "Ecclesia"
+      ],
+      "expected": "manifesto",
+      "rationale": "A promulgating decree: establishes obligations and prescribes an order. Short by nature, which is exactly why length must not decide.",
+      "text": "BULLA DE DISCIPLINA ECCLESIASTICA\n\nDeclaramus atque statuimus quae sequuntur, ad perpetuam rei memoriam.\n\nArticulus I. — Omnes clerici ad hanc disciplinam teneantur, nec ulla consuetudine se excusare possint.\n\nArticulus II. — Quod si quis contra haec fecerit, sciat se poenam incursurum esse.\n\nArticulus III. — Omnia quae huic constitutioni adversantur, abolita esse decernimus.\n\nHostes nostri sunt qui hanc disciplinam contemnunt. Novam aetatem proclamamus. Vocamus omnes fideles ut haec statuta servent atque defendant."
+    },
+    {
+      "id": "latin_commentary_la",
+      "language": "la",
+      "document_type": "commentarius",
+      "title": "Commentarius in libros naturales",
+      "subjects": [
+        "Philosophia",
+        "Commentarius",
+        "Scientia"
+      ],
+      "expected": "books",
+      "rationale": "A scholastic commentary: expository and analytical.",
+      "text": "CAPUT PRIMUM\n\nIn hoc libro tractatur de natura rerum, et quo modo per causas cognoscantur. Saepe dictum est philosophos in hac re dissentire; nos utramque sententiam exponemus.\n\nSecundum Aristotelem, natura est principium motus et quietis. Hoc autem non ita intelligendum est ut quidam interpretati sunt.\n\nCAPUT SECUNDUM\n\nPrimo videndum est quid sit materia; deinde quid forma. Exempli gratia, in statua aes est materia, figura vero forma.\n\nHic liber explicare vult, non praecipere. Auctor ea describit quae observata sunt, et interpretationem aliis relinquit. Ibidem, p. 44.\n\nCAPUT TERTIUM\n\nVidebimus in capite sequenti quomodo haec omnia inter se cohaereant."
+    },
+    {
+      "id": "sermon_programmatic_en",
+      "language": "en",
+      "document_type": "sermon",
+      "title": "A Sermon Preached Before the Assembly",
+      "subjects": [
+        "Religion",
+        "Sermons",
+        "Politics"
+      ],
+      "expected": "manifesto",
+      "rationale": "A programmatic sermon: not exposition of scripture but a call to collective action and a naming of adversaries.",
+      "text": "A SERMON PREACHED BEFORE THE ASSEMBLY\n\nWe declare this day that the covenant has been broken, and that it must be renewed by our own act.\n\nIt is the duty of every member of this congregation to put away the works of the oppressor. We demand the release of those imprisoned for conscience.\n\nOur enemies are not flesh and blood only; they are the powers that keep the poor in hunger and call it order. We reject the counsel of patience that has been offered to us.\n\nWe must sweep away what has been built upon injustice. A new era begins when this people rises. Every citizen shall be accounted a keeper of his brother.\n\nArise, and let the assembly be of one mind. We call upon each of you to act, and to act now. Down with the yoke. Long live the covenant."
+    },
+    {
+      "id": "biography_en",
+      "language": "en",
+      "document_type": "biography",
+      "title": "The Life of a Reformer",
+      "subjects": [
+        "Biography",
+        "History",
+        "Reform movements"
+      ],
+      "expected": "books",
+      "rationale": "A biography OF a political agitator. The subject demands things; the book describes him demanding them.",
+      "text": "CHAPTER I\n\nHe was born in 1802, in a town whose name he later refused to give. This book aims to describe his life, and not to settle the quarrels that surrounded it.\n\nAccording to his sister, he learned to read late and then read constantly. It has often been argued that his politics were formed at the mill; the evidence suggests they were formed considerably earlier.\n\nCHAPTER II\n\nIn the first place he was not, as his opponents claimed, an uneducated man. For example, his notebooks of 1831 contain long extracts from Bentham.\n\nHe said, in a speech his biographer has been unable to verify, that he would rather be hanged than petition again. The historian describes this as characteristic; the evidence shows he petitioned twice more.\n\nCHAPTER III\n\nWe shall see in a later chapter how the movement he founded outlived him. Ibid., p. 88. He died in 1867, and the account of his last years rests chiefly on his daughter's diary."
+    },
+    {
+      "id": "encyclopedia_en",
+      "language": "en",
+      "document_type": "encyclopedia",
+      "title": "A Dictionary of the Sciences",
+      "subjects": [
+        "Reference",
+        "Encyclopedias",
+        "Science"
+      ],
+      "expected": "books",
+      "rationale": "Reference work: purely expository.",
+      "text": "ABERRATION. In optics, the failure of rays to converge at a single focus. It has often been observed that the effect is more marked at the edge of a lens. For example, the achromatic doublet was devised to correct it.\n\nBAROMETER. An instrument for measuring atmospheric pressure. According to Torricelli, who first constructed one, the height of the column varies with the weather.\n\nCALORIC. A supposed substance formerly held to constitute heat. The evidence suggests that this hypothesis is no longer tenable, though it is retained here for the reader's information.\n\nDECLINATION. The angle between magnetic and true north. This work aims to record the accepted definitions and to indicate where authorities differ.\n\nECLIPSE. The obscuration of one body by another. We shall see under OCCULTATION that the terms are not synonymous."
+    },
+    {
+      "id": "ambiguous_political_philosophy_en",
+      "language": "en",
+      "document_type": "essay",
+      "title": "On the Grounds of Political Obligation",
+      "subjects": [
+        "Philosophy",
+        "Political theory"
+      ],
+      "expected": "books",
+      "rationale": "Normative political philosophy that argues for conclusions about what states ought to do without mobilizing anyone. Analytical throughout -- 'This book aims to assess these arguments' -- so it is books, and the classifier is right to be confident.",
+      "text": "CHAPTER I\n\nThe question of political obligation is the question why anyone should obey. It has often been argued that consent supplies the answer; the difficulty is that almost nobody has consented to anything.\n\nWe shall examine three accounts in turn. According to the first, obligation rests on benefit received. This book aims to assess these arguments rather than to adjudicate between the parties who invoke them.\n\nCHAPTER II\n\nIt is the duty of the citizen, on the second account, to support institutions that are tolerably just. But it must be shown what tolerably just means, and this has rarely been attempted with any rigour.\n\nWe must reject, I think, the view that mere residence constitutes consent. For example, a man born in a state he cannot leave has consented to nothing.\n\nCHAPTER III\n\nThe evidence suggests that no single account will serve. We shall see that a plural account, though less tidy, fits the cases better."
+    },
+    {
+      "id": "ambiguous_programmatic_essay_en",
+      "language": "en",
+      "document_type": "essay",
+      "title": "The Condition of the Universities and What Must Follow From It",
+      "subjects": [
+        "Education",
+        "Social criticism",
+        "Political theory"
+      ],
+      "expected": "manifesto",
+      "ambiguous": true,
+      "rationale": "Genuinely hard. Two thirds of the text is expository social analysis with citations; the final third turns into a numbered programme with demands and a call to act. Both functions are strongly present, so the classifier must report LOW CONFIDENCE rather than a confident verdict. The expected destination reflects the dominant final function, but the assertion this case carries is about confidence, not destination.",
+      "text": "PART ONE: THE EVIDENCE\n\nIt has often been argued that the modern university is in decline. This essay examines the claim rather than assuming it. According to the returns of 1911, the proportion of endowed chairs to enrolled students had fallen by a third within a generation.\n\nFor example, at three of the older foundations the teaching staff grew by eleven per cent while admissions more than doubled. The evidence suggests that the strain was structural and not, as the apologists maintain, a temporary effect of the war.\n\nPART TWO: THE ANALYSIS\n\nWe shall see that three causes operate together. In the first place the endowments were fixed in nominal terms. In the second, the examination system rewarded volume. Ibid., p. 214. The historian describes the result as drift; the participants experienced it as policy.\n\nIt must be shown, and this section attempts to show it, that no single reform addresses all three causes at once.\n\nPART THREE: WHAT MUST FOLLOW\n\nWe declare that the present arrangement cannot be defended by anyone who has read the foregoing. We demand the following, and we demand them now.\n\n1. That every chair be funded in real terms and that the endowments be revalued annually.\n2. That the examination system be abolished in its present form.\n3. That the governing bodies admit those who teach.\n\nEvery member of this profession has a duty to press for these measures. Our adversaries are those who profit from the drift and who call it tradition. We reject the counsel of patience that has been offered to us for thirty years.\n\nA new era in the life of these institutions begins on the day this programme is adopted. We call upon every teacher and every student to act, and to act now."
+    }
+  ]
+}

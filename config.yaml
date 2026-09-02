@@ -1,0 +1,41 @@
+project:
+  name: "Field Horizon"
+  version: "3.2"
+
+paths:
+  database: "data/field_horizon.sqlite3"
+  books: "data/books"
+  json_corpus: "data/json_corpus"
+  outputs: "outputs"
+  logs: "logs"
+  manifestos: "data/manifestos"
+
+ollama:
+  base_url: "http://localhost:11434"
+  default_model: "hermes3:8b"
+  temperature: 1.25
+  top_p: 0.95
+  repeat_penalty: 1.08
+  num_ctx: 8192
+
+embeddings:
+  model: "nomic-embed-text"
+
+retrieval:
+  book_fragments: 6
+  json_entries: 6
+  chunk_chars: 1800
+  chunk_overlap: 250
+  # Hybrid retrieval v2: weighted sum of these five components per
+  # candidate. Need not sum to 1.0 -- they're relative weights, not a
+  # probability distribution.
+  hybrid_weights:
+    vector_similarity: 0.35
+    bm25: 0.25
+    domain_prior: 0.20
+    source_weight: 0.15
+    severity: 0.05
+
+field_horizon:
+  tone: "dark, theological, anti-modern, metaphysical, severe, apocalyptic"
+  mode: "canonical_synthesis"

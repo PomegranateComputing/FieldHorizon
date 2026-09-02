@@ -1,0 +1,40 @@
+{
+  "responseHeader": {"status": 0},
+  "response": {
+    "numFound": 3,
+    "start": 0,
+    "docs": [
+      {
+        "identifier": "curatedinstitutionalbook",
+        "title": "A Curated Institutional Scan",
+        "creator": ["Historical Society"],
+        "year": "1901",
+        "language": ["eng"],
+        "subject": ["History", "Political theory"],
+        "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+        "collection": ["medicalheritagelibrary", "americana"],
+        "mediatype": "texts"
+      },
+      {
+        "identifier": "anonymousupload",
+        "title": "An Anonymous Upload Claiming CC0",
+        "creator": ["uploader123"],
+        "year": "1995",
+        "language": ["eng"],
+        "licenseurl": "http://creativecommons.org/publicdomain/zero/1.0/",
+        "collection": ["opensource"],
+        "mediatype": "texts"
+      },
+      {
+        "identifier": "lendinglibraryitem",
+        "title": "A Lending Library Book",
+        "creator": ["Modern Author"],
+        "year": "1988",
+        "language": ["eng"],
+        "collection": ["inlibrary", "printdisabled", "internetarchivebooks"],
+        "access-restricted-item": "true",
+        "mediatype": "texts"
+      }
+    ]
+  }
+}

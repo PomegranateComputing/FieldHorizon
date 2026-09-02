@@ -1,0 +1,99 @@
+.corpus-tabs {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  border-bottom: var(--border-width) solid var(--border-default);
+}
+.corpus-tabs button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+.corpus-tab--active {
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--accent-identity);
+}
+
+.corpus-toolbar {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+.corpus-toolbar input,
+.corpus-toolbar select {
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.35rem 0.5rem;
+}
+.corpus-toolbar input {
+  flex: 1;
+}
+
+.corpus-source-list {
+  height: 420px;
+  overflow-y: auto;
+  border: var(--border-width) solid var(--border-default);
+}
+
+.corpus-source-row {
+  display: grid;
+  grid-template-columns: 1fr 140px 80px;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0 0.7rem;
+  height: 36px;
+  background: transparent;
+  border: none;
+  border-bottom: var(--border-width) solid var(--border-default);
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+.corpus-source-row:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.02);
+}
+.corpus-source-row--selected {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 2px solid var(--accent-identity);
+}
+.corpus-source-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.corpus-manifest-list {
+  list-style: none;
+  padding: 0;
+  font-size: 0.8rem;
+}
+.corpus-manifest-list li {
+  padding: 0.5rem 0;
+  border-bottom: var(--border-width) solid var(--border-default);
+}
+.corpus-manifest-path {
+  color: var(--text-meta);
+  font-size: 0.72rem;
+}
+
+.corpus-ingest-ok {
+  color: var(--status-live);
+}
+.corpus-ingest-error {
+  color: var(--status-danger);
+}
+.corpus-ingest-log {
+  margin-top: 1rem;
+  padding: 0.7rem;
+  border: var(--border-width) solid var(--border-default);
+  max-height: 300px;
+  overflow-y: auto;
+  font-size: 0.75rem;
+  color: var(--status-live);
+}

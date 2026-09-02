@@ -1,0 +1,17 @@
+{
+  "server": "ia801502.us.archive.org",
+  "dir": "/12/items/curatedinstitutionalbook",
+  "metadata": {
+    "identifier": "curatedinstitutionalbook",
+    "title": "A Curated Institutional Scan",
+    "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/"
+  },
+  "files": [
+    {"name": "curatedinstitutionalbook_meta.xml", "format": "Metadata", "size": "1200"},
+    {"name": "curatedinstitutionalbook.pdf", "format": "Text PDF", "size": "18400000"},
+    {"name": "curatedinstitutionalbook_djvu.txt", "format": "DjVuTXT", "size": "410000"},
+    {"name": "curatedinstitutionalbook_sample.txt", "format": "DjVuTXT", "size": "2000"},
+    {"name": "curatedinstitutionalbook_jp2.zip", "format": "Single Page Processed JP2 ZIP", "size": "820000000"},
+    {"name": "page_0001.jpg", "format": "JPEG", "size": "44000"}
+  ]
+}

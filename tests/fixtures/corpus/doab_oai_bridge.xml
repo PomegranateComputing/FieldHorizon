@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="static/style.xsl"?><OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd"><responseDate>2026-08-01T20:33:05Z</responseDate><request verb="ListRecords" metadataPrefix="oai_dc">http://library.oapen.org/oai/request</request><ListRecords><record><header><identifier>oai:directory.doabooks.org:20.500.12854/150215</identifier><datestamp>2025-07-21T15:44:01Z</datestamp><setSpec>com_20.500.12854_11</setSpec><setSpec>col_20.500.12854_12</setSpec></header><metadata><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:doc="http://www.lyncode.com/xoai" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:datacite="https://schema.datacite.org/meta/kernel-4.1/metadata.xsd" xmlns:oaire="https://raw.githubusercontent.com/rcic/openaire4/master/schemas/4.0/oaire.xsd" xmlns:oapen="http://purl.org/dc/elements/1.1/" xmlns:publisher="http://purl.org/dc/elements/1.1/" xmlns:grantor="http://purl.org/dc/elements/1.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+<dc:title>Chapter Il cantiere di restauro, luogo di formazione e di educazione</dc:title>
+<dc:creator>MARINO, LUIGI</dc:creator>
+<dc:subject>restoration work site</dc:subject>
+<dc:subject>monument – document</dc:subject>
+<dc:subject>historic building</dc:subject>
+<dc:subject>emergency</dc:subject>
+<dc:subject>diagnostics</dc:subject>
+<dc:subject>thema EDItEUR::N History and Archaeology::NK Archaeology</dc:subject>
+<dc:subject>thema EDItEUR::N History and Archaeology::NK Archaeology::NKD Archaeology by period / region</dc:subject>
+<dc:subject>thema EDItEUR::N History and Archaeology::NK Archaeology</dc:subject>
+<dc:subject>thema EDItEUR::N History and Archaeology::NK Archaeology::NKD Archaeology by period / region</dc:subject>
+<dc:description>Archaeologists and architects: areas of communication, collaboration and conflict: this is the title of a speech by Philip Rahtz that after a few decades can constitute a useful starting point for reflections on the collaborations that can (should) be activated in a restoration site when, not infrequently, the interventions move mainly in accordance with theoretical models that have few and uncertain references with the surviving material traces. On the other hand, excavation campaigns are often carried out without adequate attention to protection actions (preventive, during and after) despite knowing that the excavation will set in motion degenerative mechanisms which in turn will cause other damage which will be aggravated by the state of abandonment in whose sites and monuments will be left behind. The relationships of collaboration and sharing that are established in a restoration site could facilitate the development of a sense of belonging and mutual responsibility.</dc:description>
+<dc:date>2025-01-22T01:42:32Z</dc:date>
+<dc:date>2025-01-22T01:42:32Z</dc:date>
+<dc:date>2024-12-20T12:38:55Z</dc:date>
+<dc:date type="Issued">2024</dc:date>
+<oaire:resourceType>chapter</oaire:resourceType>
+<dc:identifier>ONIX_20241220_9791221503760_289</dc:identifier>
+<dc:identifier>2704-5870</dc:identifier>
+<dc:identifier>https://library.oapen.org/handle/20.500.12657/96494</dc:identifier>
+<dc:alternateIdentifier type="ISBN">9791221503760</dc:alternateIdentifier>
+<dc:identifier type="URL">https://directory.doabooks.org/handle/20.500.12854/150215</dc:identifier>
+<dc:language>ita</dc:language>
+<dc:relation>Strumenti per la didattica e la ricerca</dc:relation>
+<oaire:licenseCondition>open access</oaire:licenseCondition>
+<dc:format>image/jpeg</dc:format>
+<oaire:licenseCondition uri="https://creativecommons.org/licenses/by/4.0/">
+              Attribution 4.0 International
+            </oaire:licenseCondition>
+<dc:identifier>https://library.oapen.org/bitstream/20.500.12657/96494/1/42376.pdf</dc:identifier>
+<dc:publisher>Firenze University Press</dc:publisher>
+<dc:alternateIdentifier type="DOI">10.36253/979-12-215-0376-0.27</dc:alternateIdentifier>
+<oapen:identifierdoi>10.36253/979-12-215-0376-0.27</oapen:identifierdoi>
+<oapen:relationisPublishedBy>2ec4474d-93b1-4cfa-b313-9c6019b51b1a</oapen:relationisPublishedBy>
+<oapen:relationisbn>9791221503760</oapen:relationisbn>
+<oapen:pages>9</oapen:pages>
+<oapen:placepublication>Florence</oapen:placepublication>
+<dc:rights uri="http://purl.org/coar/access_right/c_abf2">open access</dc:rights>
+</oai_dc:dc></metadata></record><record><header><identifier>oai:directory.doabooks.org:20.500.12854/62823</identifier><datestamp>2022-01-31T19:40:09Z</datestamp><setSpec>com_20.500.12854_5</setSpec><setSpec>col_20.500.12854_6</setSpec></header><metadata><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:doc="http://www.lyncode.com/xoai" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:datacite="https://schema.datacite.org/meta/kernel-4.1/metadata.xsd" xmlns:oaire="https://raw.githubusercontent.com/rcic/openaire4/master/schemas/4.0/oaire.xsd" xmlns:oapen="http://purl.org/dc/elements/1.1/" xmlns:publisher="http://purl.org/dc/elements/1.1/" xmlns:grantor="http://purl.org/dc/elements/1.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+<dc:title>A World of Nourishment</dc:title>
+<dc:creator>Cinzia Pieruccini</dc:creator>
+<dc:creator>Paola M. Rossi</dc:creator>
+<dc:subject>PK1-9601</dc:subject>
+<dc:description>Today as in the past, perhaps no other great culture of humankind is so markedly characterised by traditions in the field of nutrition as that of South Asia. In India food has served to express religious values, philosophical positions or material power, and between norms and narration Indian literature has dedicated ample space to the subject, presenting a broad range of diverse or variously aligned positions, and evidence of their evolution over time. This book provides a collection of essays on the subject, taking a broad and varied approach ranging chronologically from Vedic antiquity to the evidence of our own day, thus exposing, as in a sort of comprehensive outline, many of the tendencies, tensions and developments that have occurred within the framework of constant self-analysis and reflection.</dc:description>
+<dc:date>2021-02-12T08:48:14Z</dc:date>
+<dc:date>2021-02-12T08:48:14Z</dc:date>
+<dc:date>2018-06-21 16:52:03</dc:date>
+<dc:date type="Issued">2016</dc:date>
+<oaire:resourceType>book</oaire:resourceType>
+<dc:identifier>27052</dc:identifier>
+<dc:alternateIdentifier type="ISBN">9788867055432</dc:alternateIdentifier>
+<dc:identifier type="URL">https://directory.doabooks.org/handle/20.500.12854/62823</dc:identifier>
+<dc:language>eng</dc:language>
+<dc:relation>Consonanze</dc:relation>
+<dc:format>image/jpeg</dc:format>
+<oaire:licenseCondition uri="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+              Attribution-NonCommercial-ShareAlike 4.0 International
+            </oaire:licenseCondition>
+<dc:identifier>http://www.ledizioni.it/prodotto/c-pieruccini-p-rossi-a-cura-di-a-world-of-nourishment/</dc:identifier>
+<dc:identifier>http://www.ledizioni.it/stag/wp-content/uploads/2018/06/World_Nour_web1.pdf</dc:identifier>
+<dc:publisher>Ledizioni</dc:publisher>
+<oapen:relationisPublishedBy>cb2a1db5-5754-4ab6-bb64-d635458e30c5</oapen:relationisPublishedBy>
+<oapen:relationisbn>9788867055432</oapen:relationisbn>
+<oapen:pages>352</oapen:pages>
+<dc:rights uri="http://purl.org/coar/access_right/c_abf2">open access</dc:rights>
+</oai_dc:dc></metadata></record><record><header><identifier>oai:directory.doabooks.org:20.500.12854/160059</identifier><datestamp>2025-05-22T05:03:51Z</datestamp><setSpec>com_20.500.12854_11</setSpec><setSpec>col_20.500.12854_12</setSpec></header><metadata><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:doc="http://www.lyncode.com/xoai" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:datacite="https://schema.datacite.org/meta/kernel-4.1/metadata.xsd" xmlns:oaire="https://raw.githubusercontent.com/rcic/openaire4/master/schemas/4.0/oaire.xsd" xmlns:oapen="http://purl.org/dc/elements/1.1/" xmlns:publisher="http://purl.org/dc/elements/1.1/" xmlns:grantor="http://purl.org/dc/elements/1.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+<dc:title>Faith and Secularisation in Religious Colleges and Universities</dc:title>
+<dc:creator>Arthur, James</dc:creator>
+<dc:subject>catholic</dc:subject>
+<dc:subject>higher</dc:subject>
+<dc:subject>education</dc:subject>
+<dc:subject>university</dc:subject>
+<dc:subject>corde</dc:subject>
+<dc:subject>ecclesiae</dc:subject>
+<dc:subject>muslim</dc:subject>
+<dc:subject>academic</dc:subject>
+<dc:subject>freedom</dc:subject>
+<dc:subject>christian</dc:subject>
+<dc:subject>Corde Ecclesiae</dc:subject>
+<dc:subject>Institutional Academic Freedom</dc:subject>
+<dc:subject>AAUP Report</dc:subject>
+<dc:subject>Opus Dei</dc:subject>
+<dc:subject>Young Men</dc:subject>
+<dc:subject>Religious Congregation</dc:subject>
+<dc:subject>Muslim World</dc:subject>
+<dc:subject>Catholic University</dc:subject>
+<dc:subject>Catholic Higher Education</dc:subject>
+<dc:subject>Catholic Higher Education Institutions</dc:subject>
+<dc:subject>Genuine Occupational Qualifications</dc:subject>
+<dc:subject>Catholic Intellectual Tradition</dc:subject>
+<dc:subject>AAUP Statement</dc:subject>
+<dc:subject>Academic Freedom</dc:subject>
+<dc:subject>Aquinas</dc:subject>
+<dc:subject>St Thomas Aquinas</dc:subject>
+<dc:subject>USA Conference</dc:subject>
+<dc:subject>Bull Parens Scientiarum</dc:subject>
+<dc:subject>Ukrainian Catholic University</dc:subject>
+<dc:subject>Government Bodies</dc:subject>
+<dc:subject>thema EDItEUR::J Society and Social Sciences::JN Education::JNM Higher education, tertiary education</dc:subject>
+<dc:subject>thema EDItEUR::J Society and Social Sciences::JN Education::JNF Educational strategies and policy</dc:subject>
+<dc:subject>thema EDItEUR::J Society and Social Sciences::JN Education::JNA Philosophy and theory of education::JNAM Moral and social purpose of education</dc:subject>
+<dc:subject>thema EDItEUR::J Society and Social Sciences::JN Education::JNP Adult education, continuous learning</dc:subject>
+<dc:description>This book is a detailed study of higher education institutions affiliated to particular religions. It considers the debates surrounding academic freedom, institutional governance, educational policy, mission and identity together with institutions’ relations with the state and their wider communities. A wide range of institutions are examined, including: Christian, Islamic and Jewish universities in the US, Europe and the Middle East. Essentially, this volume questions whether such institutions can be both religious and a ‘university’ and also considers the appropriate role of religious faith within colleges and universities.</dc:description>
+<dc:date>2025-05-22T05:03:50Z</dc:date>
+<dc:date>2025-05-22T05:03:50Z</dc:date>
+<dc:date>2025-05-21T14:56:02Z</dc:date>
+<dc:date type="Issued">2006</dc:date>
+<oaire:resourceType>book</oaire:resourceType>
+<dc:identifier>ONIX_20250521T155841_9781134241125_45</dc:identifier>
+<dc:identifier>https://library.oapen.org/handle/20.500.12657/102259</dc:identifier>
+<dc:alternateIdentifier type="ISBN">9781134241125</dc:alternateIdentifier>
+<dc:alternateIdentifier type="ISBN">9781134241071</dc:alternateIdentifier>
+<dc:alternateIdentifier type="ISBN">9780415359405</dc:alternateIdentifier>
+<dc:alternateIdentifier type="ISBN">9780203007440</dc:alternateIdentifier>
+<dc:alternateIdentifier type="ISBN">9781134241118</dc:alternateIdentifier>
+<dc:alternateIdentifier type="ISBN">9781138866881</dc:alternateIdentifier>
+<dc:identifier type="URL">https://directory.doabooks.org/handle/20.500.12854/160059</dc:identifier>
+<dc:language>eng</dc:language>
+<oaire:licenseCondition>open access</oaire:licenseCondition>
+<dc:format>image/jpeg</dc:format>
+<oaire:licenseCondition uri="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+              Attribution-NonCommercial-NoDerivatives 4.0 International
+            </oaire:licenseCondition>
+<dc:identifier>https://library.oapen.org/bitstream/20.500.12657/102259/1/9781134241125.pdf</dc:identifier>
+<dc:publisher>Taylor &amp; Francis</dc:publisher>
+<dc:publisher>Routledge</dc:publisher>
+<dc:alternateIdentifier type="DOI">10.4324/9780203007440</dc:alternateIdentifier>
+<oapen:identifierdoi>10.4324/9780203007440</oapen:identifierdoi>
+<oapen:relationisPublishedBy>fa69b019-f4ee-4979-8d42-c6b6c476b5f0</oapen:relationisPublishedBy>
+<oapen:relationisbn>9781134241125</oapen:relationisbn>
+<oapen:relationisbn>9781134241071</oapen:relationisbn>
+<oapen:relationisbn>9780415359405</oapen:relationisbn>
+<oapen:relationisbn>9780203007440</oapen:relationisbn>
+<oapen:relationisbn>9781134241118</oapen:relationisbn>
+<oapen:relationisbn>9781138866881</oapen:relationisbn>
+<oapen:imprint>Routledge</oapen:imprint>
+<oapen:pages>192</oapen:pages>
+<oapen:placepublication>Oxford</oapen:placepublication>
+<dc:rights uri="http://purl.org/coar/access_right/c_abf2">open access</dc:rights>
+</oai_dc:dc></metadata></record><record><header><identifier>oai:directory.doabooks.org:20.500.12854/101067</identifier><datestamp>2024-04-02T13:58:53Z</datestamp><setSpec>com_20.500.12854_5</setSpec><setSpec>col_20.500.12854_6</setSpec></header><metadata><oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:doc="http://www.lyncode.com/xoai" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:datacite="https://schema.datacite.org/meta/kernel-4.1/metadata.xsd" xmlns:oaire="https://raw.githubusercontent.com/rcic/openaire4/master/schemas/4.0/oaire.xsd" xmlns:oapen="http://purl.org/dc/elements/1.1/" xmlns:publisher="http://purl.org/dc/elements/1.1/" xmlns:grantor="http://purl.org/dc/elements/1.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+<dc:title>La peur chez les Grecs</dc:title>
+<dc:contributor type="Editor">Patera, Maria</dc:contributor>
+<dc:contributor type="Editor">Perentidis, Stavros</dc:contributor>
+<dc:contributor type="Editor">Wallensten, Jenny</dc:contributor>
+<dc:subject>histoire de la peur</dc:subject>
+<dc:subject>histoire des religions</dc:subject>
+<dc:subject>émotions</dc:subject>
+<dc:subject>archéologie</dc:subject>
+<dc:subject>anthropologie</dc:subject>
+<dc:subject>thema EDItEUR::N History and Archaeology::NH History::NHC Ancient history</dc:subject>
+<dc:description>La peur est indissociable de notre manière d’expérimenter le monde, et elle détermine notre manière de voir. Processus à la fois cognitif et opérateur de choix décisionnels soumis aux normes sociales en vigueur, la peur n’est pourtant ni sémantiquement définie ni linguistiquement formée. Elle a besoin d’un complément qui l’ancre dans l’expérience : peur des dieux ou de Dieu, du pouvoir, de l’autre, de la guerre, de la mort, etc. L’ouvrage étudie les manières de nommer la peur, de la verbaliser, de la comprendre, de l’interpréter ; les manières de la somatiser, de la rêver, de la mettre en gestes, de la visualiser dans l’art et de la matérialiser dans des objets. À travers l’étude de la peur, de ses mécanismes mais aussi de ses usages sociaux et politiques, c’est toute une histoire des émotions qui est ici esquissée au sein des mondes de langue grecque, de l’Antiquité au xixe siècle. C’est aussi une histoire des sociétés concernées car, à travers la peur, se joue leur rapport au divin, aux autorités, aux ennemis, aux proches, aux étrangers et aux compatriotes, à soi-même enfin.</dc:description>
+<dc:date>2023-06-26T06:51:03Z</dc:date>
+<dc:date>2023-06-26T06:51:03Z</dc:date>
+<dc:date type="Issued">2023</dc:date>
+<oaire:resourceType>book</oaire:resourceType>
+<dc:identifier>ONIX_20230626_9782753591905_141</dc:identifier>
+<dc:identifier>2111-496X</dc:identifier>
+<dc:alternateIdentifier type="ISBN">9782753591905</dc:alternateIdentifier>
+<dc:alternateIdentifier type="ISBN">9782753591882</dc:alternateIdentifier>
+<dc:identifier type="URL">https://directory.doabooks.org/handle/20.500.12854/101067</dc:identifier>
+<dc:language>fre</dc:language>
+<dc:relation>Histoire</dc:relation>
+<dc:format>image/png</dc:format>
+<oaire:licenseCondition uri="https://www.openedition.org/12554">
+              n/a
+            </oaire:licenseCondition>
+<dc:identifier>https://www.7switch.com/fr/ebook/9782753591905/from/openedition</dc:identifier>
+<dc:identifier>https://books.openedition.org/pur/190788</dc:identifier>
+<dc:publisher>Presses universitaires de Rennes</dc:publisher>
+<dc:alternateIdentifier type="DOI">10.4000/books.pur.190788</dc:alternateIdentifier>
+<oapen:abstractotherlanguage>La peur est indissociable de notre manière d’expérimenter le monde, et elle détermine notre manière de voir. Processus à la fois cognitif et opérateur de choix décisionnels soumis aux normes sociales en vigueur, la peur n’est pourtant ni sémantiquement définie ni linguistiquement formée. Elle a besoin d’un complément qui l’ancre dans l’expérience : peur des dieux ou de Dieu, du pouvoir, de l’autre, de la guerre, de la mort, etc. L’ouvrage étudie les manières de nommer la peur, de la verbaliser, de la comprendre, de l’interpréter ; les manières de la somatiser, de la rêver, de la mettre en gestes, de la visualiser dans l’art et de la matérialiser dans des objets. À travers l’étude de la peur, de ses mécanismes mais aussi de ses usages sociaux et politiques, c’est toute une histoire des émotions qui est ici esquissée au sein des mondes de langue grecque, de l’Antiquité au xixe siècle. C’est aussi une histoire des sociétés concernées car, à travers la peur, se joue leur rapport au divin, aux autorités, aux ennemis, aux proches, aux étrangers et aux compatriotes, à soi-même enfin.</oapen:abstractotherlanguage>
+<oapen:identifierdoi>10.4000/books.pur.190788</oapen:identifierdoi>
+<oapen:relationisPublishedBy>39788d67-70b5-4e83-ba77-a5692a861af6</oapen:relationisPublishedBy>
+<oapen:relationisbn>9782753591905</oapen:relationisbn>
+<oapen:relationisbn>9782753591882</oapen:relationisbn>
+<oapen:pages>360</oapen:pages>
+<oapen:placepublication>Rennes</oapen:placepublication>
+<dc:rights uri="http://purl.org/coar/access_right/c_abf2">open access</dc:rights>
+</oai_dc:dc></metadata></record><resumptionToken completeListSize="90000" cursor="0">TOKEN-PAGE-2</resumptionToken></ListRecords></OAI-PMH>

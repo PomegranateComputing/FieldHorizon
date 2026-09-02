@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <responseDate>2026-07-01T10:00:00Z</responseDate>
+  <request verb="ListRecords" metadataPrefix="oai_dc">https://directory.doabooks.org/oai/request</request>
+  <ListRecords>
+    <record>
+      <header>
+        <identifier>oai:directory.doabooks.org:20.500.12854/12345</identifier>
+        <datestamp>2026-01-15</datestamp>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>Cybernetics and the Governance of Complex Systems</dc:title>
+          <dc:creator>Lefevre, Anne</dc:creator>
+          <dc:contributor>Nowak, Piotr</dc:contributor>
+          <dc:subject>Cybernetics</dc:subject>
+          <dc:subject>Systems theory</dc:subject>
+          <dc:subject>Philosophy of science</dc:subject>
+          <dc:date>2019</dc:date>
+          <dc:type>book</dc:type>
+          <dc:language>eng</dc:language>
+          <dc:format>application/pdf</dc:format>
+          <dc:rights>https://creativecommons.org/licenses/by/4.0/</dc:rights>
+          <dc:identifier>https://library.oapen.org/handle/20.500.12854/12345</dc:identifier>
+          <dc:identifier>https://library.oapen.org/bitstream/20.500.12854/12345/1/book.pdf</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+
+    <record>
+      <header>
+        <identifier>oai:directory.doabooks.org:20.500.12854/99999</identifier>
+        <datestamp>2026-01-16</datestamp>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:title>An Open Access Monograph With No Licence Grant</dc:title>
+          <dc:creator>Doe, Jane</dc:creator>
+          <dc:subject>Sociology</dc:subject>
+          <dc:date>2021</dc:date>
+          <dc:type>book</dc:type>
+          <dc:language>eng</dc:language>
+          <dc:rights>Open access</dc:rights>
+          <dc:identifier>https://library.oapen.org/handle/20.500.12854/99999</dc:identifier>
+          <dc:identifier>https://library.oapen.org/bitstream/20.500.12854/99999/1/oa.pdf</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+
+    <record>
+      <header status="deleted">
+        <identifier>oai:directory.doabooks.org:20.500.12854/00000</identifier>
+        <datestamp>2026-01-17</datestamp>
+      </header>
+    </record>
+
+    <resumptionToken cursor="0" completeListSize="3">TOKEN-PAGE-2</resumptionToken>
+  </ListRecords>
+</OAI-PMH>

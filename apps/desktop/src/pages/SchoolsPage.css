@@ -1,0 +1,103 @@
+.schools-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+
+.schools-error {
+  color: var(--status-danger);
+  margin: 0;
+}
+
+.schools-run-complete {
+  color: var(--status-live);
+  margin: 0 0 1rem;
+}
+
+.schools-progress {
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 1rem;
+  max-width: 500px;
+}
+
+.schools-run-section {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 900px;
+}
+
+.schools-run-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.schools-run-active-badge {
+  color: var(--status-live);
+  border: var(--border-width) solid var(--status-live);
+  padding: 0.05rem 0.4rem;
+  font-size: 0.7rem;
+  margin-left: 0.4rem;
+}
+
+.schools-distances-table {
+  margin-bottom: 0.8rem;
+  font-size: 0.8rem;
+}
+.schools-distances-table td {
+  padding: 0.15rem 0.5rem 0.15rem 0;
+  color: var(--text-secondary);
+}
+
+.schools-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.schools-card {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+  padding: 0.6rem 0.7rem;
+  cursor: pointer;
+}
+.schools-card--selected {
+  border-color: var(--status-live);
+}
+
+.schools-card-header {
+  display: flex;
+  gap: 0.8rem;
+  align-items: baseline;
+  font-size: 0.8rem;
+}
+.schools-card-name {
+  flex: 1;
+  color: var(--text-primary);
+  font-family: var(--font-literary);
+  font-size: 0.95rem;
+}
+
+.schools-card-summary {
+  margin: 0.35rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.schools-lineage {
+  margin-top: 0.35rem;
+  color: var(--text-meta);
+}
+
+.schools-empty-inline {
+  color: var(--text-meta);
+  font-size: 0.8rem;
+}

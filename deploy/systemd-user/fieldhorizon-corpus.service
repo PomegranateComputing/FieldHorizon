@@ -1,0 +1,119 @@
+# Field Horizon -- Autonomous Open Corpus Harvester
+#
+# A USER service (systemctl --user), never a system one. It runs as you,
+# writes only inside your Field Horizon checkout, and needs no privilege
+# of any kind.
+#
+# Installed by tools/install_corpus_timer.sh, which substitutes the
+# placeholders below. Not enabled by default -- installing the unit and
+# starting the timer are separate, deliberate acts.
+
+[Unit]
+Description=Field Horizon corpus harvester (one bounded cycle)
+Documentation=file://%h/Projects/FieldHorizon/docs/CORPUS_OPERATIONS.md
+# Pointless to run with no network, and a failed run would just be noise.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+
+WorkingDirectory=__FH_ROOT__
+Environment=FIELDHORIZON_HARVESTER_CONTACT=__FH_CONTACT__
+
+# The data root, absolute and explicit. A relative default resolves
+# against the working directory, and that is how the offline test suite
+# once wrote a fixture catalogue into the real corpus, which a later live
+# run then read back as though it were a provider's own data.
+Environment=FIELDHORIZON_DATA_ROOT=__FH_ROOT__/data
+
+# SECRETS COME FROM A FILE, NEVER FROM THIS UNIT.
+#
+# $GITHUB_TOKEN, $EUROPEANA_API_KEY, and $WIKIMEDIA_ENTERPRISE_TOKEN are
+# all optional -- every source that can use one also works without one --
+# but if you set them, set them here:
+#
+#     install -m 600 /dev/null ~/.config/fieldhorizon/corpus.env
+#     printf 'GITHUB_TOKEN=%s\n' "$TOKEN" >> ~/.config/fieldhorizon/corpus.env
+#
+# NOT with `Environment=` in this file. Unit files are world-readable and
+# `systemctl show` prints every Environment= value, so a token written
+# here is a token published to every user on the machine. The leading `-`
+# means a missing file is not an error, which is the normal case.
+EnvironmentFile=-%h/.config/fieldhorizon/corpus.env
+
+# `daemon-once` performs exactly one bounded cycle and exits. It is not a
+# daemon despite the name: there is no loop, no supervision requirement,
+# and nothing to kill. If a run is not yet due (sync_interval_hours) or
+# another run holds the lock, it exits 0 without working.
+ExecStart=__FH_PYTHON__ -m fieldhorizon.cli corpus daemon-once
+
+# Exit 2 is the harvester's "refused" code -- budget not configured, lock
+# held, export blocked. That is a decision, not a fault, and must not be
+# reported as a failed unit.
+SuccessExitStatus=0 2
+
+# A harvest that hangs on an unresponsive server is stopped rather than
+# left running until the next timer firing overlaps it.
+TimeoutStartSec=3600
+
+Nice=10
+IOSchedulingClass=idle
+
+# The harvester downloads untrusted third-party content. It never
+# executes any of it, but the sandbox below means that even a defect that
+# tried to could not reach anything outside the corpus.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=__FH_ROOT__/data __FH_ROOT__/outputs __FH_ROOT__/logs
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+ProtectHostname=true
+ProtectClock=true
+RestrictNamespaces=true
+RestrictRealtime=true
+RestrictSUIDSGID=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallErrorNumber=EPERM
+
+# No capabilities at all. A user unit has none to begin with; saying so
+# explicitly means a future edit that adds one has to be deliberate.
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+# Network only. The harvester speaks HTTPS and nothing else -- no raw
+# sockets, no netlink, no bluetooth.
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+# It reads files and talks to servers; it has no business with devices.
+PrivateDevices=true
+DevicePolicy=closed
+
+# Other users' processes are not visible, and nothing is left in shared
+# memory afterwards.
+ProtectProc=invisible
+ProcSubset=pid
+RemoveIPC=true
+KeyringMode=private
+
+# Corpus files are yours alone. Without this, a permissive login umask
+# would publish the whole corpus to every user on the machine.
+UMask=0077
+
+# RESOURCE CEILINGS. A bulk dump run decompresses multi-megabyte streams
+# in memory, and the point of a ceiling is that a runaway is killed
+# rather than taking the desktop down with it. Raise MemoryMax if archive
+# mode needs it -- and if it does, that is worth knowing.
+MemoryMax=2G
+TasksMax=64
+LimitNOFILE=1024
+
+StandardOutput=append:__FH_ROOT__/logs/corpus/systemd.log
+StandardError=append:__FH_ROOT__/logs/corpus/systemd.log

@@ -1,0 +1,608 @@
+# Field Horizon -- Autonomous Open Corpus Harvester
+# Source configuration.
+#
+# This file says WHICH catalogues the harvester may talk to and on what
+# terms. config/corpus_policy.yaml says what it is allowed to DO. The
+# split is deliberate: sources change often, policy rarely, and "what is
+# this system permitted to do" should be answerable from one short file.
+#
+# Every field below is enforced, not documentation:
+#
+#   allowed_hosts   Mandatory for an enabled source. Every request and
+#                   every redirect hop is validated against it. A leading
+#                   dot means "this host and its subdomains"; without one
+#                   the match is exact. `.gutenberg.org` matches
+#                   www.gutenberg.org, never gutenberg.org.evil.com.
+#   trust           0..1 confidence in this provider's CONTENT rights
+#                   statements. Feeds the curator's source_confidence
+#                   term and the `seed` profile's min_source_trust gate.
+#   trusted_for_content_rights
+#                   false means the rights engine will not accept on this
+#                   source's word alone -- everything from it is
+#                   quarantined unless another mechanism (a curated
+#                   collection allowlist) supplies real evidence.
+#   requests_per_minute
+#                   Per-host pacing. Retry-After from a 429/503 always
+#                   overrides this upward.
+#
+# A source stays `enabled: false` until ALL of the following exist:
+#   1. its official endpoint is identified (never a scraped HTML page);
+#   2. its terms of use are read and recorded in `notes`;
+#   3. its licence mapping is implemented and tested;
+#   4. its rate limits are configured;
+#   5. an offline integration test covers its parser.
+#
+# Set FIELDHORIZON_HARVESTER_CONTACT to a reachable address before
+# enabling anything. Institutional harvesting policies require it, and
+# it goes into the User-Agent of every request.
+
+sources:
+
+  # ------------------------------------------------------------------
+  # ENABLED -- high confidence, official interfaces, tested parsers
+  # ------------------------------------------------------------------
+
+  - id: standard_ebooks
+    name: "Standard Ebooks (public new-releases feed)"
+    adapter: standard_ebooks
+    enabled: true
+    base_url: "https://standardebooks.org/feeds/atom/new-releases"
+    allowed_hosts:
+      - standardebooks.org
+      - .standardebooks.org
+    trust: 0.95
+    trusted_for_content_rights: true
+    requests_per_minute: 12
+    max_download_bytes: 33554432          # 32 MB
+    languages: [en]
+    options:
+      license_url: "https://standardebooks.org/licensing"
+    notes: >-
+      IMPORTANT -- two things, both verified against the live service on
+      2026-07-31.
+
+      (1) The bulk OPDS catalogue at /feeds/opds/all now returns HTTP 401:
+      it requires an account. We do not have credentials and will not
+      bypass authentication, so the public /feeds/atom/new-releases
+      syndication feed is used instead. It is official, unauthenticated,
+      and carries full rights text plus rel="enclosure" download links --
+      but it is only the 15 most recent releases. To harvest the full
+      catalogue, obtain an account and point base_url back at the OPDS
+      feed. The HTML site is never scraped.
+
+      (2) Standard Ebooks' entries state "Public domain in the United
+      States. Users located outside of the United States must check their
+      local laws." The CC0 dedication covers Standard Ebooks' OWN
+      editorial contribution to the edition -- typesetting, proofreading,
+      markup -- NOT the underlying work. These texts therefore normalize
+      to public-domain-us with scope LOCAL_US_ONLY: accepted under
+      local_research_us, quarantined under release_worldwide, and refused
+      by export-safe for a worldwide release.
+
+  - id: standard_ebooks_github
+    name: "Standard Ebooks (public GitHub repositories)"
+    adapter: standard_ebooks_github
+    enabled: true
+    base_url: "https://api.github.com"
+    allowed_hosts:
+      - api.github.com
+      - raw.githubusercontent.com
+      - github.com
+    trust: 0.95
+    trusted_for_content_rights: true
+    # 60 requests/hour unauthenticated; a repository costs 2 (OPF +
+    # LICENSE.md) plus one per spine item at content time. One per second
+    # is well inside the authenticated ceiling and the pacing below is
+    # what keeps an unauthenticated run from exhausting its hour in a
+    # minute. Retry-After from a 403 always overrides this downward.
+    requests_per_minute: 20
+    max_download_bytes: 33554432          # 32 MB
+    languages: [en]
+    options:
+      org: standardebooks
+      per_page: 30
+      token_env: GITHUB_TOKEN
+    notes: >-
+      The same publisher as `standard_ebooks` above, reached by a different
+      published interface. /feeds/opds/all requires an account and we do
+      not bypass authentication; the atom feed carries only the 15 most
+      recent releases. The GitHub organisation publishes every ebook as a
+      public repository -- documented, unauthenticated, no gate to step
+      around -- and that is the full catalogue.
+
+      $GITHUB_TOKEN raises the rate limit from 60 to 5000 requests/hour if
+      it is set. It is OPTIONAL: without one the adapter harvests more
+      slowly, never not at all. The token is read from the environment and
+      travels in a session header that the request log does not record.
+
+      Rights: `dc:rights` states TWO layers in one string -- the source
+      text is US public domain, and Standard Ebooks' own contributions
+      (typesetting, proofreading, markup) are CC0. Phase I's single-licence
+      engine matched CC0 first and produced a worldwide grant. Here the
+      clauses are split into SOURCE_TEXT and EDITORIAL_CONTRIBUTION and
+      intersected, so the result is LOCAL_US_ONLY structurally rather than
+      by regex ordering.
+
+      No EPUB is built: `src/epub/text/*.xhtml` is the text and
+      `content.opf` gives the reading order. Colophon, uncopyright,
+      imprint, and title pages sit in the spine and are routed to the
+      licence artifact rather than into the corpus.
+
+  - id: gutenberg
+    name: "Project Gutenberg"
+    adapter: gutenberg
+    enabled: true
+    base_url: "https://www.gutenberg.org"
+    allowed_hosts:
+      - www.gutenberg.org
+      - gutenberg.org
+      - .gutenberg.org
+    trust: 0.9
+    trusted_for_content_rights: true
+    requests_per_minute: 6
+    max_download_bytes: 67108864          # 64 MB
+    languages: [en, fr, de, es, it, la]
+    options:
+      catalog_url: "https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv"
+      # Low on purpose. The published CSV carries NO rights column, so
+      # per-item rights come from each book's own /ebooks/<id>.rdf --
+      # one extra request per candidate, which is the honest cost of
+      # having real evidence instead of an assumption.
+      page_size: 25
+      fetch_rights_rdf: true
+      # Each candidate costs its own RDF request at 6/min, so a broad
+      # ceiling here would mean over an hour of discovery for one source.
+      max_candidates: 25
+    notes: >-
+      Official CSV catalogue only; the site itself is never crawled, which
+      its terms of use require. Rate limited hard (6/min) and identified by
+      a contact-bearing User-Agent. IMPORTANT: Gutenberg determines public
+      domain status under UNITED STATES law. Its texts normalize to
+      `public-domain-us` with scope LOCAL_US_ONLY -- accepted under
+      local_research_us, quarantined under release_worldwide, and never
+      packaged into a worldwide export.
+
+  - id: gutenberg_fr
+    name: "Project Gutenberg (français)"
+    adapter: gutenberg
+    enabled: true
+    base_url: "https://www.gutenberg.org"
+    allowed_hosts:
+      - www.gutenberg.org
+      - gutenberg.org
+      - .gutenberg.org
+    trust: 0.9
+    trusted_for_content_rights: true
+    requests_per_minute: 6
+    max_download_bytes: 67108864
+    languages: [fr]
+    options:
+      catalog_url: "https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv"
+      page_size: 25
+      fetch_rights_rdf: true
+      # The catalogue is overwhelmingly English and is ordered by
+      # accession, so an unfiltered slice of it is English-only. This
+      # entry exists so the corpus is not monolingual by accident.
+      filter_languages: [fr]
+      max_candidates: 25
+    notes: >-
+      The same official catalogue and the same adapter as `gutenberg`,
+      restricted to French-language texts. Shares gutenberg.org with that
+      source; the rate limiter is per-host, so the two together still
+      respect a single 6-requests-per-minute budget against the site.
+      Same US-jurisdiction caveat applies: LOCAL_US_ONLY, never worldwide.
+
+  - id: wikisource_fr
+    name: "Wikisource (français)"
+    adapter: wikisource
+    enabled: true
+    base_url: "https://fr.wikisource.org"
+    allowed_hosts:
+      - fr.wikisource.org
+      - .wikisource.org
+      - .wikimedia.org
+    trust: 0.8
+    trusted_for_content_rights: true
+    requests_per_minute: 20
+    max_download_bytes: 16777216          # 16 MB
+    languages: [fr]
+    options:
+      language: fr
+      page_size: 50
+      # Verified populated against the live wiki on 2026-07-31. Note the
+      # French wiki uses "Catégorie:", which the adapter prefixes for us.
+      categories:
+        - "Philosophie"
+        - "Politique"
+        - "Discours"
+        - "Déclarations"
+        - "Essais"
+    notes: >-
+      MediaWiki API (action=query), never the rendered site. Content is
+      CC BY-SA 4.0 by the site's own terms, so attribution AND share-alike
+      obligations are real and are recorded per document. Talk pages,
+      categories, indexes, templates, stubs, and subpages of works already
+      imported via their parent are all excluded.
+
+  - id: wikisource_fr_dump
+    name: "Wikisource français (published XML dump)"
+    adapter: wikisource_dump
+    enabled: true
+    base_url: "https://dumps.wikimedia.org"
+    allowed_hosts:
+      - dumps.wikimedia.org
+    trust: 0.85
+    trusted_for_content_rights: true
+    # The dumps service asks for restraint rather than publishing a rate
+    # limit. Seed mode issues roughly one request per stream, so this is
+    # already far below anything that could burden it.
+    requests_per_minute: 12
+    max_download_bytes: 268435456         # 256 MB -- the index, not the dump
+    languages: [fr]
+    options:
+      wiki: frwikisource
+      language: fr
+      mode: dump-seed
+      max_works: 30
+      transport: xml_export
+    notes: >-
+      The same wiki as `wikisource_fr`, by the route the institution
+      actually wants used at scale: reading a whole wiki through
+      action=query is hundreds of thousands of requests against a service
+      that has already packaged it into one file.
+
+      BOUNDED BY DESIGN. pages-articles-multistream for frwikisource is
+      2.8 GB. A multistream dump is a concatenation of independently
+      decompressible bzip2 streams of 100 pages each, and the companion
+      index maps titles to byte offsets -- so seed mode reads the index
+      plus a handful of HTTP Range requests, roughly 1-2 MB out of 2.8 GB.
+      max_works is clamped to 20-50 whatever this file says.
+
+      `latest/` is never resolved: it is a moving symlink, and a run that
+      resolves it twice can read one release's index against the next
+      release's data, which puts byte offsets in the middle of the wrong
+      stream. Only dated directories, and only jobs the service reports
+      as `done`.
+
+      WHAT THIS DUMP DOES NOT CONTAIN. Wikisource keeps the transcribed
+      text of most works in the `Page:` namespace and assembles it at
+      render time; pages-articles carries the main namespace, where those
+      works are a `<pages index="...djvu"/>` directive and nothing else.
+      For them this source fills the discovery and metadata roles and NOT
+      the content role -- the same shape as Gallica. Shell pages are
+      counted and reported, never silently dropped.
+
+      Rights are two layers, and the second one usually blocks.
+      Wikisource's transcription is CC BY-SA 4.0, whose attribution and
+      share-alike obligations are real. The underlying WORK is separate
+      and is filled only when the page carries a public-domain template.
+
+      Its absence BLOCKS, and this is worth being exact about because the
+      opposite argument is tempting. A transcriber can only license what
+      they own: the keystrokes, the proofreading, the markup. They do not
+      own the work they transcribed and cannot grant rights in it. So
+      CC BY-SA over a transcription of a text whose copyright status
+      nobody established grants nothing usable -- if the work is still in
+      copyright, the composite is unusable whatever the footer says.
+
+      The WORK layer is therefore applicable and unevaluated, which is
+      precisely the standing rule: unknown, absent, or unevaluated
+      quarantines. Expect most of this source to quarantine pending a
+      per-work determination; that is the correct answer, not a defect.
+
+      $WIKIMEDIA_ENTERPRISE_TOKEN selects the Enterprise transport. It is
+      optional; the public export needs no credentials and is the normal
+      path, not a degraded one.
+
+  - id: wikisource_en
+    name: "Wikisource (English)"
+    adapter: wikisource
+    enabled: true
+    base_url: "https://en.wikisource.org"
+    allowed_hosts:
+      - en.wikisource.org
+      - .wikisource.org
+      - .wikimedia.org
+    trust: 0.8
+    trusted_for_content_rights: true
+    requests_per_minute: 20
+    max_download_bytes: 16777216
+    languages: [en]
+    options:
+      language: en
+      page_size: 50
+      # Verified populated against the live wiki on 2026-07-31.
+      # "Philosophical works" had zero members and was replaced by
+      # "Philosophy"; a configured category that does not exist discovers
+      # nothing and says nothing about why.
+      categories:
+        - "Manifestos"
+        - "Constitutional documents"
+        - "Speeches"
+        - "Philosophy"
+    notes: >-
+      Same terms and same exclusions as the French edition. "Manifestos"
+      and "Constitutional documents" are the richest single source of
+      genuine manifesto-class documents available under an open licence,
+      which is what makes this source worth its share-alike obligations.
+
+  # ------------------------------------------------------------------
+  # ENABLED -- conservative; rights come from the record, not the host
+  # ------------------------------------------------------------------
+
+  - id: doab
+    name: "DOAB (Directory of Open Access Books)"
+    adapter: doab_oapen
+    enabled: true
+    base_url: "https://directory.doabooks.org/oai/request"
+    allowed_hosts:
+      - directory.doabooks.org
+      - .doabooks.org
+      - library.oapen.org
+      - .oapen.org
+    trust: 0.85
+    trusted_for_content_rights: true
+    requests_per_minute: 10
+    max_download_bytes: 67108864
+    languages: [en, fr, de, es, it]
+    options:
+      metadata_prefix: oai_dc
+      resolve_content: true
+      max_resolutions: 25
+    notes: >-
+      TWO PROVIDERS, FOUR ROLES, AND A GAP. DOAB is a directory and fills
+      DISCOVERY and METADATA. OAPEN is a repository and fills
+      CONTENT_HOSTING and RENDERED_TEXT. Nobody fills RIGHTS_EVIDENCE.
+
+      That last sentence is measured, not assumed. Probed live 2026-08-01:
+      of 100 DOAB OAI records, none carried a dc:rights element; of 12 DOAB
+      items sampled through /rest/search, six had no rights field and five
+      said "open access"; of 10 OAPEN items, none carried rights metadata
+      of any kind. "Open access" is a business model -- the reader pays
+      nothing -- and grants no permission to redistribute, adapt, or index.
+
+      So the bridge resolves, the full text is reachable, and every
+      document still quarantines. That is the capability graph reporting
+      what is actually there. The licence for most of these titles lives
+      on the publisher's own page, which neither aggregator republishes in
+      a machine-readable field; a document here becomes acceptable the
+      moment either of them does, with no code change.
+
+      WORTH HAVING ANYWAY. OAPEN attaches an already-extracted text layer
+      in a DSpace TEXT bundle, served as text/plain. Preferring it over the
+      ORIGINAL PDF means no PDF parsing, no guessing whether a scan has a
+      usable text layer, and no OCR -- the best content quality of any
+      source configured here.
+
+      BOUNDARIES. The OAPEN web interface is never scraped; this uses the
+      published OAI-PMH and REST interfaces. DOAB's /api/search answers 403
+      behind a Cloudflare interstitial and is therefore not used at all --
+      /rest/search and /oai/request answer normally. A 403 is recorded as
+      ACCESS_BLOCKED for a later retry and is never worked around.
+
+      CONDITIONS OF USE. directory.doabooks.org publishes
+      Content-Signal: search=yes,ai-train=no,use=reference in its
+      robots.txt, with a preamble declaring these express reservations of
+      rights under Article 4 of EU Directive 2019/790. Its path rules
+      permit this harvester. The signal is parsed from the same robots.txt
+      the fetcher already reads, recorded on every document taken through
+      this bridge, and carried into the export manifest as the obligations
+      no-ai-training and use:reference. A condition on USE that is obeyed
+      at crawl time and then forgotten has not been honoured at all.
+
+  # ------------------------------------------------------------------
+  # DISABLED -- endpoint or terms verified, but not yet integration-tested
+  # against the live service. Enable only after completing the checklist
+  # at the top of this file.
+  # ------------------------------------------------------------------
+
+  - id: gallica
+    name: "Gallica / BnF"
+    adapter: gallica
+    enabled: false
+    base_url: "https://gallica.bnf.fr/SRU"
+    allowed_hosts:
+      - gallica.bnf.fr
+      - .bnf.fr
+    trust: 0.75
+    trusted_for_content_rights: true
+    requests_per_minute: 10
+    max_download_bytes: 33554432
+    languages: [fr, la]
+    options:
+      query: 'gallica all "domaine public" and dc.type all "monographie" and dc.language all "fre"'
+      page_size: 50
+    notes: >-
+      DISABLED pending a live integration test. The parser and its offline
+      fixtures exist. Gallica separates the rights of the WORK, the SCAN,
+      the OCR TEXT, and the METADATA; only an affirmative public-domain
+      statement about the object counts as a content licence here.
+      "Consultable en ligne" is an ACCESS statement, not permission, and is
+      recorded as access_restricted. Existing text mode (.texteBrut) is
+      always preferred; no OCR is ever run locally.
+
+  - id: gallica_text
+    name: "Gallica / BnF (institutional text pipeline)"
+    adapter: gallica_text
+    enabled: true
+    base_url: "https://gallica.bnf.fr/SRU"
+    allowed_hosts:
+      - gallica.bnf.fr
+      - .bnf.fr
+    trust: 0.75
+    trusted_for_content_rights: true
+    requests_per_minute: 10
+    max_download_bytes: 33554432
+    languages: [fr, la]
+    options:
+      query: 'gallica all "domaine public" and dc.type all "monographie" and dc.language all "fre"'
+      page_size: 50
+    notes: >-
+      DISABLED, and for a reason worth stating precisely: Gallica's text
+      mode is behind an anti-bot challenge. Verified against the live
+      service on 2026-08-01, `/ark:/.../.texteBrut` answers 302 to
+      /services/engine/search/altcha -- a proof-of-work challenge. Solving
+      it would be bypassing an anti-bot protection, which this project does
+      not do.
+
+      So this adapter declares DISCOVERY, METADATA, and RIGHTS_EVIDENCE and
+      does NOT declare CONTENT_HOSTING. SRU search, the Pagination service,
+      and IIIF manifests all answer 200; the ALTO and page-reconstruction
+      parsers are implemented and covered by offline tests. Documents from
+      this source rest in METADATA_ONLY: real, catalogued, rights-assessed,
+      and not downloaded.
+
+      ENABLED, and it will download nothing. The acquisition plan reads
+      the declared roles and parks every document from this source in
+      METADATA_ONLY with its rights evidence intact -- a complete outcome
+      for a discovery-and-rights provider, and not an error. `corpus
+      status` reports them under plan_parked, never under errors.
+
+      That is the point of enabling it: Gallica is an excellent catalogue
+      and an excellent rights authority, and the graph can now use it as
+      both without pretending it will serve the text. When a provider that
+      DOES host these works is allowlisted, the plan will pair Gallica's
+      evidence with that provider's content and the same documents become
+      acquirable with no code change.
+
+  - id: europeana
+    name: "Europeana"
+    adapter: europeana
+    enabled: false
+    base_url: "https://api.europeana.eu"
+    allowed_hosts:
+      - api.europeana.eu
+      - .europeana.eu
+      # Provider content hosts must be added explicitly. Europeana can
+      # point at any institution on the internet; an aggregator that can
+      # redirect the harvester anywhere is an allowlist bypass.
+    trust: 0.6
+    trusted_for_content_rights: true
+    requests_per_minute: 15
+    max_download_bytes: 33554432
+    options:
+      query: 'TYPE:TEXT AND RIGHTS:*creativecommons*'
+      rows: 50
+      api_key_env: EUROPEANA_API_KEY
+    notes: >-
+      A BROKER, and declared as one. Europeana describes objects held by
+      hundreds of institutions and hosts almost none of them, so it
+      declares DISCOVERY, METADATA, and RIGHTS_EVIDENCE and NOT
+      CONTENT_HOSTING. The content role is filled by whichever provider
+      `edmIsShownBy` names, and that host must be allowlisted on its own
+      merits before anything is fetched from it: an aggregator that can
+      redirect the harvester anywhere IS an allowlist bypass. Rejected
+      hosts are recorded per item, not just logged, so "found 400,
+      fetchable 12" tells an operator which institutions to allowlist next.
+
+      DISABLED because $EUROPEANA_API_KEY is not set, not because anything
+      is broken. Every role it fills is declared as a CREDENTIALLED
+      capability, so `corpus health` reports READY_WITH_CREDENTIALS and
+      says which variable to set. Keys are free from
+      https://pro.europeana.eu/page/apis. Asking the adapter for its key
+      returns "" rather than raising -- a missing credential is a
+      configuration state, not an error -- but discovery still refuses to
+      run without one.
+
+      Europeana publishes its METADATA under CC0, which says nothing
+      whatsoever about the digital object. The adapter records the two
+      separately and the rights engine quarantines "open metadata, no
+      content licence" with reason code METADATA_LICENSE_ONLY.
+
+  - id: internet_archive
+    name: "Internet Archive"
+    adapter: internet_archive
+    enabled: false
+    base_url: "https://archive.org"
+    allowed_hosts:
+      - archive.org
+      - .archive.org
+      - .us.archive.org
+    trust: 0.35
+    trusted_for_content_rights: false
+    requests_per_minute: 8
+    max_download_bytes: 134217728         # 128 MB
+    options:
+      query: 'mediatype:texts AND licenseurl:*creativecommons*'
+      rows: 50
+      # Empty by default, which means EVERY item is quarantined. Add only
+      # collections curated by an identifiable institution -- the name is
+      # the whole guarantee, so a vague or personal collection is not a
+      # candidate for this list.
+      #
+      #   trusted_collections:
+      #     - library_of_congress
+      #     - smithsonian
+      #     - bibliothequenationaledefrance
+      #
+      # `allowed_collections` is still read as the Phase I spelling:
+      # renaming it outright would silently empty a deployment's allowlist,
+      # which is safe (everything quarantines) but indistinguishable from
+      # the harvester breaking.
+      trusted_collections: []
+    notes: >-
+      DISABLED, and `trusted_for_content_rights: false` even when enabled.
+      Internet Archive is an excellent discovery surface and is not a
+      guarantor of the rights of what it hosts: a `licenseurl` field
+      reflects what an UPLOADER typed, and an uploader is not an authority
+      on whether a work is in the public domain. Phase I's single largest
+      rights risk was treating that field as a determination.
+
+      So the adapter declares DISCOVERY, METADATA, and CONTENT_HOSTING and
+      NOT RIGHTS_EVIDENCE. Without an institutional collection on
+      trusted_collections every item is quarantined with
+      UNTRUSTED_UPLOADER_ASSERTION. Borrow-only, lending-library, and
+      access-restricted items are refused outright before rights are even
+      considered.
+
+      The pairing this enables: Internet Archive can fill the content role
+      for a document whose rights evidence comes from somewhere else
+      entirely -- which is the point of the source graph, and something
+      Phase I had no way to express.
+
+  # ------------------------------------------------------------------
+  # DISABLED CANDIDATES -- recorded so the decision is visible, never
+  # harvested. Each needs technical AND legal validation first; several
+  # will never qualify.
+  # ------------------------------------------------------------------
+
+  - id: open_library_fulltext
+    name: "Open Library (full text)"
+    adapter: opds
+    enabled: false
+    base_url: ""
+    allowed_hosts: []
+    trust: 0.3
+    trusted_for_content_rights: false
+    notes: >-
+      CANDIDATE, NOT VALIDATED. Open Library's metadata is excellent; its
+      full-text access is largely Internet Archive lending, which is
+      borrow-only and therefore out of scope. Would need a full-text
+      endpoint with per-object licensing before it could be considered.
+
+  - id: hathitrust
+    name: "HathiTrust"
+    adapter: oai_pmh
+    enabled: false
+    base_url: ""
+    allowed_hosts: []
+    trust: 0.4
+    trusted_for_content_rights: false
+    notes: >-
+      CANDIDATE, NOT VALIDATED. Full-text access is restricted by
+      membership and per-item rights determinations that are not exposed as
+      a machine-readable content licence. Not harvestable under any profile
+      here without an explicit agreement.
+
+  - id: google_books
+    name: "Google Books"
+    adapter: opds
+    enabled: false
+    base_url: ""
+    allowed_hosts: []
+    trust: 0.2
+    trusted_for_content_rights: false
+    notes: >-
+      CANDIDATE, REJECTED for this purpose. The API's terms do not permit
+      bulk text acquisition, and per-object licensing is not exposed in a
+      form this engine could verify. Recorded so the decision is explicit.

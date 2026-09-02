@@ -1,0 +1,73 @@
+# Field Horizon curation manifest (Civilization Engine corpus-scale phase).
+#
+# This is the single source of truth for what belongs in the corpus.
+# `field-horizon ingest-manifest` ingests exactly what is listed here and
+# nothing else -- there is no directory scan, no crawler, no download
+# step. To add a source: place the file locally, add an entry here, run
+# `field-horizon ingest-manifest`.
+#
+# Fields:
+#   id            stable identifier; ingest-manifest is idempotent by this,
+#                 not by path, so renaming a file on disk without changing
+#                 id will not cause a re-ingest.
+#   title, author, year, language, license  -- provenance metadata.
+#                 Where a field genuinely isn't known/verified, it says
+#                 "unknown" rather than guessing -- this manifest is meant
+#                 to be a truthful record, not a formality.
+#   path          resolved relative to this file's own directory (the repo
+#                 root, same convention as config.yaml/ontology.yaml).
+#   domain_hints  optional: ontology.yaml domain names this source should
+#                 be persistently biased toward, on top of (not instead
+#                 of) per-query domain routing.
+#   weight        source-level trust/emphasis multiplier for hybrid
+#                 retrieval v2 scoring. Default 1.0.
+#   notes         free text.
+
+sources:
+  - id: quran
+    title: "The Quran (English translation)"
+    author: null
+    year: null
+    language: en
+    license: unknown
+    path: data/books/quran.txt
+    domain_hints: [tawhid, apocalypse]
+    weight: 1.0
+    notes: >-
+      Translation source and translator not verified in this manifest --
+      confirm before treating license/attribution as authoritative.
+
+  - id: bible_asv
+    title: "The Bible (American Standard Version)"
+    author: null
+    year: 1901
+    language: en
+    license: public-domain
+    path: data/books/bible.txt
+    domain_hints: [logos, apocalypse]
+    weight: 1.0
+    notes: "File's own header states: 'This Bible is in the Public Domain.'"
+
+  - id: redflags
+    title: "Red Flags"
+    author: null
+    year: null
+    language: en
+    license: internal-corpus
+    path: data/books/redflags.txt
+    domain_hints: [technology, bureaucracy, modernity]
+    weight: 1.0
+    notes: >-
+      Purpose-written for this project (source_type "red_flags"), not a
+      third-party text -- not subject to external licensing.
+
+  - id: test_manifesto
+    title: "Test Manifesto Fixture"
+    author: null
+    year: null
+    language: en
+    license: test-fixture
+    path: data/manifestos/test_manifesto.txt
+    domain_hints: []
+    weight: 0.1
+    notes: "Single-sentence test fixture, not real corpus content -- low weight reflects that.

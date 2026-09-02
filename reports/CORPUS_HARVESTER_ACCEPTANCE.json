@@ -1,0 +1,1139 @@
+{
+  "runs": [
+    {
+      "run_id": "corpus_7d157d44537e4421",
+      "profile": "broad",
+      "rights_profile": "local_research_us",
+      "mode": "sync",
+      "dry_run": 0,
+      "started_at": "2026-07-31T16:28:34+00:00",
+      "finished_at": "2026-07-31T16:40:04+00:00",
+      "status": "completed",
+      "plan_path": "/home/edouard/Projects/FieldHorizon/data/corpus/reports/corpus_7d157d44537e4421_plan.json",
+      "report_path": null,
+      "pipeline_version": "1.0.0",
+      "error_message": null,
+      "stats": {
+        "already_known": 0,
+        "bytes_downloaded": 10635894,
+        "classified_books": 16,
+        "classified_manifesto": 4,
+        "discovered": 565,
+        "downloaded": 20,
+        "duplicates": 0,
+        "errors": 8,
+        "ingested": 20,
+        "materialized": 20,
+        "normalized": 20,
+        "per_source": {
+          "doab": {
+            "accepted": 103,
+            "already_known": 0,
+            "discovered": 500,
+            "quarantined": 8,
+            "rejected": 389,
+            "seen": 500,
+            "status": "completed"
+          },
+          "gutenberg": {
+            "accepted": 25,
+            "already_known": 0,
+            "discovered": 25,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 25,
+            "status": "completed"
+          },
+          "gutenberg_fr": {
+            "accepted": 22,
+            "already_known": 0,
+            "discovered": 25,
+            "quarantined": 3,
+            "rejected": 0,
+            "seen": 25,
+            "status": "completed"
+          },
+          "standard_ebooks": {
+            "accepted": 15,
+            "already_known": 0,
+            "discovered": 15,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 15,
+            "status": "completed"
+          },
+          "wikisource_en": {
+            "accepted": 0,
+            "already_known": 0,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 0,
+            "status": "failed"
+          },
+          "wikisource_fr": {
+            "accepted": 0,
+            "already_known": 0,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 0,
+            "status": "failed"
+          }
+        },
+        "quality_rejected": 0,
+        "rights_accepted": 165,
+        "rights_quarantined": 11,
+        "rights_rejected": 389,
+        "selected": 26,
+        "stage_seconds": {
+          "acquisition": 155.77,
+          "discovery": 533.18,
+          "materialization": 0.62,
+          "planning": 0.33
+        },
+        "stopped_reason": "",
+        "unchanged": 0
+      }
+    },
+    {
+      "run_id": "corpus_911257ace4604339",
+      "profile": "broad",
+      "rights_profile": "local_research_us",
+      "mode": "sync",
+      "dry_run": 0,
+      "started_at": "2026-07-31T16:40:57+00:00",
+      "finished_at": "2026-07-31T16:50:25+00:00",
+      "status": "completed",
+      "plan_path": "/home/edouard/Projects/FieldHorizon/data/corpus/reports/corpus_911257ace4604339_plan.json",
+      "report_path": null,
+      "pipeline_version": "1.0.0",
+      "error_message": null,
+      "stats": {
+        "already_known": 550,
+        "bytes_downloaded": 7626524,
+        "classified_books": 8,
+        "classified_manifesto": 0,
+        "discovered": 0,
+        "downloaded": 8,
+        "duplicates": 0,
+        "errors": 9,
+        "ingested": 8,
+        "materialized": 8,
+        "normalized": 8,
+        "per_source": {
+          "doab": {
+            "accepted": 0,
+            "already_known": 500,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 500,
+            "status": "completed"
+          },
+          "gutenberg": {
+            "accepted": 0,
+            "already_known": 25,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 25,
+            "status": "completed"
+          },
+          "gutenberg_fr": {
+            "accepted": 0,
+            "already_known": 25,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 25,
+            "status": "completed"
+          },
+          "standard_ebooks": {
+            "accepted": 0,
+            "already_known": 0,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 0,
+            "status": "not_modified"
+          },
+          "wikisource_en": {
+            "accepted": 0,
+            "already_known": 0,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 0,
+            "status": "failed"
+          },
+          "wikisource_fr": {
+            "accepted": 0,
+            "already_known": 0,
+            "discovered": 0,
+            "quarantined": 0,
+            "rejected": 0,
+            "seen": 0,
+            "status": "failed"
+          }
+        },
+        "quality_rejected": 0,
+        "rights_accepted": 0,
+        "rights_quarantined": 0,
+        "rights_rejected": 0,
+        "selected": 26,
+        "stage_seconds": {
+          "acquisition": 34.78,
+          "discovery": 532.48,
+          "materialization": 0.63,
+          "planning": 0.37
+        },
+        "stopped_reason": "",
+        "unchanged": 11
+      }
+    }
+  ],
+  "source_runs": [
+    {
+      "id": 23,
+      "run_id": "corpus_7d157d44537e4421",
+      "source_id": "standard_ebooks",
+      "started_at": "2026-07-31T16:28:34+00:00",
+      "finished_at": "2026-07-31T16:28:35+00:00",
+      "status": "completed",
+      "discovered": 15,
+      "accepted": 15,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 24,
+      "run_id": "corpus_7d157d44537e4421",
+      "source_id": "gutenberg",
+      "started_at": "2026-07-31T16:28:35+00:00",
+      "finished_at": "2026-07-31T16:32:46+00:00",
+      "status": "completed",
+      "discovered": 25,
+      "accepted": 25,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 25,
+      "run_id": "corpus_7d157d44537e4421",
+      "source_id": "gutenberg_fr",
+      "started_at": "2026-07-31T16:32:46+00:00",
+      "finished_at": "2026-07-31T16:37:01+00:00",
+      "status": "completed",
+      "discovered": 25,
+      "accepted": 22,
+      "rejected": 0,
+      "quarantined": 3,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 26,
+      "run_id": "corpus_7d157d44537e4421",
+      "source_id": "wikisource_fr",
+      "started_at": "2026-07-31T16:37:01+00:00",
+      "finished_at": "2026-07-31T16:37:01+00:00",
+      "status": "failed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": "RobotsDisallowed: robots.txt disallows https://fr.wikisource.org/w/api.php?format=json&formatversion=2&action=query&list=categorymembers&cmtitle=Category%3APhilosophie&cmlimit=50&cmnamespace=0",
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 27,
+      "run_id": "corpus_7d157d44537e4421",
+      "source_id": "wikisource_en",
+      "started_at": "2026-07-31T16:37:01+00:00",
+      "finished_at": "2026-07-31T16:37:01+00:00",
+      "status": "failed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": "RobotsDisallowed: robots.txt disallows https://en.wikisource.org/w/api.php?format=json&formatversion=2&action=query&list=categorymembers&cmtitle=Category%3AManifestos&cmlimit=50&cmnamespace=0",
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 28,
+      "run_id": "corpus_7d157d44537e4421",
+      "source_id": "doab",
+      "started_at": "2026-07-31T16:37:01+00:00",
+      "finished_at": "2026-07-31T16:37:27+00:00",
+      "status": "completed",
+      "discovered": 500,
+      "accepted": 103,
+      "rejected": 389,
+      "quarantined": 8,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 29,
+      "run_id": "corpus_911257ace4604339",
+      "source_id": "standard_ebooks",
+      "started_at": "2026-07-31T16:40:57+00:00",
+      "finished_at": "2026-07-31T16:40:58+00:00",
+      "status": "not_modified",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 30,
+      "run_id": "corpus_911257ace4604339",
+      "source_id": "gutenberg",
+      "started_at": "2026-07-31T16:40:58+00:00",
+      "finished_at": "2026-07-31T16:45:08+00:00",
+      "status": "completed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 31,
+      "run_id": "corpus_911257ace4604339",
+      "source_id": "gutenberg_fr",
+      "started_at": "2026-07-31T16:45:08+00:00",
+      "finished_at": "2026-07-31T16:49:23+00:00",
+      "status": "completed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 32,
+      "run_id": "corpus_911257ace4604339",
+      "source_id": "wikisource_fr",
+      "started_at": "2026-07-31T16:49:23+00:00",
+      "finished_at": "2026-07-31T16:49:23+00:00",
+      "status": "failed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": "RobotsDisallowed: robots.txt disallows https://fr.wikisource.org/w/api.php?format=json&formatversion=2&action=query&list=categorymembers&cmtitle=Category%3APhilosophie&cmlimit=50&cmnamespace=0",
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 33,
+      "run_id": "corpus_911257ace4604339",
+      "source_id": "wikisource_en",
+      "started_at": "2026-07-31T16:49:23+00:00",
+      "finished_at": "2026-07-31T16:49:24+00:00",
+      "status": "failed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": "RobotsDisallowed: robots.txt disallows https://en.wikisource.org/w/api.php?format=json&formatversion=2&action=query&list=categorymembers&cmtitle=Category%3AManifestos&cmlimit=50&cmnamespace=0",
+      "cursor_before": null,
+      "cursor_after": null
+    },
+    {
+      "id": 34,
+      "run_id": "corpus_911257ace4604339",
+      "source_id": "doab",
+      "started_at": "2026-07-31T16:49:24+00:00",
+      "finished_at": "2026-07-31T16:49:50+00:00",
+      "status": "completed",
+      "discovered": 0,
+      "accepted": 0,
+      "rejected": 0,
+      "quarantined": 0,
+      "downloaded": 0,
+      "bytes_downloaded": 0,
+      "error_message": null,
+      "cursor_before": null,
+      "cursor_after": null
+    }
+  ],
+  "item_states": {
+    "FAILED_FINAL": 11,
+    "INDEXED": 28
+  },
+  "candidate_states": {
+    "RIGHTS_ACCEPTED": 165,
+    "RIGHTS_QUARANTINED": 11,
+    "RIGHTS_REJECTED": 389
+  },
+  "indexed_count": 28,
+  "indexed_documents": [
+    {
+      "document_id": "gutenberg_1255be51a8766ef84066",
+      "title": "The United States Constitution",
+      "authors": [
+        "United States"
+      ],
+      "language": "en",
+      "destination": "manifesto",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/5",
+      "raw_sha256": "d177168e3f4898213dced30fbbe60d74ad08e884ed5dd86bff94a1b8836b5982",
+      "normalized_sha256": "8111a4cfbf0bdd81b5bb562fba0c2fecb7d62149bda5fbe80cbbdd9a84eb7972",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/manifestos/_auto/the-united-states-constitution_gutenberg_1255be51a8766ef84066.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_1763ac6bdf3a0ba2b202",
+      "title": "Moby-Dick; or, The Whale",
+      "authors": [
+        "Melville, Herman"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/15",
+      "raw_sha256": "cca79713fb2eb809daa7da6538018a0190a57d661b59f3a2b68ce4e137bbf8fc",
+      "normalized_sha256": "99ed1cf21bdd892036cbf82eb0e6878a6fedd71eabaf6a24d49ff4d5a7841306",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/moby-dick-or-the-whale_gutenberg_1763ac6bdf3a0ba2b202.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_2c3534b3a8d971fe8fb7",
+      "title": "Give Me Liberty or Give Me Death",
+      "authors": [
+        "Henry, Patrick"
+      ],
+      "language": "en",
+      "destination": "manifesto",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 0.7772,
+      "canonical_url": "https://www.gutenberg.org/ebooks/6",
+      "raw_sha256": "a5d5b114cf5dde662b49534a1db3176d5d968c6293d15769c094a0af0407971d",
+      "normalized_sha256": "6ed728d75aad57a11401bd3a28e0d6cf30bfdb0eefdefe6ab99014c57d160a44",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/manifestos/_auto/give-me-liberty-or-give-me-death_gutenberg_2c3534b3a8d971fe8fb7.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_4192f9e0fe417ad9e479",
+      "title": "Abraham Lincoln's First Inaugural Address",
+      "authors": [
+        "Lincoln, Abraham"
+      ],
+      "language": "en",
+      "destination": "manifesto",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/9",
+      "raw_sha256": "fa635b8a3cea02506516d24de2465ef114cd75ee6fac8f417a893aafb2143492",
+      "normalized_sha256": "26550dce7698cc9c491c52217c61b57bf644575e85964767f00414b1724914fd",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/manifestos/_auto/abraham-lincoln-s-first-inaugural-address_gutenberg_4192f9e0fe417ad9e479.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_4665100289ac2be92fcc",
+      "title": "Narrative of the Life of Frederick Douglass, an American Slave",
+      "authors": [
+        "Douglass, Frederick"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/23",
+      "raw_sha256": "234c15348a66919bad1d534cdd48ee8ddf91f50115a706cbefaa8edd049672fd",
+      "normalized_sha256": "247571b7d9efaa204f8aac399d6007973669298cd4da77dc19099f583bd59f5f",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/narrative-of-the-life-of-frederick-douglass-an-american-slav_gutenberg_4665100289ac2be92fcc.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_6a8075b523039a5d6ed0",
+      "title": "Abraham Lincoln's Second Inaugural Address",
+      "authors": [
+        "Lincoln, Abraham"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 0.6806,
+      "canonical_url": "https://www.gutenberg.org/ebooks/8",
+      "raw_sha256": "060853cffcbafcea4c8b5893410cd92fd9106323dcd8542b82bc50c78b1cbf94",
+      "normalized_sha256": "0d6fb4bfde9b6aa7fcf04d2b7152fb85499575236ddf238369f3c5123638d368",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/abraham-lincoln-s-second-inaugural-address_gutenberg_6a8075b523039a5d6ed0.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_7efca2d86e4be3e004d1",
+      "title": "The Declaration of Independence of the United States of America",
+      "authors": [
+        "Jefferson, Thomas"
+      ],
+      "language": "en",
+      "destination": "manifesto",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 0.8889,
+      "canonical_url": "https://www.gutenberg.org/ebooks/1",
+      "raw_sha256": "8fc7483413518ecf182d982a2e61289894e7fa3ccb1fa3d1db4c1be55debb1f0",
+      "normalized_sha256": "c1bd15a5e44074a0330f508cdd54c32b8fccf111e91a96ef78a5d5c9259a8573",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/manifestos/_auto/the-declaration-of-independence-of-the-united-states-of-amer_gutenberg_7efca2d86e4be3e004d1.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_beeb3ed1825029f4d094",
+      "title": "Paradise Lost",
+      "authors": [
+        "Milton, John"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/20",
+      "raw_sha256": "67321f478e04486493f1df3f95c285c9d9b7e42ec984f6b74a27ab02770e2ca6",
+      "normalized_sha256": "d2d269af82aa3baad0c15a7de5592d66085f840177062a4d24607f6bbf2b1c73",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/paradise-lost_gutenberg_beeb3ed1825029f4d094.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_c4e7b6ba15e1204a8434",
+      "title": "The 1991 CIA World Factbook",
+      "authors": [
+        "United States. Central Intelligence Agency"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/25",
+      "raw_sha256": "f5f02341fc4e54b00af488e4b8ad96c707e9d6f7578203cf9666abe71986c601",
+      "normalized_sha256": "b6992736be7899cc001f4f8ad4039713e4e4e25c32f8b911fb72bf94b449d705",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/the-1991-cia-world-factbook_gutenberg_c4e7b6ba15e1204a8434.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_ca42f21f7ddaeca8036e",
+      "title": "Through the Looking-Glass",
+      "authors": [
+        "Carroll, Lewis"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/12",
+      "raw_sha256": "e40a38f5da841f9fb6acc557355c447b7c2ccb56a208caf5fcf2b05081f14d42",
+      "normalized_sha256": "a7ee9f1fc6e56d286a01eab26f861f5d2ba4bbbbd2b9b48182e59dd6f843e980",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/through-the-looking-glass_gutenberg_ca42f21f7ddaeca8036e.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_d69c954ec35c56675298",
+      "title": "The King James Version of the Bible",
+      "authors": [],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/10",
+      "raw_sha256": "0204adaed1f25700aa854218cae63c7172228c41088f335e99167a071eed83c0",
+      "normalized_sha256": "d48e1cae04df9099c855f6b18b445e8a929cc744fae9cc971769bbaa6316646b",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/the-king-james-version-of-the-bible_gutenberg_d69c954ec35c56675298.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_db2d68bf124e17e6f550",
+      "title": "The Federalist Papers",
+      "authors": [
+        "Hamilton, Alexander",
+        "Jay, John",
+        "Madison, James"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "gutenberg",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/18",
+      "raw_sha256": "a6c9d1135a04d10955fe11d210b7f642e1c2341d4f2c8369b9a832cc97839d94",
+      "normalized_sha256": "62a7400514b6b479b015d410d7f96a72084e7cf7fc793b9649ff4a5c817ce0a8",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/the-federalist-papers_gutenberg_db2d68bf124e17e6f550.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_0ab95911d1ab0aa0ff9d",
+      "title": "La Tulipe Noire",
+      "authors": [
+        "Dumas, Alexandre",
+        "Maquet, Auguste"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/1910",
+      "raw_sha256": "146333f90d54ca28c8df2625d0cb3dafc6c4e6a6d29dc4428835017a97d01d33",
+      "normalized_sha256": "0234e68bf63beb49539f3536c2ef06553388adb37443a8e8007c5d64f6a2327b",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/la-tulipe-noire_gutenberg_fr_0ab95911d1ab0aa0ff9d.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_194cc39362bed2017314",
+      "title": "Cinq Semaines En Ballon",
+      "authors": [
+        "Verne, Jules"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/4548",
+      "raw_sha256": "1b038aa114d73196528602afa18fe74124005134a8dc7788065c4049d624d341",
+      "normalized_sha256": "01999c026908315ae5a27eae23af3c319ae3cdc72ae31fb14d720e2b32fd5166",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/cinq-semaines-en-ballon_gutenberg_fr_194cc39362bed2017314.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_2a145d98d4bf24be93e4",
+      "title": "La Duchesse De Palliano",
+      "authors": [
+        "Stendhal"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/803",
+      "raw_sha256": "ac410e18cdc70c9ec7e37deefd99648b239885849d8594d82e037dd5a2063307",
+      "normalized_sha256": "172944d1f3543a83161e6d5b67249a706f4238b71a25627ed1b148f42a3f411e",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/la-duchesse-de-palliano_gutenberg_fr_2a145d98d4bf24be93e4.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_2db1cf3a499e20628f61",
+      "title": "Cyrano de Bergerac",
+      "authors": [
+        "Rostand, Edmond"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/1256",
+      "raw_sha256": "d82f6bb4063520944ebc8eb0a89ac60be60c51408629431ab34eb75a57f94fd1",
+      "normalized_sha256": "722a0453a3d58d01f6c53fb600f2fae5f12798508940c5034f10cf36408b0e83",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/cyrano-de-bergerac_gutenberg_fr_2db1cf3a499e20628f61.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_496c1380a2a2c505758d",
+      "title": "Salomé",
+      "authors": [
+        "Wilde, Oscar"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/1339",
+      "raw_sha256": "d44797f3751444d41e7e84d38612532c1bf7f9ef1a6f5dab98dc16629105f3d2",
+      "normalized_sha256": "78440b898861858d37b06706ab116320e67a18ee1661f30ea8b3fc2fae347edd",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/salome_gutenberg_fr_496c1380a2a2c505758d.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_6aa17ef40b15526a8a9a",
+      "title": "Du côté de chez Swann",
+      "authors": [
+        "Proust, Marcel"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/2650",
+      "raw_sha256": "9ebdb837f733f41d6a822e010d1ccbf14b4ddafad0131482461edb72b55b0936",
+      "normalized_sha256": "7bac7aced0094c02b71d7dbfe9dbc387931ac7ce6a585b55456b84da498a3251",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/du-cote-de-chez-swann_gutenberg_fr_6aa17ef40b15526a8a9a.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "gutenberg_fr_bdd1f1138d9df6973415",
+      "title": "Poil de Carotte",
+      "authors": [
+        "Renard, Jules"
+      ],
+      "language": "fr",
+      "destination": "books",
+      "source": "gutenberg_fr",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "https://www.gutenberg.org/ebooks/4559",
+      "raw_sha256": "954f8780abd0ad7918d2cb1080f84c993954ec99aa851df629b9d9f3d2a65780",
+      "normalized_sha256": "15905f8f4f7af47f416fa621dcd81a277bb910842c69febeb5197c78429b4a00",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/poil-de-carotte_gutenberg_fr_bdd1f1138d9df6973415.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_15e31f56c4be6106aebf",
+      "title": "Pirates of Venus",
+      "authors": [
+        "Edgar Rice Burroughs"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "3d089097b7c4d79205eb566b55b8a0090a539a65d671361c174e9a0ae669b829",
+      "normalized_sha256": "92f443ff5619d18099326965e4483d91c2c951704e1124debc71dddd7a1b47c0",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/pirates-of-venus_standard_ebooks_15e31f56c4be6106aebf.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_30ea826f979fa98b13c6",
+      "title": "The Mystery of Edwin Drood",
+      "authors": [
+        "Charles Dickens"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "c1786038fd3d3a2b708fd01eeaacc864d1c33d215aa7a04872e70cdf1d301cc5",
+      "normalized_sha256": "c272cfb671813daa8a2b7621960ad0f60e27098c86be2caea2ae9d6df6a852ac",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/the-mystery-of-edwin-drood_standard_ebooks_30ea826f979fa98b13c6.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_334537766183b3798b8c",
+      "title": "Memoirs of an Infantry Officer",
+      "authors": [
+        "Siegfried Sassoon"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "de8487b8ebf41a4134655f3b2b472db9520fcbd5502ff946b8b237efb8374e81",
+      "normalized_sha256": "c602d55ba06078b4ce7db781373d70863b19b289d41ab6aa134f291de2d42bed",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/memoirs-of-an-infantry-officer_standard_ebooks_334537766183b3798b8c.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_6bdd12e67cee0c62b030",
+      "title": "The Protestant Ethic and the Spirit of Capitalism",
+      "authors": [
+        "Max Weber"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "a4e323fcd8634d6da7a9d4578529772dbfdf6d057afc5d00ede9f6f5935fb7a3",
+      "normalized_sha256": "3d23d7a1ec7e69bec08a6c61914bd377e52775f7a3929c7ec2b2b6373851b386",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/the-protestant-ethic-and-the-spirit-of-capitalism_standard_ebooks_6bdd12e67cee0c62b030.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_78cd4b9d26cebc0e80f5",
+      "title": "’Midst the Wild Carpathians",
+      "authors": [
+        "Mór Jókai"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "2d99ce95b4b47590748b08dd30da5dfa3f2ba345b93cc43202a2366d97122c18",
+      "normalized_sha256": "b5c11b28482581f7da2344a61535a7a9a9961c4e75249ae74abd6b618cd6b4f3",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/midst-the-wild-carpathians_standard_ebooks_78cd4b9d26cebc0e80f5.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_857a14c075304bfcd40c",
+      "title": "The Rescue",
+      "authors": [
+        "Joseph Conrad"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "30be6bf021f84af88f995db499827b6ff028be9c11fdaa053c1e4bf17dc43c37",
+      "normalized_sha256": "ecac161771539367e6e71fcaa775263373c07bba6953342ff1c59323f6fbcbe4",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/the-rescue_standard_ebooks_857a14c075304bfcd40c.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_a438fa4d5e45e8ad6a1c",
+      "title": "Basil",
+      "authors": [
+        "Wilkie Collins"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "6dff8fd0a45d370e6784172f850f143bd143b02060af498cc61be9c06a3dbe1e",
+      "normalized_sha256": "42491133e72d5662c3e532bc35f9f829f7c681dfb989078e4abadadc19cac916",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/basil_standard_ebooks_a438fa4d5e45e8ad6a1c.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_c77e86376c3cdeee40f8",
+      "title": "Flight",
+      "authors": [
+        "Walter White"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "a6c195ef3aff7ffad5c90c81a10d803d8c63b1d4fa2f6a5bf4f3072da73014b6",
+      "normalized_sha256": "7a524e16ce194c3423ce6ff703bdad3a14c4d7e19610c11ddcc4cc7fe73f8716",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/flight_standard_ebooks_c77e86376c3cdeee40f8.txt",
+      "attribution_required": false,
+      "share_alike": false
+    },
+    {
+      "document_id": "standard_ebooks_cc3cef76cab1f1894c85",
+      "title": "Poetry",
+      "authors": [
+        "Maria Lowell"
+      ],
+      "language": "en",
+      "destination": "books",
+      "source": "standard_ebooks",
+      "license": "public-domain-us",
+      "distribution_scope": "LOCAL_US_ONLY",
+      "quality_score": 1.0,
+      "canonical_url": "",
+      "raw_sha256": "34ed436a05592e4eb7181ae392e50819d58ba5643e2b4ab41eba31783db2320b",
+      "normalized_sha256": "fe1b15d15ca358be42263a6eb333864722f26fbfbe895a59f24678fe0f1820c5",
+      "materialized_path": "/home/edouard/Projects/FieldHorizon/data/books/_auto/poetry_standard_ebooks_cc3cef76cab1f1894c85.txt",
+      "attribution_required": false,
+      "share_alike": false
+    }
+  ],
+  "distributions": {
+    "language": {
+      "en": 22,
+      "de": 8,
+      "fr": 7,
+      "slo": 1,
+      "it": 1
+    },
+    "destination": {
+      "books": 24,
+      "": 11,
+      "manifesto": 4
+    },
+    "normalized_license": {
+      "public-domain-us": 28,
+      "cc-by": 10,
+      "cc-by-sa": 1
+    },
+    "source_id": {
+      "gutenberg": 12,
+      "doab": 11,
+      "standard_ebooks": 9,
+      "gutenberg_fr": 7
+    },
+    "distribution_scope": {
+      "LOCAL_US_ONLY": 28,
+      "WORLDWIDE": 11
+    },
+    "state": {
+      "INDEXED": 28,
+      "FAILED_FINAL": 11
+    }
+  },
+  "rights_invariant_violations": [],
+  "rights_invariant_holds": true,
+  "quarantine_count": 11,
+  "quarantine_reason_codes": {
+    "UNKNOWN_LICENSE": 11,
+    "NO_LICENSE_STATEMENT": 8
+  },
+  "reject_count": 389,
+  "reject_reason_codes": {
+    "ACCESS_RESTRICTED": 246,
+    "NON_COMMERCIAL_RESTRICTION": 137,
+    "NO_DERIVATIVES_RESTRICTION": 111
+  },
+  "duplicate_clusters": [],
+  "disk": {
+    "corpus_bytes": 35110293,
+    "corpus_human": "33.5 MB",
+    "blob_count": 28
+  },
+  "materialized": {
+    "books": [
+      "abraham-lincoln-s-second-inaugural-address_gutenberg_6a8075b523039a5d6ed0.txt",
+      "basil_standard_ebooks_a438fa4d5e45e8ad6a1c.txt",
+      "cinq-semaines-en-ballon_gutenberg_fr_194cc39362bed2017314.txt",
+      "cyrano-de-bergerac_gutenberg_fr_2db1cf3a499e20628f61.txt",
+      "du-cote-de-chez-swann_gutenberg_fr_6aa17ef40b15526a8a9a.txt",
+      "flight_standard_ebooks_c77e86376c3cdeee40f8.txt",
+      "la-duchesse-de-palliano_gutenberg_fr_2a145d98d4bf24be93e4.txt",
+      "la-tulipe-noire_gutenberg_fr_0ab95911d1ab0aa0ff9d.txt",
+      "memoirs-of-an-infantry-officer_standard_ebooks_334537766183b3798b8c.txt",
+      "midst-the-wild-carpathians_standard_ebooks_78cd4b9d26cebc0e80f5.txt",
+      "moby-dick-or-the-whale_gutenberg_1763ac6bdf3a0ba2b202.txt",
+      "narrative-of-the-life-of-frederick-douglass-an-american-slav_gutenberg_4665100289ac2be92fcc.txt",
+      "paradise-lost_gutenberg_beeb3ed1825029f4d094.txt",
+      "pirates-of-venus_standard_ebooks_15e31f56c4be6106aebf.txt",
+      "poetry_standard_ebooks_cc3cef76cab1f1894c85.txt",
+      "poil-de-carotte_gutenberg_fr_bdd1f1138d9df6973415.txt",
+      "salome_gutenberg_fr_496c1380a2a2c505758d.txt",
+      "the-1991-cia-world-factbook_gutenberg_c4e7b6ba15e1204a8434.txt",
+      "the-federalist-papers_gutenberg_db2d68bf124e17e6f550.txt",
+      "the-king-james-version-of-the-bible_gutenberg_d69c954ec35c56675298.txt",
+      "the-mystery-of-edwin-drood_standard_ebooks_30ea826f979fa98b13c6.txt",
+      "the-protestant-ethic-and-the-spirit-of-capitalism_standard_ebooks_6bdd12e67cee0c62b030.txt",
+      "the-rescue_standard_ebooks_857a14c075304bfcd40c.txt",
+      "through-the-looking-glass_gutenberg_ca42f21f7ddaeca8036e.txt"
+    ],
+    "manifesto": [
+      "abraham-lincoln-s-first-inaugural-address_gutenberg_4192f9e0fe417ad9e479.txt",
+      "give-me-liberty-or-give-me-death_gutenberg_2c3534b3a8d971fe8fb7.txt",
+      "the-declaration-of-independence-of-the-united-states-of-amer_gutenberg_7efca2d86e4be3e004d1.txt",
+      "the-united-states-constitution_gutenberg_1255be51a8766ef84066.txt"
+    ]
+  },
+  "index": {
+    "harvested_sources": 28,
+    "harvested_chunks": 10431,
+    "total_sources": 34,
+    "fts_orphans": 0
+  },
+  "indexed_document_ids": [
+    "gutenberg_1255be51a8766ef84066",
+    "gutenberg_1763ac6bdf3a0ba2b202",
+    "gutenberg_2c3534b3a8d971fe8fb7",
+    "gutenberg_4192f9e0fe417ad9e479",
+    "gutenberg_4665100289ac2be92fcc",
+    "gutenberg_6a8075b523039a5d6ed0",
+    "gutenberg_7efca2d86e4be3e004d1",
+    "gutenberg_beeb3ed1825029f4d094",
+    "gutenberg_c4e7b6ba15e1204a8434",
+    "gutenberg_ca42f21f7ddaeca8036e",
+    "gutenberg_d69c954ec35c56675298",
+    "gutenberg_db2d68bf124e17e6f550",
+    "gutenberg_fr_0ab95911d1ab0aa0ff9d",
+    "gutenberg_fr_194cc39362bed2017314",
+    "gutenberg_fr_2a145d98d4bf24be93e4",
+    "gutenberg_fr_2db1cf3a499e20628f61",
+    "gutenberg_fr_496c1380a2a2c505758d",
+    "gutenberg_fr_6aa17ef40b15526a8a9a",
+    "gutenberg_fr_bdd1f1138d9df6973415",
+    "standard_ebooks_15e31f56c4be6106aebf",
+    "standard_ebooks_30ea826f979fa98b13c6",
+    "standard_ebooks_334537766183b3798b8c",
+    "standard_ebooks_6bdd12e67cee0c62b030",
+    "standard_ebooks_78cd4b9d26cebc0e80f5",
+    "standard_ebooks_857a14c075304bfcd40c",
+    "standard_ebooks_a438fa4d5e45e8ad6a1c",
+    "standard_ebooks_c77e86376c3cdeee40f8",
+    "standard_ebooks_cc3cef76cab1f1894c85"
+  ],
+  "git": {
+    "commit": "8ec9e7fb8d2e59cdeba30d9acfc3854375402f37",
+    "branch": "feature/autonomous-open-corpus-harvester"
+  },
+  "test_total": 953,
+  "test_preexisting": 635,
+  "retrieval_proof": {
+    "target_document_id": "gutenberg_6a8075b523039a5d6ed0",
+    "target_title": "Abraham Lincoln's Second Inaugural Address",
+    "query": "Lincoln's Inaugural Address countrymen: appearing presidential",
+    "retrieved_target": true,
+    "harvested_results_all_marked_untrusted": true,
+    "hand_curated_chunks_pass_through_unenriched": true
+  },
+  "export_guard_proof": {
+    "release_worldwide": {
+      "decision": "refused",
+      "exit_code": 2,
+      "documents": 28,
+      "permitted": 0
+    },
+    "release_worldwide_filtered": {
+      "included": 0,
+      "excluded": 28
+    },
+    "local_research_us": {
+      "included": 28,
+      "excluded": 0,
+      "attributions_written": true
+    }
+  },
+  "idempotence_proof": {
+    "run_b_discovered_new": 0,
+    "run_b_already_known": 550,
+    "run_b_unchanged": 11,
+    "corpus_ingest_rerun": {
+      "ingested": 0,
+      "reingested": 0,
+      "unchanged": 28,
+      "skipped": 0
+    },
+    "fts_orphans": 0
+  },
+  "renormalize_proof": {
+    "examined": 28,
+    "renormalized": 2,
+    "unchanged": 26,
+    "failed": 0,
+    "rematerialized": 2,
+    "network_access": false
+  },
+  "indexed_only_distributions": {
+    "language": {
+      "en": 21,
+      "fr": 7
+    },
+    "destination": {
+      "books": 24,
+      "manifesto": 4
+    },
+    "source": {
+      "gutenberg": 12,
+      "standard_ebooks": 9,
+      "gutenberg_fr": 7
+    },
+    "license": {
+      "public-domain-us": 28
+    },
+    "_note": "The corpus-wide distributions above count every corpus_items row, including 11 DOAB records that passed the rights engine and then failed at download (OAPEN returns 403 to automated clients). Those were never indexed."
+  }
+}

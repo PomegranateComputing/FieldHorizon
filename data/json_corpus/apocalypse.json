@@ -1,0 +1,47 @@
+[
+  {
+    "id": "apocalypse_0001",
+    "group_name": "apocalypse",
+    "category": "apocalypse",
+    "tradition": "eschatological",
+    "statement": "Apocalypse is not destruction first, but unveiling.",
+    "gloss": "The end begins when hidden structures become visible.",
+    "tags": ["apocalypse", "revelation"]
+  },
+  {
+    "id": "apocalypse_0002",
+    "group_name": "apocalypse",
+    "category": "apocalypse",
+    "tradition": "eschatological",
+    "statement": "Judgment separates essence from noise.",
+    "gloss": "Collapse reveals what was real and what was theatrical.",
+    "tags": ["apocalypse", "judgment"]
+  },
+  {
+    "id": "apocalypse_0003",
+    "group_name": "apocalypse",
+    "category": "apocalypse",
+    "tradition": "eschatological",
+    "statement": "Every civilization carries its apocalypse as an internal accounting.",
+    "gloss": "The end is prepared by the structure itself.",
+    "tags": ["apocalypse", "civilization"]
+  },
+  {
+    "id": "apocalypse_0004",
+    "group_name": "apocalypse",
+    "category": "apocalypse",
+    "tradition": "eschatological",
+    "statement": "The trumpet does not create the ruin; it announces what was already rotten.",
+    "gloss": "Revelation names decay before it becomes undeniable.",
+    "tags": ["apocalypse", "decay"]
+  },
+  {
+    "id": "apocalypse_0005",
+    "group_name": "apocalypse",
+    "category": "apocalypse",
+    "tradition": "eschatological",
+    "statement": "The last days are recognized by the inflation of false necessities.",
+    "gloss": "A dying order multiplies obligations to hide its emptiness.",
+    "tags": ["apocalypse", "modernity"]
+  }
+]
