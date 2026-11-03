@@ -291,3 +291,20 @@ def test_an_llm_failure_never_breaks_the_pipeline():
     report = ag.run_role(None, ag.ROLE_VALIDATOR, EVIDENCE, "t", model="m", llm=boom)  # type: ignore[arg-type]
     assert report.error == "RuntimeError: ollama down"
     assert report.assessment is None
+
+
+def test_db_commands_work_on_a_fresh_field_horizon_database(tmp_path, capsys, monkeypatch):
+    """Regression: the journal's events need init_db; a brand-new config used to fail on the first event."""
+    import json as _json
+
+    from fieldhorizon.cli import main
+
+    (tmp_path / "config.yaml").write_text("paths:\n  database: fresh.sqlite3\n", encoding="utf-8")
+    monkeypatch.setattr("sys.argv", ["field-horizon", "--config", str(tmp_path / "config.yaml"), "db", "operations", "--json"])
+    main()
+    assert _json.loads(capsys.readouterr().out) == []
+    import sqlite3
+
+    with sqlite3.connect(tmp_path / "fresh.sqlite3") as conn:
+        tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+    assert {"domain_events", "provenance_edges", "dbeng_operations"} <= tables

@@ -10,7 +10,9 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 
-from ..config import load_config
+from ..config import AppConfig
+from ..config import load_config as _load_config
+from ..db import init_db
 from .journal import Journal
 from .targets import TargetConfig, default_targets_path, load_targets
 
@@ -19,6 +21,13 @@ console = Console()
 PACKAGE_ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_WORKLOAD = PACKAGE_ROOT / "config" / "dbeng_workloads" / "bench_orders.yaml"
 FAULT_EXIT_CODE = 86
+
+
+def load_config(path) -> AppConfig:
+    """Every db command journals into the Field Horizon database: make sure it exists (events, provenance, dbeng tables)."""
+    cfg = _load_config(path)
+    init_db(cfg.database)
+    return cfg
 
 
 def _targets_path(args, cfg) -> Path:
