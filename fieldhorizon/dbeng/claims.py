@@ -11,9 +11,12 @@ gets three separate answers, never merged into one "confidence":
                 verified or contradicted against the snapshot and the measured
                 plans: a table or column exists, a query sequentially scans a
                 table, a column has no index leading with it;
-* verdict    -- contradicted if any assertion is contradicted; verified if at
-                least one is verified and none contradicted; otherwise
-                unverified (nothing in the sentence could be tested).
+* verdict    -- contradicted if any assertion is contradicted; verified only if
+                at least one SUBSTANTIVE assertion (a scan, an index, statistics
+                -- not the mere existence of a named table) is verified and none
+                is contradicted; otherwise unverified. A claim that only names
+                existing tables says nothing testable about them (DB-02 run D03:
+                two false statements had been marked verified this way).
 
 Recognition is deliberately literal (names that exist in the snapshot,
 fixed phrases); what it does not recognise stays "unverified" rather than
@@ -28,9 +31,12 @@ VERIFIED = "verified"
 CONTRADICTED = "contradicted"
 UNVERIFIED = "unverified"
 
-_SEQ_SCAN = re.compile(r"\b(seq(uential)?\s*scan|full\s+(table\s+)?scan|scans?\s+the\s+(whole|entire)\s+table)", re.IGNORECASE)
+_SEQ_SCAN = re.compile(r"\b(seq(uential(ly)?)?\s*scan|full\s+(table\s+)?scan|scans?\s+the\s+(whole|entire)\s+table)", re.IGNORECASE)
 _NO_INDEX = re.compile(r"\b(no\s+(supporting\s+)?index|missing\s+(an\s+)?index|without\s+(an?\s+|any\s+)?(supporting\s+)?index|"
                        r"unindexed|not\s+indexed|lacks?\s+(an?\s+)?index)", re.IGNORECASE)
+_NOT_ANALYZED = re.compile(r"\b(not\s+(been\s+)?analy[sz]ed|unanaly[sz]ed|never\s+analy[sz]ed|no\s+statistics|missing\s+statistics)",
+                           re.IGNORECASE)
+_EXISTENCE = {"table_exists", "column_exists"}
 _QUALIFIED = re.compile(r"\b([a-z_][a-z0-9_]*)\.([a-z_][a-z0-9_]*)\b")
 
 
@@ -39,6 +45,8 @@ def _facts(snapshot: dict, evidence: dict[str, dict]) -> dict:
     columns: dict[str, set[str]] = {}
     for c in snapshot.get("columns", []):
         columns.setdefault(f"{c['schema']}.{c['table']}", set()).add(c["column"])
+    indexed = {f"{i['schema']}.{i['table']}" for i in snapshot.get("indexes", []) if i.get("is_valid")}
+    analyzed = {f"{t['schema']}.{t['table']}" for t in snapshot.get("tables", []) if t.get("column_statistics") == "available"}
     leading: dict[str, set[str]] = {}
     for i in snapshot.get("indexes", []):
         if i.get("is_valid") and i.get("columns"):
@@ -48,8 +56,8 @@ def _facts(snapshot: dict, evidence: dict[str, dict]) -> dict:
         if item.get("kind") == "baseline_plan":
             for scan in item.get("seq_scans", []):
                 seq_scans.setdefault(f"{scan.get('schema') or 'public'}.{scan['relation']}", set()).add(item["query_id"])
-    return {"tables": tables, "bare": {t.split(".", 1)[1]: t for t in tables}, "columns": columns,
-            "leading": leading, "seq_scans": seq_scans, "queries": {e.get("query_id") for e in evidence.values() if e.get("query_id")}}
+    return {"tables": tables, "bare": {t.split(".", 1)[1]: t for t in tables}, "columns": columns, "indexed": indexed,
+            "analyzed": analyzed, "leading": leading, "seq_scans": seq_scans, "queries": {e.get("query_id") for e in evidence.values() if e.get("query_id")}}
 
 
 def _subjects(text: str, facts: dict) -> dict:
@@ -92,6 +100,16 @@ def check_claim(text: str, cited: list[str], evidence: dict[str, dict], facts: d
             indexed = col in facts["leading"].get(table, set())
             assertions.append({"type": "column_unindexed", "subject": f"{table}.{col}", "result": CONTRADICTED if indexed else VERIFIED,
                                "detail": "a valid index leads with this column" if indexed else "no valid index leads with this column"})
+        tables_with_column = {t for t, _ in subjects["columns"]}
+        for table in sorted(subjects["tables"] - tables_with_column):
+            has = table in facts["indexed"]
+            assertions.append({"type": "table_unindexed", "subject": table, "result": CONTRADICTED if has else VERIFIED,
+                               "detail": "the snapshot lists valid indexes on this table" if has else "no valid index on this table"})
+    if _NOT_ANALYZED.search(text):
+        for table in sorted(subjects["tables"]):
+            done = table in facts["analyzed"]
+            assertions.append({"type": "table_not_analyzed", "subject": table, "result": CONTRADICTED if done else VERIFIED,
+                               "detail": "column statistics exist (the table was analyzed)" if done else "no column statistics in the snapshot"})
     terms = [t.split(".", 1)[1] for t in subjects["tables"]] + [c for _, c in subjects["columns"]] + list(subjects["queries"])
     if not terms or not cited:
         relevance = "unknown"
@@ -99,7 +117,8 @@ def check_claim(text: str, cited: list[str], evidence: dict[str, dict], facts: d
         texts = [json.dumps(evidence.get(e, {}), default=str).lower() for e in cited]
         relevance = "relevant" if any(any(t in body for t in terms) for body in texts) else "irrelevant"
     results = {a["result"] for a in assertions}
-    verdict = CONTRADICTED if CONTRADICTED in results else VERIFIED if VERIFIED in results else UNVERIFIED
+    substantive = {a["result"] for a in assertions if a["type"] not in _EXISTENCE}
+    verdict = CONTRADICTED if CONTRADICTED in results else VERIFIED if VERIFIED in substantive else UNVERIFIED
     return {"claim": text, "evidence": cited, "relevance": relevance, "assertions": assertions, "verdict": verdict}
 
 

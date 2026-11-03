@@ -338,3 +338,39 @@ def test_bare_evidence_ids_are_quoted_but_must_still_exist():
     assert report.normalised and report.assessment == "retain"
     assert [a["claim"] for a in report.accepted] == ["kept"]
     assert report.rejected[0]["reason"] == "cites unknown evidence ids ['E9']"
+
+
+# --- agent claims (DB-02) -------------------------------------------------------------------
+def _claims_facts():
+    from fieldhorizon.dbeng.claims import _facts
+
+    snapshot = {
+        "tables": [{"schema": "bench", "table": t, "column_statistics": "available"} for t in ("orders", "customers", "audit_log")],
+        "columns": [{"schema": "bench", "table": "orders", "column": c} for c in ("id", "customer_id", "note")],
+        "indexes": [{"schema": "bench", "table": "orders", "index": "orders_pkey", "columns": ["id"], "is_valid": True}],
+    }
+    evidence = {"E1": {"kind": "baseline_plan", "query_id": "order_by_note",
+                       "seq_scans": [{"schema": "bench", "relation": "orders", "predicates": [{"column": "note", "op": "="}]}]}}
+    return _facts(snapshot, evidence), evidence
+
+
+def test_a_claim_that_only_names_existing_tables_is_not_verified():
+    """Two false statements from the real D03 run had been marked 'verified' on table existence alone."""
+    from fieldhorizon.dbeng.claims import check_claim
+
+    facts, evidence = _claims_facts()
+    analyzed = check_claim("The table bench.orders is not analyzed and has no indexes, which could cause slow queries.", ["E1"], evidence, facts)
+    assert analyzed["verdict"] == "contradicted"
+    assert {a["type"] for a in analyzed["assertions"] if a["result"] == "contradicted"} == {"table_unindexed", "table_not_analyzed"}
+    scanned = check_claim("The table bench.audit_log is sequentially scanned despite having only 100,000 rows.", ["E1"], evidence, facts)
+    assert scanned["verdict"] == "contradicted", "no baseline plan scans bench.audit_log"
+    vague = check_claim("bench.customers matters.", ["E1"], evidence, facts)
+    assert vague["verdict"] == "unverified"
+
+
+def test_a_substantive_claim_backed_by_the_plans_is_verified():
+    from fieldhorizon.dbeng.claims import check_claim
+
+    facts, evidence = _claims_facts()
+    claim = check_claim("order_by_note does a sequential scan of bench.orders filtering on note, which has no index", ["E1"], evidence, facts)
+    assert claim["verdict"] == "verified" and claim["relevance"] == "relevant"
