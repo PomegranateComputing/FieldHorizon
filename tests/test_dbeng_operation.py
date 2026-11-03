@@ -289,3 +289,17 @@ def test_llm_agents_inform_but_never_decide(cfg):
     verdicts = json.loads((evidence / "policy_verdicts.json").read_text(encoding="utf-8"))["verdicts"]
     agent_candidate = [v for v in verdicts.values() if v["candidate"]["source"] == "agent:change_planner"]
     assert agent_candidate and agent_candidate[0]["eligible"] is False  # protected table, same gate as everyone
+
+
+def test_the_agents_evidence_pack_uses_only_its_own_ids(cfg):
+    prompts: list[str] = []
+
+    def llm(prompt: str) -> str:
+        prompts.append(prompt)
+        return '{"findings": []}'
+
+    outcome = run(cfg, FakeAdapter(make_target()), llm=llm)
+    assert outcome.status == "RETAINED"
+    pack = prompts[0].split("EVIDENCE:", 1)[1]
+    assert "plan:" not in pack
+    assert '"evidence_refs": ["E' in pack

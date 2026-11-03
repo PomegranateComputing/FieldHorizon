@@ -308,3 +308,14 @@ def test_db_commands_work_on_a_fresh_field_horizon_database(tmp_path, capsys, mo
     with sqlite3.connect(tmp_path / "fresh.sqlite3") as conn:
         tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
     assert {"domain_events", "provenance_edges", "dbeng_operations"} <= tables
+
+
+def test_bare_evidence_ids_are_quoted_but_must_still_exist():
+    """Seen with hermes3:8b on the real bench: `"evidence": [E25]` (invalid JSON, valid intent)."""
+    assert ag.quote_bare_evidence_ids('{"evidence": [E1, "E2" ,E9]}') == '{"evidence": ["E1", "E2" ,"E9"]}'
+    assert ag.quote_bare_evidence_ids('{"claim": "E1 is slow", "evidence": []}') == '{"claim": "E1 is slow", "evidence": []}'
+    reply = '{"assessment": "retain", "findings": [{"claim": "kept", "evidence": [E1]}, {"claim": "x", "evidence": [E9]}]}'
+    report = ag.run_role(None, ag.ROLE_VALIDATOR, EVIDENCE, "t", model="m", llm=lambda p: reply)  # type: ignore[arg-type]
+    assert report.normalised and report.assessment == "retain"
+    assert [a["claim"] for a in report.accepted] == ["kept"]
+    assert report.rejected[0]["reason"] == "cites unknown evidence ids ['E9']"

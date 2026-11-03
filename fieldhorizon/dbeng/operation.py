@@ -144,6 +144,7 @@ class IndexOptimization:
         self.emitter = OperationEmitter(cfg, actor=request.actor, aggregate_type=AGGREGATE_DB_OPERATION, correlation_id=self.op)
         self.edges = ProvenanceEdgeRepository(cfg)
         self.evidence: dict[str, dict] = {}
+        self.plan_evidence: dict[str, str] = {}
         self.record: dict = {"operation_id": self.op, "target": target.describe(), "request": request.__dict__}
 
     # --- plumbing ------------------------------------------------------------
@@ -294,7 +295,7 @@ class IndexOptimization:
         medians = {q: round(sorted(v)[len(v) // 2], 3) for q, v in measurement.series().items()}
         if label == "baseline":
             for qid, plan in measurement.first_plans.items():
-                self._add_evidence("baseline_plan", {
+                self.plan_evidence[qid] = self._add_evidence("baseline_plan", {
                     "query_id": qid, "median_ms": medians.get(qid), "node_types": plan.node_types,
                     "indexes_used": plan.indexes_used, "seq_scans": plan.seq_scans,
                 })
@@ -309,7 +310,11 @@ class IndexOptimization:
             candidates.append(manual)
         self._artifact("candidates.json", "candidates", {"candidates": [c.describe() for c in candidates], "observations": observations})
         for c in candidates:
-            self._add_evidence("candidate", c.describe())
+            # In the pack, a candidate points at the pack's own ids, never at internal "plan:<query>" refs
+            # an agent would copy and then (rightly) have rejected as unknown.
+            described = c.describe()
+            described["evidence_refs"] = [self.plan_evidence.get(r.removeprefix("plan:"), r) for r in c.evidence_refs]
+            self._add_evidence("candidate", described)
             self.edges.append(OBJECT_DB_EVIDENCE, f"{self.op}/baseline.json", OBJECT_DB_CANDIDATE, c.candidate_id,
                               REL_DERIVED_FROM, provenance_ref=self.op)
         return candidates, {"candidates": [c.spec.key for c in candidates], "observations": len(observations)}
