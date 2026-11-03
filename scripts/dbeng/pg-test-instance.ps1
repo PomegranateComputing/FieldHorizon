@@ -42,21 +42,22 @@ $PassFile = Join-Path $SecretsDir "pgpass.conf"
 $LogFile = Join-Path (Split-Path $DataDir -Parent) "postgresql-$Port.log"
 
 function Invoke-PgCtl([string[]] $Arguments) {
-    # pg_ctl on Windows starts postgres with inherited handles: called directly from a pipeline,
-    # the long-lived server keeps the caller's stdout pipe open and the caller never returns.
-    # Run it with its output redirected to files and wait for pg_ctl itself only -- not for its
-    # descendants, which Start-Process -Wait would also wait for.
-    $out = [System.IO.Path]::GetTempFileName()
-    $err = [System.IO.Path]::GetTempFileName()
-    try {
-        $process = Start-Process -FilePath $PgCtl -ArgumentList $Arguments -NoNewWindow -PassThru `
-            -RedirectStandardOutput $out -RedirectStandardError $err
-        $process.WaitForExit()
-        Get-Content $out, $err | Out-Host
-        return $process.ExitCode
-    } finally {
-        Remove-Item $out, $err -Force -ErrorAction SilentlyContinue
-    }
+    # pg_ctl starts postgres with CreateProcess(bInheritHandles=TRUE), so the long-lived server
+    # inherits EVERY inheritable handle of its ancestors -- including a caller's stdout pipe
+    # (`... | tail`), which then never reaches end-of-file: the caller hangs for the server's
+    # lifetime. Redirecting pg_ctl's own output to files is not enough (seen on this PC). Launch it
+    # through ShellExecute instead (Start-Process without redirection or -NoNewWindow), which
+    # passes no handles at all, and wait for pg_ctl itself only -- never Start-Process -Wait, which
+    # also waits for descendants. pg_ctl's own messages go to its hidden console; the server log is
+    # -l $LogFile, and `status` is printed afterwards.
+    $process = Start-Process -FilePath $PgCtl -ArgumentList $Arguments -WindowStyle Hidden -PassThru
+    $process.WaitForExit()
+    return $process.ExitCode
+}
+
+function Show-Status {
+    # `pg_ctl status` starts no server, so it can run inline and keep its output.
+    & $PgCtl -D $DataDir status | Out-Host
 }
 
 function New-Secret {
@@ -137,18 +138,21 @@ host    all       all   ::1/128        scram-sha-256
     "start" {
         $rc = Invoke-PgCtl @("-D", "`"$DataDir`"", "-l", "`"$LogFile`"", "-w", "-t", "60", "start")
         if ($rc -ne 0) { throw "pg_ctl start failed with exit code $rc (see $LogFile)" }
+        Show-Status
     }
     "stop" {
         $rc = Invoke-PgCtl @("-D", "`"$DataDir`"", "-m", "fast", "-w", "-t", "60", "stop")
         if ($rc -ne 0) { throw "pg_ctl stop failed with exit code $rc" }
+        Write-Host "server stopped"
     }
     "restart" {
         $rc = Invoke-PgCtl @("-D", "`"$DataDir`"", "-l", "`"$LogFile`"", "-m", "fast", "-w", "-t", "60", "restart")
         if ($rc -ne 0) { throw "pg_ctl restart failed with exit code $rc (see $LogFile)" }
+        Show-Status
     }
     "status" {
-        $rc = Invoke-PgCtl @("-D", "`"$DataDir`"", "status")
-        exit $rc
+        Show-Status
+        exit $LASTEXITCODE
     }
     "destroy" {
         & $PgCtl -D $DataDir status *> $null
