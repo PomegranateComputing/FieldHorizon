@@ -56,7 +56,9 @@ def render_schema(schema: dict) -> str:
 
 def write_contract(path: Path = CONTRACT_PATH) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(render_schema(build_openapi_schema()), encoding="utf-8")
+    # newline="\n": the frozen contract must be byte-identical on every OS;
+    # the default would write CRLF on Windows.
+    path.write_text(render_schema(build_openapi_schema()), encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
