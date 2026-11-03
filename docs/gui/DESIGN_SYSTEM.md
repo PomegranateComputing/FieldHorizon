@@ -1,4 +1,61 @@
-# Design System (finalized — Phase UI-3 item 3)
+# Design System
+
+## DB-02 (current): the operations workstation direction
+
+Since DB-02 the whole application uses the operations-workstation palette below
+(`apps/desktop/src/styles/tokens.css`). The Pomegranate-site palette further down is kept as the
+record of where the earlier identity came from; its legacy names now map onto the graphite values.
+
+| Role | Token | Value | Use |
+|---|---|---|---|
+| Ground | `--graphite-0` / `--surface-base` | `#0f1114` | page background |
+| Raised | `--graphite-1` / `--surface-raised` | `#14171b` | context bar, side surfaces |
+| Panel | `--graphite-2` / `--surface-panel-opaque` | `#181b20` | panels, tiles, cards |
+| Hover | `--graphite-3` / `--surface-hover` | `#20242a` | hovered or selected rows |
+| Control | `--graphite-4` / `--surface-control` | `#2a2f36` | buttons, selects, inputs |
+| Text | `--fog` / `--text-primary` | `#e6e8eb` | primary text |
+| Secondary | `--fog-dim` / `--text-secondary` | `#b3b9c1` | secondary text |
+| Meta | `--slate` / `--text-meta` | `#949ca6` | labels, timestamps |
+| Attention (sparing) | `--amber` / `--accent-attention`, `--status-warning` | `#d8a03a` | warnings, notes needing attention |
+| Cold accent | `--cold` / `--accent-cold`, `--focus-ring`, `--status-info` | `#69b3d6` | selection, focus, links, primary action, "after" series |
+| OK | `--signal-ok` / `--status-ok` | `#5cbf86` | verified, passed, retained |
+| Danger | `--signal-danger` / `--status-danger` | `#ec7385` | failed, contradicted, needs recovery |
+
+**Status is never colour alone.** Every status chip (`src/db/status.tsx`) carries a glyph and a
+written word (✓ Conservé, ↺ Compensé, ✖ Échec, reprise nécessaire, ❚❚ En pause…); the raw code is in
+the tooltip. Verdicts (identity verified, reachable…) use the same chip.
+
+**Contrast (WCAG 2.x, computed, `_qualification/db02/logs`):**
+
+| Text | on ground | on panel | on control |
+|---|---|---|---|
+| text `#e6e8eb` | 15.4:1 | 14.1:1 | 11.0:1 |
+| secondary `#b3b9c1` | 9.6:1 | 8.7:1 | 6.8:1 |
+| meta `#949ca6` | 6.8:1 | 6.2:1 | 4.9:1 |
+| amber `#d8a03a` | 8.1:1 | 7.4:1 | 5.8:1 |
+| cold `#69b3d6` | 8.1:1 | 7.4:1 | 5.8:1 |
+| ok `#5cbf86` | 8.3:1 | 7.6:1 | 5.9:1 |
+| danger `#ec7385` | 6.6:1 | 6.1:1 | 4.7:1 |
+
+Tinted chip backgrounds (14 % of the tone over the panel) keep every tone at ≥ 4.9:1. Primary
+buttons: `#0b1216` on cold = 8.1:1. Two values were raised during DB-02 after this check
+(meta `#8c949e` → `#949ca6`, danger `#e2576c` → `#ec7385`), which failed 4.5:1 on the control surface.
+
+**Type.** UI text in the system UI font (`Segoe UI Variable` on Windows); identifiers, hashes,
+numbers in `Cascadia Mono`/Consolas; the literary serif stays with the corpus screens only.
+
+**Density and scale.** Sizes in `rem`, so Windows scaling at 125 % and 150 % enlarges everything
+together; grids collapse to one column below ~62rem (1366 px at 150 % ≈ 910 CSS px). Accepted at
+1366×768, 1920×1080 and 2560×1440, each at 100/125/150 % (`docs/gui/DB02_UI_ACCEPTANCE.md`).
+
+**Charts.** Measurements are drawn as every real sample on one log axis (baseline: hollow grey;
+after: filled cold; medians as bars), with the same numbers in a table beside it — no decorative
+chart, no invented point.
+
+---
+
+## History: the Pomegranate-site palette (Phase UI-3 item 3)
+
 
 **Source found.** `~/Projects/PomegranateInteractive_Site` — git remote `github.com/PomegranateComputing/pomegranate-interactive-site.git`, a static site built by `source/build_site.py` into plain HTML/CSS (no framework, no build-tool lock-in to worry about). It already has a dedicated page for this project: `public/field-horizon.html` ("FH-01", tagged `Local web UI` among its tech tags — the site *already anticipates this exact work*). This draft extracts real tokens from `public/assets/css/styles.css` (545 lines) and the studio's own internal `CONTENT_GUIDE.md`. FABLE §6's fallback direction was **not needed** — everything below is sourced, not invented.
 

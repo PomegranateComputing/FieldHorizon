@@ -138,3 +138,85 @@ Set-Location apps\desktop; npx tsc --noEmit; npx vitest run; npm run build; Set-
   inherits every inheritable handle. The instance script starts it through ShellExecute.
 - `uv lock` downloads the Python named in `.python-version` (3.13) unless told otherwise:
   `uv lock --python 3.12` or `$env:UV_PYTHON_DOWNLOADS = "never"`.
+
+---
+
+# DB-02 — autonomous operations, daily use
+
+Everything above still works; DB-02 changes the lab, the identities, the commands below, and adds a
+launcher and an operator workstation. Same PC, same PowerShell 7 session variables, plus:
+
+```powershell
+$D2   = "$REPO\_qualification\db02\run"                           # DB-02 config, journal, evidence (gitignored)
+$CFG2 = "$D2\config.yaml"
+```
+
+## 7. Instance and lab (DB-02)
+
+```powershell
+# Pin THIS instance to one CCD of the Ryzen 9 7900 (logical CPUs 0-11): measurement stability.
+& $INST -Action start -PgBin "$PG\pgsql\bin" -DataDir "$PG\cluster" -Port 55432 -CpuMask 0xFFF
+# Lab v2: fh_observer / fh_measure / fh_operator (INHERIT FALSE, SET TRUE on fh_bench_owner),
+# fh_protected_owner (bench.audit_log), DDL guard + DML guards, fieldhorizon_meta lease and ledger,
+# VACUUM (ANALYZE) so the lab starts settled. Writes $D2\dbeng_targets.yaml (no secret).
+& $PY -m fieldhorizon.cli --config $CFG2 db bench-setup --reset --port 55432 --passfile $PASS --data-directory "$PG\cluster"
+```
+
+Why the CPU mask: without it, backends migrating between the two CCDs ran ~1.7x slower in bursts and
+the measurements had to (and did) refuse to credit gains under that noise (runs D01, E01–E02).
+
+## 8. Daily launch (Windows launcher)
+
+```powershell
+scripts\windows\FieldHorizon.cmd                 # start the service, open http://127.0.0.1:8777/ui/
+scripts\windows\FieldHorizon.cmd -Action status  # what runs, what the launcher started, where the logs are
+scripts\windows\FieldHorizon.cmd -Action stop    # graceful (/admin/shutdown); refuses while a DB operation runs
+scripts\windows\FieldHorizon.cmd -Action stop -Force   # cancels running operations first (each removes its change)
+scripts\windows\FieldHorizon.cmd -Action start -WithLab -Desktop   # also the test instance; open the desktop app
+```
+
+Settings: `%LOCALAPPDATA%\FieldHorizon\launcher.json` (`python`, `config`, `token_file`, `lab`
+{`pg_bin`, `data_dir`, `port`, `cpu_mask`}). Logs: `%LOCALAPPDATA%\FieldHorizon\logs`
+(`launcher-YYYYMMDD.log`, `service-<stamp>.out/err.log`). The launcher never starts a duplicate,
+never touches a service it did not start, and stops a process only if its PID, start time and
+executable all match its state file.
+
+## 9. CLI (DB-02)
+
+```powershell
+& $PY -m fieldhorizon.cli --config $CFG2 db optimize-indexes --workload config\dbeng_workloads\bench_orders.yaml             # read-dominant
+& $PY -m fieldhorizon.cli --config $CFG2 db optimize-indexes --workload config\dbeng_workloads\bench_orders_write_heavy.yaml # regression
+& $PY -m fieldhorizon.cli --config $CFG2 db optimize-indexes --workload config\dbeng_workloads\bench_orders_mixed.yaml       # mixed
+& $PY -m fieldhorizon.cli --config $CFG2 db status                      # detection only: unfinished changes, orphaned activity, lease
+& $PY -m fieldhorizon.cli --config $CFG2 db recover                     # manual recovery (proven ownership only; idempotent)
+& $PY -m fieldhorizon.cli --config $CFG2 db control <OP_ID> pause       # pause | resume | cancel, at the next safe point
+& $PY -m fieldhorizon.cli --config $CFG2 db verify <OP_ID>              # integrity of every file + recomputed decision
+& $PY -m fieldhorizon.cli --config $CFG2 db evidence <OP_ID> --output "$D2\evidence_copy" --zip   # + redacted bundle
+# Test-only crash right after the change (exit 86): the next start or the next operation recovers it.
+& $PY -m fieldhorizon.cli --config $CFG2 db optimize-indexes --workload config\dbeng_workloads\bench_orders_mixed.yaml --fault-after apply
+```
+
+Exit codes of `optimize-indexes`: 0 terminal and clean, 2 `FAILED_NEEDS_RECOVERY`, 3 `BLOCKED`,
+4 `FAILED_RECOVERED`, 86 the test-only crash.
+
+## 10. Tests (DB-02)
+
+```powershell
+& $PY -m pytest -q                                            # everything; real-PostgreSQL tests skip without the variables
+$env:FIELDHORIZON_DBENG_TEST_PASSFILE = $PASS
+$env:FIELDHORIZON_DBENG_TEST_DATA_DIR = "$PG\cluster"
+& $PY -m pytest -v tests\test_dbeng_postgres.py               # 15 real-server tests: refusals, two processes, kill, crash, timeouts
+& $PY -m fieldhorizon.openapi_export; Set-Location contract; npm run generate; Set-Location $REPO   # contract + TS types
+Set-Location apps\desktop; npx tsc --noEmit; npx vitest run; npm run build; npx tauri build; Set-Location $REPO
+```
+
+## DB-02 specifics
+
+- Measurement writes are rolled back but leave dead tuples (66 000 per phase with `bench_orders`) and
+  consume identity values; the executor VACUUMs the lab tables before each phase
+  (`measurement.vacuum_before_phase`), and each report shows the side effects.
+- Right after `bench-setup` autovacuum used to process the freshly loaded tables during the first
+  measurement (run D01); the setup now ends with `VACUUM (ANALYZE)`, and every phase waits (bounded)
+  for running maintenance.
+- The service must be started without inheriting its caller's handles (the launcher uses ShellExecute),
+  for the same reason as `pg_ctl`.
