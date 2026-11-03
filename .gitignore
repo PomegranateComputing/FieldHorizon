@@ -61,3 +61,7 @@ data/corpus/
 # above; named explicitly so the intent is obvious.
 data/books/_auto/
 data/manifestos/_auto/
+
+# Local qualification workspaces (venvs, isolated databases, tokens, evidence).
+# Reports worth keeping are copied into docs/.
+_qualification/
