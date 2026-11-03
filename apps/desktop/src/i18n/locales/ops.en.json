@@ -70,7 +70,8 @@
     "missing": "missing",
     "blocking": "blocking",
     "warning": "warning",
-    "info": "information"
+    "info": "information",
+    "INTERRUPTED": "Interrupted — recovery needed"
   },
   "step": {
     "created": "created",
@@ -202,7 +203,12 @@
     "requested": "{{action}} requested",
     "cancelTitle": "Cancel this operation?",
     "cancelBody": "The cancel applies at the next safe point. If the index was already built, it is removed by compensation, confirmed in the catalog. A DDL statement in progress is not interrupted. A cancel arriving after retention has no effect, and the sheet will say so.",
-    "cancelConfirm": "Confirm cancel"
+    "cancelConfirm": "Confirm cancel",
+    "semantics": {
+      "pause": "Takes effect at the next safe point (between steps or measurement rounds), never inside a DDL statement. The target lease is kept while paused, so no other operation can start on this target. Authorization is re-verified before any later change.",
+      "resume": "Continues from the safe point where the operation paused.",
+      "cancel": "Takes effect at the next safe point. A change already applied is removed (compensation confirmed in the catalog). A DDL statement already running is not interrupted; the cancel applies when it returns. A cancel arriving after the change was retained has no effect, and the operation says so."
+    }
   },
   "incidents": {
     "title": "Incidents and recovery",
@@ -306,7 +312,9 @@
       "agents": "Agents",
       "evidence": "Evidence"
     },
-    "journalMessage": "Journaled message:"
+    "journalMessage": "Journaled message:",
+    "journalEffect": "journaled effect",
+    "interrupted": "The process running this operation stopped before the end: it will not finish by itself. Recovery (automatic at start-up or before the next operation, or manual from the desk) removes its change when proven and closes it."
   },
   "decision": {
     "criteria": "Acceptance criteria",

@@ -38,7 +38,7 @@ export function TopBar({ onOpenPalette, onOpenSearch }: { onOpenPalette: () => v
           {backendStatus}
         </span>
 
-        <span className="top-bar-metric">
+        <span className="top-bar-metric top-bar-metric--secondary">
           {t("topBar.db")}: {systemInfo.status === "loaded" ? basename(systemInfo.data.database_path) : "--"}
         </span>
 
@@ -46,11 +46,11 @@ export function TopBar({ onOpenPalette, onOpenSearch }: { onOpenPalette: () => v
           {t("topBar.model")}: {systemInfo.status === "loaded" ? systemInfo.data.default_model : "--"}
         </span>
 
-        <span className="top-bar-metric">
+        <span className="top-bar-metric top-bar-metric--secondary">
           {t("topBar.planner")}: {plannerLabel}
         </span>
 
-        <span className="top-bar-metric">
+        <span className="top-bar-metric top-bar-metric--secondary">
           {t("topBar.cycles")}: {activeCycles}
         </span>
 

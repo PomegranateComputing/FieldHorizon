@@ -1,0 +1,75 @@
+/* The first screen of the first launch: one centred card, keyboard first. */
+.token-gate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: var(--surface-base);
+  font-family: var(--font-ui);
+}
+.token-gate-card {
+  width: min(36rem, 100%);
+  background: var(--surface-panel-opaque);
+  border: 1px solid var(--border-strong);
+  padding: 1.5rem 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.token-gate-title {
+  margin: 0;
+  font-family: var(--font-literary);
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+}
+.token-gate-text,
+.token-gate-note {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.92rem;
+}
+.token-gate-note {
+  color: var(--text-meta);
+  font-size: 0.82rem;
+}
+.token-gate-text code {
+  font-family: var(--font-machine);
+  font-size: 0.85em;
+  color: var(--text-primary);
+}
+.token-gate-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0.35rem 0.6rem;
+  align-items: center;
+}
+.token-gate-form label {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.token-gate-form input {
+  font: inherit;
+  color: var(--text-primary);
+  background: var(--surface-control);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 0.45rem 0.6rem;
+}
+.token-gate-form button {
+  font: inherit;
+  font-weight: 600;
+  background: var(--accent-cold);
+  color: #0b1216;
+  border: 1px solid var(--accent-cold);
+  border-radius: var(--radius-control);
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+}
+.token-gate-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

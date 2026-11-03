@@ -17,6 +17,7 @@ const META: Record<string, StatusMeta> = {
   RUNNING: { tone: "live", glyph: "▶" },
   PAUSED: { tone: "warning", glyph: "❚❚" },
   CANCELLING: { tone: "warning", glyph: "⨯" },
+  INTERRUPTED: { tone: "danger", glyph: "⚡" },
   RETAINED: { tone: "ok", glyph: "✓" },
   REVERTED: { tone: "info", glyph: "↺" },
   REJECTED: { tone: "neutral", glyph: "⊘" },

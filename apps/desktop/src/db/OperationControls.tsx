@@ -50,7 +50,7 @@ export function OperationControls({ operationId, status, available }: { operatio
       <p id="ops-control-semantics" className="ops-help">
         {status === "CANCELLING" ? t("ops.controls.cancelling") : status === "PAUSED" ? t("ops.controls.pausedNote") : t("ops.controls.safePoint")}
       </p>
-      {last && <p className="ops-note" role="status">{t("ops.controls.requested", { action: t(`ops.controls.${last.action}`) })} — {last.semantics}</p>}
+      {last && <p className="ops-note" role="status">{t("ops.controls.requested", { action: t(`ops.controls.${last.action}`) })} — {t(`ops.controls.semantics.${last.action}`)}</p>}
       <ErrorBox error={control.error} />
       <ConfirmDialog open={confirmCancel} tone="danger" title={t("ops.controls.cancelTitle")} confirmLabel={t("ops.controls.cancelConfirm")}
                      onCancel={() => setConfirmCancel(false)} onConfirm={() => { setConfirmCancel(false); control.mutate("cancel"); }}>

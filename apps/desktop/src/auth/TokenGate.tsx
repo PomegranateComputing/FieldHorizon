@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
+import "./tokenGate.css";
 import { getStoredToken, setStoredToken } from "./tokenStorage";
 
 interface TokenGateProps {
@@ -25,12 +26,13 @@ export function TokenGate({ children }: TokenGateProps) {
   }
 
   return (
-    <main aria-label="Field Horizon token entry">
-      <h1>{t("tokenGate.title")}</h1>
-      <p>
+    <main aria-label="Field Horizon token entry" className="token-gate">
+      <div className="token-gate-card">
+      <h1 className="token-gate-title">{t("tokenGate.title")}</h1>
+      <p className="token-gate-text">
         <Trans i18nKey="tokenGate.instructions" components={{ code: <code /> }} />
       </p>
-      <form
+      <form className="token-gate-form"
         onSubmit={(event) => {
           event.preventDefault();
           const trimmed = draft.trim();
@@ -51,6 +53,8 @@ export function TokenGate({ children }: TokenGateProps) {
           {t("tokenGate.connect")}
         </button>
       </form>
+      <p className="token-gate-note">{t("tokenGate.note")}</p>
+      </div>
     </main>
   );
 }

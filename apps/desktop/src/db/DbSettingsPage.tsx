@@ -46,7 +46,7 @@ export function DbSettingsPage() {
       </div>
       <Panel title={t("ops.settings.controls")}>
         {settings.data && (
-          <KV items={Object.entries(settings.data.controls).map(([action, text]) => [t(`ops.controls.${action}`), text])} />
+          <KV items={Object.keys(settings.data.controls).map((action) => [t(`ops.controls.${action}`), t(`ops.controls.semantics.${action}`)])} />
         )}
       </Panel>
       <Panel title={t("ops.settings.policy")}>

@@ -1,9 +1,10 @@
 {
   "tokenGate": {
     "title": "FIELD HORIZON",
-    "instructions": "Paste the local API token to continue. Run <code>field-horizon serve</code> in the repo if the backend isn't already running -- it prints the token file's path, e.g. <code>Token file: .fh_token</code>. Read that file's contents (<code>cat .fh_token</code>) and paste them below.",
+    "instructions": "Paste the local access token to continue. The launcher <code>scripts\\windows\\FieldHorizon.cmd</code> starts the service and names the token file (by default <code>.fh_token</code> next to the configuration): open that file, copy its content and paste it below.",
     "label": "API token",
-    "connect": "Connect"
+    "connect": "Connect",
+    "note": "The token stays in this browser session; it appears in no log and no capture."
   },
   "topBar": {
     "db": "db",

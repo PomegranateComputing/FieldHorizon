@@ -86,7 +86,9 @@ button.top-bar-metric:hover {
 .app-shell-body--workstation {
   grid-template-columns: 13.5rem minmax(0, 1fr);
 }
-.app-shell-center--workstation {
+/* Higher specificity than .app-shell-center (declared later): the workstation's sticky context bar
+   must sit flush at the top of the scroll area, with nothing scrolling visibly above it. */
+.app-shell-center.app-shell-center--workstation {
   padding: 0;
 }
 @media (max-width: 62rem) {
@@ -288,4 +290,14 @@ summary.side-nav-group-title {
 .console-toolbar button:hover {
   color: var(--text-primary);
   border-color: var(--accent-cold);
+}
+
+/* DB-02: at narrow widths (1366 px at 125-150 %), keep the identity and the essentials on one line. */
+.top-bar-identity {
+  white-space: nowrap;
+}
+@media (max-width: 75rem) {
+  .top-bar-metric--secondary {
+    display: none;
+  }
 }

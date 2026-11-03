@@ -191,6 +191,9 @@
   text-transform: uppercase;
   color: var(--text-meta);
 }
+.ops-tile .ops-chip {
+  white-space: normal; /* a long status ("Interrompue — reprise nécessaire") wraps inside a narrow tile */
+}
 .ops-tile-hint {
   font-size: 0.78rem;
   color: var(--text-meta);

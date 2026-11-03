@@ -1,9 +1,10 @@
 {
   "tokenGate": {
     "title": "FIELD HORIZON",
-    "instructions": "Collez le jeton API local pour continuer. Lancez <code>field-horizon serve</code> dans le dépôt si le backend n'est pas déjà démarré -- il affiche le chemin du fichier de jeton, par ex. <code>Token file: .fh_token</code>. Lisez le contenu de ce fichier (<code>cat .fh_token</code>) et collez-le ci-dessous.",
+    "instructions": "Collez le jeton d'accès local pour continuer. Le lanceur <code>scripts\\windows\\FieldHorizon.cmd</code> démarre le service et indique le fichier du jeton (par défaut <code>.fh_token</code> à côté de la configuration) : ouvrez ce fichier, copiez son contenu et collez-le ci-dessous.",
     "label": "Jeton API",
-    "connect": "Connecter"
+    "connect": "Connecter",
+    "note": "Le jeton reste dans la session de ce navigateur ; il n'apparaît dans aucun journal ni aucune capture."
   },
   "topBar": {
     "db": "bdd",

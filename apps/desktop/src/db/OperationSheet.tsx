@@ -38,7 +38,8 @@ export function OperationSheet() {
       </nav>
       <header className="ops-sheet-head">
         <div className="ops-sheet-status">
-          <StatusChip value={op.status} />
+          <StatusChip value={op.interrupted ? "INTERRUPTED" : op.status} />
+          {op.interrupted && <span className="ops-note ops-note--warning">{t("ops.sheet.interrupted")}</span>}
           {op.cause && <span className="ops-muted">{t("ops.fields.cause")} : {t(`ops.cause.${op.cause}`, { defaultValue: op.cause })} (<Mono>{op.cause}</Mono>)</span>}
         </div>
         <h1 className="ops-page-title">{isRecovery ? t("ops.sheet.recoveryTitle") : t("ops.sheet.title")} <Mono>{op.operation_id}</Mono></h1>
@@ -70,7 +71,7 @@ export function OperationSheet() {
           {data.controls.length > 0 && (
             <ul className="ops-list ops-small" aria-label={t("ops.sheet.controlHistory")}>
               {(data.controls as { seq: number; action: string; requested_by: string; requested_at: string; effect?: string | null }[]).map((c) => (
-                <li key={c.seq}><Mono>#{c.seq}</Mono> {t(`ops.controls.${c.action}`)} · {c.requested_by} · <Age iso={c.requested_at} /> → {c.effect ?? t("ops.controls.pending")}</li>
+                <li key={c.seq}><Mono>#{c.seq}</Mono> {t(`ops.controls.${c.action}`)} · {c.requested_by} · <Age iso={c.requested_at} /> → {c.effect ? <><span className="ops-muted">{t("ops.sheet.journalEffect")} :</span> {c.effect}</> : t("ops.controls.pending")}</li>
               ))}
             </ul>
           )}

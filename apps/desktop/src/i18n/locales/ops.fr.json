@@ -70,7 +70,8 @@
     "missing": "absent",
     "blocking": "bloquant",
     "warning": "avertissement",
-    "info": "information"
+    "info": "information",
+    "INTERRUPTED": "Interrompue — reprise nécessaire"
   },
   "step": {
     "created": "création",
@@ -202,7 +203,12 @@
     "requested": "{{action}} demandée",
     "cancelTitle": "Annuler cette opération ?",
     "cancelBody": "L'annulation s'applique au prochain point sûr. Si l'index a déjà été créé, il sera retiré par compensation, confirmée dans le catalogue. Une instruction DDL en cours n'est pas interrompue. Une annulation arrivée après la conservation est sans effet, et la fiche le dira.",
-    "cancelConfirm": "Confirmer l'annulation"
+    "cancelConfirm": "Confirmer l'annulation",
+    "semantics": {
+      "pause": "Prend effet au prochain point sûr (entre deux étapes ou deux tours de mesure), jamais au milieu d'une instruction DDL. Le bail de la cible est conservé pendant la pause : aucune autre opération ne peut démarrer sur cette cible. L'autorisation est revérifiée avant tout changement ultérieur.",
+      "resume": "Reprend au point sûr où l'opération s'était mise en pause.",
+      "cancel": "Prend effet au prochain point sûr. Un changement déjà appliqué est retiré (compensation confirmée dans le catalogue). Une instruction DDL en cours n'est pas interrompue : l'annulation s'applique à son retour. Une annulation arrivée après la conservation est sans effet, et l'opération le dit."
+    }
   },
   "incidents": {
     "title": "Incidents et reprise",
@@ -306,7 +312,9 @@
       "agents": "Agents",
       "evidence": "Preuves"
     },
-    "journalMessage": "Message journalisé :"
+    "journalMessage": "Message journalisé :",
+    "journalEffect": "effet journalisé",
+    "interrupted": "Le processus qui exécutait cette opération s'est arrêté avant la fin : elle ne se terminera pas d'elle-même. La reprise (automatique au démarrage ou avant la prochaine opération, ou manuelle depuis Exploitation) retire son changement s'il est prouvé et la clôt."
   },
   "decision": {
     "criteria": "Critères d'acceptation",
