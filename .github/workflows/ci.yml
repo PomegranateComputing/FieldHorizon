@@ -1,5 +1,12 @@
 name: CI
 
+# DB-02: written and run locally job by job (docs/dbeng/REPORT_DB02.md); NOT yet observed on GitHub
+# Actions -- nothing has been pushed. Jobs:
+#   python     unit + API tests on Linux and Windows (PostgreSQL tests skip without an instance)
+#   postgres   the real-PostgreSQL acceptance suite against PostgreSQL 18 with pg_stat_statements
+#   frontend   type check, component tests and production build of the desktop UI
+#   contract   the frozen OpenAPI contract and its generated TypeScript types do not drift
+
 on:
   push:
     branches: ["**"]
@@ -7,39 +14,92 @@ on:
     branches: ["**"]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
+  python:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Install package with dev dependencies
-        run: pip install -e ".[dev]"
-
+      - name: Install package with dev and PostgreSQL dependencies
+        run: pip install -e ".[dev,pg]"
       - name: ruff
-        run: ruff check fieldhorizon tests
-
-      - name: mypy
-        run: mypy fieldhorizon tests
-
+        run: ruff check fieldhorizon tests scripts
+      - name: mypy (package)
+        run: mypy fieldhorizon
+      - name: mypy (DB engineering tests)
+        # The other test modules carry 124 pre-existing mypy errors (none from DB-02); tracked separately.
+        run: mypy tests/dbeng_fakes.py tests/test_dbeng_operation.py tests/test_dbeng_api.py tests/test_dbeng_units.py tests/test_dbeng_postgres.py
       - name: pytest
-        run: pytest -v
+        run: pytest -q
 
+  postgres:
+    runs-on: ubuntu-latest
+    env:
+      FIELDHORIZON_DBENG_TEST_PASSFILE: ${{ github.workspace }}/.ci_pgpass
+      FIELDHORIZON_DBENG_TEST_PORT: "55432"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package with dev and PostgreSQL dependencies
+        run: pip install -e ".[dev,pg]"
+      - name: Start an isolated PostgreSQL 18 (pg_stat_statements preloaded, loopback only)
+        run: |
+          SECRET="$(python -c 'import secrets; print(secrets.token_urlsafe(24))')"
+          docker run -d --name fh-pg -p 127.0.0.1:55432:5432 -e POSTGRES_USER=fh_admin -e POSTGRES_PASSWORD="$SECRET" \
+            postgres:18 -c shared_preload_libraries=pg_stat_statements -c jit=off -c max_parallel_workers_per_gather=0
+          echo "127.0.0.1:55432:*:fh_admin:$SECRET" > "$FIELDHORIZON_DBENG_TEST_PASSFILE"
+          chmod 600 "$FIELDHORIZON_DBENG_TEST_PASSFILE"
+          for i in $(seq 1 30); do docker exec fh-pg pg_isready -U fh_admin && break; sleep 1; done
+      - name: Real-PostgreSQL acceptance suite
+        run: pytest -v tests/test_dbeng_postgres.py
+      - name: Stop PostgreSQL
+        if: always()
+        run: docker rm -f fh-pg
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/desktop
+    steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit
+      - name: Component tests
+        run: npx vitest run
+      - name: Production build
+        run: npm run build
 
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package with dev and PostgreSQL dependencies
+        run: pip install -e ".[dev,pg]"
+      - name: Fail if the served OpenAPI drifted from contract/openapi.json
+        run: pytest -q tests/test_openapi_contract.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install contract toolchain
         run: npm ci
         working-directory: contract
-
       - name: Regenerate TypeScript contract types
         run: npm run generate
         working-directory: contract
-
       - name: Fail if generated types.gen.ts drifted from the committed file
         run: git diff --exit-code -- contract/types.gen.ts
