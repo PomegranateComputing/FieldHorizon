@@ -4,6 +4,29 @@
  */
 
 export interface paths {
+    "/admin/shutdown": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Admin Shutdown
+         * @description Graceful stop for the launcher. Refused while a DB operation runs, unless
+         *     ``force``: then each running operation is asked to cancel (it removes its
+         *     change at its next safe point) and the server waits up to 120 s for them.
+         *     An operation still running after that is recovered at the next start.
+         */
+        post: operations["admin_shutdown_admin_shutdown_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/canon": {
         parameters: {
             query?: never;
@@ -210,6 +233,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/db/operations-page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Operations Page */
+        get: operations["get_db_operations_page_db_operations_page_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/db/operations/{operation_id}": {
         parameters: {
             query?: never;
@@ -227,6 +267,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/db/operations/{operation_id}/artifacts/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Operation Artifact */
+        get: operations["get_db_operation_artifact_db_operations__operation_id__artifacts__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/operations/{operation_id}/control": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Post Db Operation Control */
+        post: operations["post_db_operation_control_db_operations__operation_id__control_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/db/operations/{operation_id}/evidence": {
         parameters: {
             query?: never;
@@ -236,6 +310,23 @@ export interface paths {
         };
         /** Get Db Operation Evidence */
         get: operations["get_db_operation_evidence_db_operations__operation_id__evidence_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/operations/{operation_id}/measurements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Operation Measurements */
+        get: operations["get_db_operation_measurements_db_operations__operation_id__measurements_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -261,6 +352,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/db/operations/{operation_id}/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Operation Verify */
+        get: operations["get_db_operation_verify_db_operations__operation_id__verify_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/operations/{operation_id}/view": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Operation View */
+        get: operations["get_db_operation_view_db_operations__operation_id__view_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Overview */
+        get: operations["get_db_overview_db_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Policy */
+        get: operations["get_db_policy_db_policy_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/db/recover": {
         parameters: {
             query?: never;
@@ -272,6 +431,23 @@ export interface paths {
         put?: never;
         /** Post Db Recover */
         post: operations["post_db_recover_db_recover_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Settings */
+        get: operations["get_db_settings_db_settings_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -304,6 +480,40 @@ export interface paths {
         };
         /** Get Db Targets */
         get: operations["get_db_targets_db_targets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/targets/{name}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Target */
+        get: operations["get_db_target_db_targets__name__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/db/targets/{name}/incidents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Db Incidents */
+        get: operations["get_db_incidents_db_targets__name__incidents_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1381,10 +1591,107 @@ export interface components {
             /** Source Kind */
             source_kind: string;
         };
+        /** DbControlRequest */
+        DbControlRequest: {
+            /**
+             * Action
+             * @enum {string}
+             */
+            action: "pause" | "resume" | "cancel";
+        };
+        /** DbControlResponse */
+        DbControlResponse: {
+            /** Action */
+            action: string;
+            /** Operation Id */
+            operation_id: string;
+            /** Semantics */
+            semantics: string;
+            /** Seq */
+            seq: number;
+        };
+        /** DbDetectionResponse */
+        DbDetectionResponse: {
+            /** Detection */
+            detection: {
+                [key: string]: unknown;
+            };
+            /** Target */
+            target: string;
+        };
         /** DbDiscoverRequest */
         DbDiscoverRequest: {
             /** Target */
             target: string;
+        };
+        /** DbLiveState */
+        DbLiveState: {
+            /**
+             * Build Progress
+             * @default []
+             */
+            build_progress: {
+                [key: string]: unknown;
+            }[];
+            /** Checked At */
+            checked_at: string;
+            /** Detail */
+            detail?: string | null;
+            /** Detection */
+            detection?: {
+                [key: string]: unknown;
+            } | null;
+            /**
+             * Fieldhorizon Indexes
+             * @default []
+             */
+            fieldhorizon_indexes: {
+                [key: string]: unknown;
+            }[];
+            /** Identity Verified */
+            identity_verified?: boolean | null;
+            /** In Recovery */
+            in_recovery?: boolean | null;
+            /** Instance Marker Live */
+            instance_marker_live?: string | null;
+            /**
+             * Ledger
+             * @default []
+             */
+            ledger: {
+                [key: string]: unknown;
+            }[];
+            /** Reachable */
+            reachable?: boolean | null;
+            /** Server Version */
+            server_version?: string | null;
+            /** Server Version Num */
+            server_version_num?: number | null;
+            /** System Identifier Live */
+            system_identifier_live?: string | null;
+        };
+        /** DbMeasurementsResponse */
+        DbMeasurementsResponse: {
+            /** Operation Id */
+            operation_id: string;
+            /** Outcome */
+            outcome: string | null;
+            /** Queries */
+            queries: {
+                [key: string]: unknown;
+            }[];
+            /** Side Effects */
+            side_effects: {
+                [key: string]: unknown;
+            } | null;
+            /** Units */
+            units: {
+                [key: string]: string;
+            };
+            /** Weighted */
+            weighted: {
+                [key: string]: unknown;
+            } | null;
         };
         /** DbOperationDetailResponse */
         DbOperationDetailResponse: {
@@ -1437,6 +1744,142 @@ export interface components {
             /** Target */
             target: string;
         };
+        /** DbOperationSummary */
+        DbOperationSummary: {
+            /** Candidate */
+            candidate: string | null;
+            /** Cause */
+            cause: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /** Kind */
+            kind: string;
+            /** Lease Token */
+            lease_token: number | null;
+            /** Live */
+            live: boolean;
+            /** Llm */
+            llm: boolean;
+            /** Message */
+            message: string | null;
+            /** Operation Id */
+            operation_id: string;
+            /** Outcome */
+            outcome: string | null;
+            /** Recovered By */
+            recovered_by: string | null;
+            /** Recovery Mode */
+            recovery_mode: string | null;
+            /** Started At */
+            started_at: string;
+            /** State */
+            state: string;
+            /** Status */
+            status: string;
+            /** Target */
+            target: string;
+            /** Weighted Ratio */
+            weighted_ratio: number | null;
+            /** Workload */
+            workload: string | null;
+        };
+        /** DbOperationView */
+        DbOperationView: {
+            /** Artifacts */
+            artifacts: {
+                [key: string]: unknown;
+            }[];
+            /** Authority */
+            authority: {
+                [key: string]: unknown;
+            } | null;
+            /** Authorization */
+            authorization: {
+                [key: string]: unknown;
+            } | null;
+            /** Candidates */
+            candidates: {
+                [key: string]: unknown;
+            }[];
+            /** Change */
+            change: {
+                [key: string]: unknown;
+            } | null;
+            /** Changes */
+            changes: {
+                [key: string]: unknown;
+            }[];
+            /** Claims */
+            claims: {
+                [key: string]: unknown;
+            } | null;
+            /** Compensation */
+            compensation: {
+                [key: string]: unknown;
+            } | null;
+            /** Controls */
+            controls: {
+                [key: string]: unknown;
+            }[];
+            /** Controls Available */
+            controls_available: string[];
+            /** Decision */
+            decision: {
+                [key: string]: unknown;
+            } | null;
+            /** Execution Failure */
+            execution_failure: {
+                [key: string]: unknown;
+            } | null;
+            /** Final State */
+            final_state: {
+                [key: string]: unknown;
+            } | null;
+            /** Lease */
+            lease: {
+                [key: string]: unknown;
+            } | null;
+            /** Measurements Available */
+            measurements_available: boolean;
+            operation: components["schemas"]["DbOperationSummary"];
+            /** Recovery */
+            recovery: {
+                [key: string]: unknown;
+            } | null;
+            /** Report Available */
+            report_available: boolean;
+            /** Request */
+            request: {
+                [key: string]: unknown;
+            };
+            /** Runtime */
+            runtime: {
+                [key: string]: unknown;
+            } | null;
+            /** Timeline */
+            timeline: {
+                [key: string]: unknown;
+            }[];
+            /** Verdicts */
+            verdicts: {
+                [key: string]: unknown;
+            };
+        };
+        /** DbOperationsPage */
+        DbOperationsPage: {
+            /** Items */
+            items: components["schemas"]["DbOperationSummary"][];
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+            /** Running */
+            running: {
+                [key: string]: string;
+            };
+            /** Total */
+            total: number;
+        };
         /** DbOperationsResponse */
         DbOperationsResponse: {
             /** Operations */
@@ -1453,6 +1896,8 @@ export interface components {
             candidates: string[];
             /** Llm Model */
             llm_model?: string | null;
+            /** Request Id */
+            request_id?: string | null;
             /** Target */
             target: string;
             /**
@@ -1468,10 +1913,67 @@ export interface components {
         };
         /** DbOptimizeResponse */
         DbOptimizeResponse: {
+            /**
+             * Created
+             * @default true
+             */
+            created: boolean;
             /** Operation Id */
             operation_id: string;
             /** Status */
             status: string;
+        };
+        /** DbOverviewResponse */
+        DbOverviewResponse: {
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+            /** Generated At */
+            generated_at: string;
+            policy: components["schemas"]["DbPolicySummary"];
+            /** Recent */
+            recent: components["schemas"]["DbOperationSummary"][];
+            /** Recoveries */
+            recoveries: components["schemas"]["DbOperationSummary"][];
+            /** Running */
+            running: components["schemas"]["DbOperationSummary"][];
+            /** Startup */
+            startup: {
+                [key: string]: unknown;
+            };
+            /** Targets */
+            targets: components["schemas"]["DbTargetCard"][];
+        };
+        /** DbPolicyResponse */
+        DbPolicyResponse: {
+            /** Document */
+            document: {
+                [key: string]: unknown;
+            };
+            /** Sha256 */
+            sha256: string;
+            /** Source */
+            source: string;
+            /** Text */
+            text: string | null;
+            /** Version */
+            version: number;
+        };
+        /** DbPolicySummary */
+        DbPolicySummary: {
+            /** Max Authorization Age Seconds */
+            max_authorization_age_seconds: number;
+            /** Orphan Wait Seconds */
+            orphan_wait_seconds: number;
+            /** Recovery Automatic */
+            recovery_automatic: boolean;
+            /** Sha256 */
+            sha256: string;
+            /** Source */
+            source: string;
+            /** Version */
+            version: number;
         };
         /** DbRecoverRequest */
         DbRecoverRequest: {
@@ -1484,8 +1986,50 @@ export interface components {
             actions: {
                 [key: string]: unknown;
             }[];
+            /**
+             * Blocked
+             * @default []
+             */
+            blocked: {
+                [key: string]: unknown;
+            }[];
+            /** Detection */
+            detection?: {
+                [key: string]: unknown;
+            } | null;
+            /** Message */
+            message?: string | null;
+            /** Mode */
+            mode?: string | null;
+            /** Run Id */
+            run_id?: string | null;
+            /** Status */
+            status?: string | null;
             /** Target */
             target: string;
+        };
+        /** DbSettingsResponse */
+        DbSettingsResponse: {
+            /** Controls */
+            controls: {
+                [key: string]: string;
+            };
+            /** Evidence Root */
+            evidence_root: string;
+            /** Journal Database */
+            journal_database: string;
+            /** Llm Model */
+            llm_model: string;
+            /** Passfile Configured */
+            passfile_configured: {
+                [key: string]: boolean;
+            };
+            /** Policy Source */
+            policy_source: string;
+            /** Targets File */
+            targets_file: string;
+            /** Workloads Dir */
+            workloads_dir: string;
         };
         /** DbSnapshotModel */
         DbSnapshotModel: {
@@ -1510,6 +2054,62 @@ export interface components {
         DbSnapshotsResponse: {
             /** Snapshots */
             snapshots: components["schemas"]["DbSnapshotModel"][];
+        };
+        /** DbTargetCard */
+        DbTargetCard: {
+            /** Data Classification */
+            data_classification: string;
+            /** Dbname */
+            dbname: string;
+            /** Engine */
+            engine: string;
+            /** Environment */
+            environment: string;
+            /** Fingerprint */
+            fingerprint: string;
+            /** Host */
+            host: string;
+            /** Identities */
+            identities: {
+                [key: string]: string | null;
+            };
+            live?: components["schemas"]["DbLiveState"] | null;
+            /** Name */
+            name: string;
+            /** Pinned */
+            pinned: {
+                [key: string]: string | null;
+            };
+            /** Port */
+            port: number;
+            /** Reconciling */
+            reconciling: boolean;
+            /** Running Operation */
+            running_operation: string | null;
+            /** Startup */
+            startup: {
+                [key: string]: unknown;
+            } | null;
+            /** Writable */
+            writable: boolean;
+        };
+        /** DbTargetDetailResponse */
+        DbTargetDetailResponse: {
+            /** Authority */
+            authority: {
+                [key: string]: unknown;
+            } | null;
+            /** Authority Detail */
+            authority_detail?: string | null;
+            card: components["schemas"]["DbTargetCard"];
+            /** Snapshot */
+            snapshot: {
+                [key: string]: unknown;
+            } | null;
+            /** Statements */
+            statements: {
+                [key: string]: unknown;
+            } | null;
         };
         /** DbTargetModel */
         DbTargetModel: {
@@ -1550,6 +2150,25 @@ export interface components {
             /** Targets File */
             targets_file: string;
         };
+        /** DbVerificationResponse */
+        DbVerificationResponse: {
+            /** Attestation */
+            attestation: {
+                [key: string]: unknown;
+            };
+            /** Checked At */
+            checked_at: string;
+            /** Integrity */
+            integrity: {
+                [key: string]: unknown;
+            };
+            /** Operation Id */
+            operation_id: string;
+            /** Recomputation */
+            recomputation: {
+                [key: string]: unknown;
+            };
+        };
         /** DbWorkloadModel */
         DbWorkloadModel: {
             /** File */
@@ -1560,6 +2179,11 @@ export interface components {
             queries: {
                 [key: string]: unknown;
             }[];
+            /**
+             * Version
+             * @default 1
+             */
+            version: number;
         };
         /** DbWorkloadsResponse */
         DbWorkloadsResponse: {
@@ -2638,6 +3262,39 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    admin_shutdown_admin_shutdown_post: {
+        parameters: {
+            query?: {
+                force?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_canon_canon_get: {
         parameters: {
             query?: {
@@ -3000,6 +3657,44 @@ export interface operations {
             };
         };
     };
+    get_db_operations_page_db_operations_page_get: {
+        parameters: {
+            query?: {
+                target?: string | null;
+                status?: string | null;
+                kind?: string | null;
+                q?: string | null;
+                sort?: string;
+                order?: "asc" | "desc";
+                offset?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbOperationsPage"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_db_operation_db_operations__operation_id__get: {
         parameters: {
             query?: never;
@@ -3031,7 +3726,109 @@ export interface operations {
             };
         };
     };
+    get_db_operation_artifact_db_operations__operation_id__artifacts__name__get: {
+        parameters: {
+            query?: {
+                redact?: boolean;
+            };
+            header?: never;
+            path: {
+                operation_id: string;
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    post_db_operation_control_db_operations__operation_id__control_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                operation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DbControlRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbControlResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_db_operation_evidence_db_operations__operation_id__evidence_get: {
+        parameters: {
+            query?: {
+                redact?: boolean;
+            };
+            header?: never;
+            path: {
+                operation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_db_operation_measurements_db_operations__operation_id__measurements_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -3048,7 +3845,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["DbMeasurementsResponse"];
                 };
             };
             /** @description Validation Error */
@@ -3093,6 +3890,108 @@ export interface operations {
             };
         };
     };
+    get_db_operation_verify_db_operations__operation_id__verify_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                operation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbVerificationResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_db_operation_view_db_operations__operation_id__view_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                operation_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbOperationView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_db_overview_db_overview_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbOverviewResponse"];
+                };
+            };
+        };
+    };
+    get_db_policy_db_policy_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbPolicyResponse"];
+                };
+            };
+        };
+    };
     post_db_recover_db_recover_post: {
         parameters: {
             query?: never;
@@ -3122,6 +4021,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_db_settings_db_settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbSettingsResponse"];
                 };
             };
         };
@@ -3176,6 +4095,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DbTargetsResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_db_target_db_targets__name__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbTargetDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_db_incidents_db_targets__name__incidents_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DbDetectionResponse"];
                 };
             };
             /** @description Validation Error */

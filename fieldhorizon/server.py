@@ -4,6 +4,7 @@ import asyncio
 import json
 import logging
 import secrets
+import signal
 import sqlite3
 import threading
 import time
@@ -14,7 +15,7 @@ from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -154,9 +155,15 @@ class _SPAStaticFiles(StaticFiles):
         try:
             return await super().get_response(path, scope)
         except StarletteHTTPException as exc:
-            if exc.status_code == 404:
-                return await super().get_response("index.html", scope)
-            raise
+            if exc.status_code != 404:
+                raise
+            # The build's asset URLs are relative ("./assets/...", required by Tauri, which serves
+            # dist/ at its own root). From a nested deep link such as /ui/db/operations/OP-1 the
+            # browser would resolve them under /ui/db/operations/ and get this HTML back as
+            # JavaScript; anchor them at the mount point instead.
+            mount = (scope.get("root_path") or "/ui").rstrip("/")
+            html = (Path(str(self.directory)) / "index.html").read_text(encoding="utf-8")
+            return HTMLResponse(html.replace('"./', f'"{mount}/'))
 
 
 def load_or_create_token(token_file: Path) -> str:
@@ -302,10 +309,13 @@ def _error_response(status_code: int, code: str, title: str, detail: str, remedi
     )
 
 
-def create_app(cfg: AppConfig, token: str, db_adapter_factory=None) -> FastAPI:
+def create_app(cfg: AppConfig, token: str, db_adapter_factory=None, db_executor_factory=None,
+               db_startup_reconcile: bool = False) -> FastAPI:
     """
-    ``db_adapter_factory`` (TargetConfig -> adapter) replaces the real
-    database adapter for the /db routes; tests inject an in-memory one.
+    ``db_adapter_factory`` (TargetConfig -> adapter) and ``db_executor_factory``
+    replace the real database adapter and executor for the /db routes; tests
+    inject in-memory ones. ``db_startup_reconcile`` runs the DB engineering
+    start-up reconciliation (run_server turns it on).
 
     Local-only platform API (Civilization Engine phase): read-mostly,
     binds to 127.0.0.1 only (enforced by the caller, run_server, which
@@ -1028,7 +1038,43 @@ def create_app(cfg: AppConfig, token: str, db_adapter_factory=None) -> FastAPI:
     # DB engineering (fieldhorizon.dbeng): its own routes under /db, same token.
     from .dbeng.api import register_db_routes
 
-    register_db_routes(app, cfg, require_token, open_adapter=db_adapter_factory)
+    db_service = register_db_routes(app, cfg, require_token, open_adapter=db_adapter_factory, open_executor=db_executor_factory)
+    if db_startup_reconcile:
+        db_service.startup_reconcile(background=True)
+
+    @app.post("/admin/shutdown", dependencies=[Depends(require_token)])
+    def admin_shutdown(force: bool = False) -> dict:
+        """
+        Graceful stop for the launcher. Refused while a DB operation runs, unless
+        ``force``: then each running operation is asked to cancel (it removes its
+        change at its next safe point) and the server waits up to 120 s for them.
+        An operation still running after that is recovered at the next start.
+        """
+        running = db_service.running()
+        if running and not force:
+            raise FieldHorizonAPIError(409, "DB_OPERATIONS_RUNNING", "DB operations are running",
+                                       f"Running: {running}.", "Retry with force=true to cancel them first (each removes its change).")
+        cancelled = []
+        for operation_id in running.values():
+            if operation_id.startswith("OP-"):
+                try:
+                    db_service.control(operation_id, "cancel", actor=ACTOR_SERVER)
+                    cancelled.append(operation_id)
+                except Exception:  # noqa: BLE001 - already finishing or already cancelling
+                    pass
+        serving = bool(getattr(app.state, "graceful_exit", False))
+
+        def stop() -> None:
+            deadline = time.monotonic() + 120.0
+            while db_service.running() and time.monotonic() < deadline:
+                time.sleep(0.5)
+            if serving:
+                # uvicorn's own SIGINT handler performs the graceful exit. Only ever raised in a process
+                # that run_server started -- never under a test client, where it would interrupt the host.
+                signal.raise_signal(signal.SIGINT)
+
+        threading.Thread(target=stop, name="admin-shutdown", daemon=True).start()
+        return {"status": "stopping" if serving else "no_server_handle", "cancel_requested": cancelled}
 
     if UI_DIST_DIR.is_dir():
         app.mount("/ui", _SPAStaticFiles(directory=UI_DIST_DIR, html=True), name="ui")
@@ -1042,5 +1088,6 @@ def run_server(cfg: AppConfig, port: int, token_file: Path) -> None:
     import uvicorn
 
     token = load_or_create_token(token_file)
-    app = create_app(cfg, token)
+    app = create_app(cfg, token, db_startup_reconcile=True)
+    app.state.graceful_exit = True  # /admin/shutdown may end this process (see admin_shutdown)
     uvicorn.run(app, host=HOST, port=port, log_level="warning")

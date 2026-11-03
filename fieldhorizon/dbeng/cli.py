@@ -1,6 +1,7 @@
 """`field-horizon db ...` -- the operator interface of fieldhorizon.dbeng."""
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 import shutil
@@ -123,16 +124,29 @@ def cmd_optimize_indexes(args) -> None:
     )
     adapter = open_adapter(target)
     try:
-        outcome = IndexOptimization(cfg, target, adapter, policy, workload, request, fault_hook=_fault_exit).run()
+        outcome = IndexOptimization(cfg, target, adapter, policy, workload, request, fault_hook=_fault_exit,
+                                    executor_factory=_executor_factory(args, cfg, target, policy)).run()
     finally:
         adapter.close()
     if args.json:
         _print_json(asdict(outcome))
     else:
-        console.print(f"Operation [bold]{outcome.operation_id}[/bold]: [bold]{outcome.status}[/bold]")
+        console.print(f"Operation [bold]{outcome.operation_id}[/bold]: [bold]{outcome.status}[/bold] (cause {outcome.cause})")
         console.print(outcome.message)
         console.print(f"Evidence: {outcome.evidence_dir}")
-    raise SystemExit(0 if outcome.status not in ("FAILED_NEEDS_RECOVERY",) else 2)
+    raise SystemExit(EXIT_CODES.get(outcome.status, 0))
+
+
+EXIT_CODES = {"FAILED_NEEDS_RECOVERY": 2, "BLOCKED": 3, "FAILED_RECOVERED": 4}
+
+
+def _executor_factory(args, cfg, target, policy):
+    from .executor import PostgresExecutor
+
+    def make(operation_id: str):
+        return PostgresExecutor(target, policy, operation_id=operation_id, journal_ref=str(cfg.database),
+                                targets_path=_targets_path(args, cfg))
+    return make
 
 
 def cmd_operations(args) -> None:
@@ -161,17 +175,59 @@ def cmd_operation(args) -> None:
 
 def cmd_recover(args) -> None:
     from .adapters import open_adapter
-    from .operation import recover
     from .policy import load_policy
+    from .recovery import MODE_MANUAL, recover
+
+    cfg = load_config(args.config)
+    target = _target(args, cfg)
+    policy = load_policy(Path(args.policy) if args.policy else None)
+    adapter = open_adapter(target)
+    try:
+        report = recover(cfg, target, adapter, policy, _executor_factory(args, cfg, target, policy), mode=MODE_MANUAL)
+    finally:
+        adapter.close()
+    _print_json({k: report[k] for k in ("run_id", "mode", "status", "message", "actions", "blocked", "orphan_wait")})
+    raise SystemExit(0 if report["status"] in ("RECOVERY_DONE", "RECOVERY_NOTHING_TO_DO", "RECOVERY_DEFERRED") else 2)
+
+
+def cmd_status(args) -> None:
+    """Detection only: what is unfinished on the target and in this journal. Changes nothing."""
+    from .adapters import open_adapter
+    from .policy import load_policy
+    from .recovery import safe_detect
 
     cfg = load_config(args.config)
     target = _target(args, cfg)
     adapter = open_adapter(target)
     try:
-        actions = recover(cfg, target, adapter, load_policy(Path(args.policy) if args.policy else None))
+        detection = safe_detect(adapter, Journal(cfg), target, load_policy(Path(args.policy) if args.policy else None))
     finally:
         adapter.close()
-    _print_json({"target": target.name, "actions": actions, "nothing_to_do": not actions})
+    _print_json(detection)
+    raise SystemExit(0 if detection.get("clean") else 1)
+
+
+def cmd_control(args) -> None:
+    from .service import DbService, ServiceError
+
+    cfg = load_config(args.config)
+    try:
+        result = DbService(cfg, targets_path=_targets_path(args, cfg)).control(args.operation_id, args.action, actor="cli")
+    except ServiceError as exc:
+        raise SystemExit(f"{exc.code}: {exc.detail}") from None
+    _print_json(result)
+
+
+def cmd_verify(args) -> None:
+    from .export import verification
+
+    cfg = load_config(args.config)
+    if Journal(cfg).get(args.operation_id) is None:
+        raise SystemExit(f"No operation {args.operation_id}")
+    result = verification(cfg, args.operation_id)
+    _print_json(result)
+    ok = result["integrity"]["all_intact"] and (not result["recomputation"].get("available") or result["recomputation"]["matches"])
+    raise SystemExit(0 if ok else 1)
 
 
 def cmd_evidence(args) -> None:
@@ -189,8 +245,18 @@ def cmd_evidence(args) -> None:
         ok = hashlib.sha256(data).hexdigest() == a["sha256"]
         shutil.copyfile(a["path"], out / a["name"])
         report.append({"name": a["name"], "sha256_verified": ok, "bytes": len(data)})
+    bundle = None
+    if args.zip:
+        from .export import build_bundle
+
+        record = Journal(cfg).get(args.operation_id)
+        classification = "unspecified"  # an unknown target is exported under the strictest rules
+        with contextlib.suppress(Exception):
+            classification = load_targets(_targets_path(args, cfg))[record.target].data_classification if record else classification
+        bundle = out.parent / f"{args.operation_id}-evidence-redacted.zip"
+        bundle.write_bytes(build_bundle(cfg, args.operation_id, redact=True, data_classification=classification))
     _print_json({"operation_id": args.operation_id, "copied_to": str(out), "files": report,
-                 "all_verified": all(r["sha256_verified"] for r in report)})
+                 "all_verified": all(r["sha256_verified"] for r in report), "redacted_bundle": str(bundle) if bundle else None})
 
 
 def cmd_bench_setup(args) -> None:
@@ -265,13 +331,28 @@ def register(sub) -> None:
     p.add_argument("operation_id")
     p.set_defaults(func=cmd_operation)
 
-    p = common(dsub.add_parser("recover", help="Bring interrupted operations to a terminal state; idempotent."))
+    p = common(dsub.add_parser("recover", help="Manual recovery: bring unfinished changes back, proven ownership only; idempotent."))
     p.add_argument("--policy", default=None)
     p.set_defaults(func=cmd_recover)
 
-    p = dsub.add_parser("evidence", help="Copy an operation's evidence files and verify their sha256.")
+    p = common(dsub.add_parser("status", help="Detection only: unfinished changes, orphaned activity, lease holder. Changes nothing."))
+    p.add_argument("--policy", default=None)
+    p.set_defaults(func=cmd_status)
+
+    p = common(dsub.add_parser("control", help="Pause, resume or cancel a running operation (applied at its next safe point)."),
+               target=False)
+    p.add_argument("operation_id")
+    p.add_argument("action", choices=["pause", "resume", "cancel"])
+    p.set_defaults(func=cmd_control)
+
+    p = dsub.add_parser("verify", help="Integrity of an operation's evidence and recomputation of its decision.")
+    p.add_argument("operation_id")
+    p.set_defaults(func=cmd_verify)
+
+    p = common(dsub.add_parser("evidence", help="Copy an operation's evidence files and verify their sha256."), target=False)
     p.add_argument("operation_id")
     p.add_argument("--output", required=True)
+    p.add_argument("--zip", action="store_true", help="Also write a redacted export bundle (literals masked, paths hidden).")
     p.set_defaults(func=cmd_evidence)
 
     p = common(dsub.add_parser("bench-setup", help="Build the reproducible benchmark database on an isolated test instance."))

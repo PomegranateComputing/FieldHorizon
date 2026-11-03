@@ -1,31 +1,35 @@
 """
 FastAPI routes for DB engineering, mounted by fieldhorizon.server.create_app.
 
-Same bearer token and loopback-only server as every other route. An
-operation started here runs in a background thread (one at a time) and
-reports progress through its journal and the existing domain-event stream.
-The API accepts only workload files shipped in config/dbeng_workloads (never
-an arbitrary path) and never exposes the test-only fault injection.
+Same bearer token and loopback-only server as every other route. Operations
+run in server-owned threads (service.DbService): the UI only reads state and
+posts typed requests -- a launch with a client request id (idempotent), a
+control (pause / resume / cancel), a recovery. No route accepts SQL, a file
+path, or anything the executor would send as text; workloads are referenced
+by the name of a file shipped in config/dbeng_workloads.
+
+A graphical confirmation never replaces a backend check: every rule the UI
+shows is enforced here or below (policy, executor, server-side guards).
 """
 from __future__ import annotations
 
+import contextlib
 import io
 import json
-import threading
-import zipfile
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse, StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..config import AppConfig
 from ..events import ACTOR_SERVER
+from . import views
 from .journal import Journal
-from .targets import TargetConfigError, default_targets_path, load_targets
+from .service import WORKLOADS_DIR, DbService, ServiceError
 
-WORKLOADS_DIR = Path(__file__).resolve().parent.parent.parent / "config" / "dbeng_workloads"
+# --- models (the frozen contract: contract/openapi.json -> contract/types.gen.ts) ------------------
 
 
 class DbTargetModel(BaseModel):
@@ -52,6 +56,7 @@ class DbTargetsResponse(BaseModel):
 class DbWorkloadModel(BaseModel):
     name: str
     file: str
+    version: int = 1
     queries: list[dict[str, Any]]
 
 
@@ -110,11 +115,14 @@ class DbOptimizeRequest(BaseModel):
     candidates: list[str] = []
     use_llm: bool = False
     llm_model: str | None = None
+    # Idempotency: the same request id always designates the same operation (double click, refresh, retry).
+    request_id: str | None = Field(default=None, max_length=80, pattern=r"^[A-Za-z0-9_.:-]+$")
 
 
 class DbOptimizeResponse(BaseModel):
     operation_id: str
     status: str
+    created: bool = True
 
 
 class DbRecoverRequest(BaseModel):
@@ -124,6 +132,197 @@ class DbRecoverRequest(BaseModel):
 class DbRecoverResponse(BaseModel):
     target: str
     actions: list[dict[str, Any]]
+    run_id: str | None = None
+    status: str | None = None
+    message: str | None = None
+    mode: str | None = None
+    blocked: list[dict[str, Any]] = []
+    detection: dict[str, Any] | None = None
+
+
+class DbOperationSummary(BaseModel):
+    operation_id: str
+    kind: str
+    target: str
+    status: str
+    state: str
+    cause: str | None
+    message: str | None
+    started_at: str
+    finished_at: str | None
+    live: bool
+    workload: str | None
+    candidate: str | None
+    outcome: str | None
+    weighted_ratio: float | None
+    recovery_mode: str | None
+    recovered_by: str | None
+    lease_token: int | None
+    llm: bool
+
+
+class DbLiveState(BaseModel):
+    checked_at: str
+    reachable: bool | None = None
+    detail: str | None = None
+    server_version: str | None = None
+    server_version_num: int | None = None
+    instance_marker_live: str | None = None
+    system_identifier_live: str | None = None
+    identity_verified: bool | None = None
+    in_recovery: bool | None = None
+    detection: dict[str, Any] | None = None
+    fieldhorizon_indexes: list[dict[str, Any]] = []
+    ledger: list[dict[str, Any]] = []
+    build_progress: list[dict[str, Any]] = []
+
+
+class DbTargetCard(BaseModel):
+    name: str
+    engine: str
+    host: str
+    port: int
+    dbname: str
+    environment: str
+    writable: bool
+    data_classification: str
+    identities: dict[str, str | None]
+    pinned: dict[str, str | None]
+    fingerprint: str
+    running_operation: str | None
+    reconciling: bool
+    startup: dict[str, Any] | None
+    live: DbLiveState | None = None
+
+
+class DbPolicySummary(BaseModel):
+    version: int
+    sha256: str
+    source: str
+    recovery_automatic: bool
+    max_authorization_age_seconds: float
+    orphan_wait_seconds: float
+
+
+class DbOverviewResponse(BaseModel):
+    generated_at: str
+    policy: DbPolicySummary
+    targets: list[DbTargetCard]
+    running: list[DbOperationSummary]
+    recent: list[DbOperationSummary]
+    recoveries: list[DbOperationSummary]
+    counts: dict[str, int]
+    startup: dict[str, Any]
+
+
+class DbTargetDetailResponse(BaseModel):
+    card: DbTargetCard
+    authority: dict[str, Any] | None
+    authority_detail: str | None = None
+    snapshot: dict[str, Any] | None
+    statements: dict[str, Any] | None
+
+
+class DbOperationsPage(BaseModel):
+    total: int
+    offset: int
+    limit: int
+    items: list[DbOperationSummary]
+    running: dict[str, str]
+
+
+class DbOperationView(BaseModel):
+    operation: DbOperationSummary
+    request: dict[str, Any]
+    runtime: dict[str, Any] | None
+    controls_available: list[str]
+    timeline: list[dict[str, Any]]
+    controls: list[dict[str, Any]]
+    changes: list[dict[str, Any]]
+    decision: dict[str, Any] | None
+    candidates: list[dict[str, Any]]
+    verdicts: dict[str, Any]
+    authority: dict[str, Any] | None
+    authorization: dict[str, Any] | None
+    change: dict[str, Any] | None
+    compensation: dict[str, Any] | None
+    final_state: dict[str, Any] | None
+    claims: dict[str, Any] | None
+    recovery: dict[str, Any] | None
+    execution_failure: dict[str, Any] | None
+    lease: dict[str, Any] | None
+    artifacts: list[dict[str, Any]]
+    report_available: bool
+    measurements_available: bool
+
+
+class DbControlRequest(BaseModel):
+    action: Literal["pause", "resume", "cancel"]
+
+
+class DbControlResponse(BaseModel):
+    operation_id: str
+    seq: int
+    action: str
+    semantics: str
+
+
+class DbMeasurementsResponse(BaseModel):
+    operation_id: str
+    queries: list[dict[str, Any]]
+    weighted: dict[str, Any] | None
+    side_effects: dict[str, Any] | None
+    outcome: str | None
+    units: dict[str, str]
+
+
+class DbVerificationResponse(BaseModel):
+    operation_id: str
+    checked_at: str
+    integrity: dict[str, Any]
+    recomputation: dict[str, Any]
+    attestation: dict[str, Any]
+
+
+class DbPolicyResponse(BaseModel):
+    version: int
+    sha256: str
+    source: str
+    document: dict[str, Any]
+    text: str | None
+
+
+class DbSettingsResponse(BaseModel):
+    targets_file: str
+    workloads_dir: str
+    journal_database: str
+    evidence_root: str
+    policy_source: str
+    llm_model: str
+    passfile_configured: dict[str, bool]
+    controls: dict[str, str]
+
+
+class DbDetectionResponse(BaseModel):
+    target: str
+    detection: dict[str, Any]
+
+
+SERVICE_ERRORS = {
+    "operation_running": ("An operation is already running on this target",
+                          "Wait for it to finish, or pause or cancel it from its operation sheet."),
+    "target_reconciling": ("Start-up reconciliation in progress", "The target is being checked after start-up; retry in a few seconds."),
+    "request_id_reused": ("Request id already used", "A different launch needs a new request id."),
+    "unknown_target": ("Unknown target", "Pick a target declared in the targets file (Settings)."),
+    "targets_unavailable": ("No target file", "Run `field-horizon db bench-setup` or write the targets file named in Settings."),
+    "unknown_workload": ("Unknown workload", "Pick one of the workloads listed on the Workloads screen."),
+    "unknown_operation": ("Unknown operation", "Check the operation id."),
+    "operation_finished": ("Operation already ended", "Nothing to control: the operation has a terminal status."),
+    "not_controllable": ("Not controllable", "Only index optimizations can be paused, resumed or cancelled."),
+    "already_paused": ("Already paused", "Resume or cancel it."),
+    "not_paused": ("Not paused", "Only a paused operation can be resumed."),
+    "already_cancelling": ("Already cancelling", "The cancel takes effect at the next safe point."),
+}
 
 
 def _operation_model(record) -> DbOperationModel:
@@ -133,33 +332,24 @@ def _operation_model(record) -> DbOperationModel:
     )
 
 
-def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter=None) -> None:
-    lock = threading.Lock()
-    running: dict[str, str | None] = {"operation_id": None}
+def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter=None, open_executor=None,
+                       service: DbService | None = None) -> DbService:
+    svc = service or DbService(cfg, open_adapter=open_adapter, open_executor=open_executor)
+    app.state.db_service = svc
 
-    def adapter_for(target):
-        if open_adapter is not None:
-            return open_adapter(target)
-        from .adapters import open_adapter as default_open
+    def call(fn, *args, **kwargs):
+        from ..server import FieldHorizonAPIError
 
-        return default_open(target)
-
-    def targets():
-        path = default_targets_path(cfg.root)
         try:
-            return path, load_targets(path)
-        except TargetConfigError as exc:
-            raise HTTPException(status_code=404, detail=str(exc)) from exc
+            return fn(*args, **kwargs)
+        except ServiceError as exc:
+            title, remediation = SERVICE_ERRORS.get(exc.code, ("Request refused", "See detail for what to do next."))
+            raise FieldHorizonAPIError(exc.status_code, f"DB_{exc.code.upper()}", title, exc.detail, remediation) from exc
 
-    def target_or_404(name: str):
-        _, known = targets()
-        if name not in known:
-            raise HTTPException(status_code=404, detail=f"Unknown target {name!r}")
-        return known[name]
-
+    # --- targets, workloads, snapshots (DB-01 routes, kept) -----------------------------------
     @app.get("/db/targets", response_model=DbTargetsResponse, dependencies=[Depends(require_token)])
     def get_db_targets(check: bool = False) -> DbTargetsResponse:
-        path, known = targets()
+        known = call(svc.targets)
         out = []
         for t in known.values():
             model = DbTargetModel(
@@ -167,21 +357,34 @@ def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter
                 observer_user=t.observer_user, operator_user=t.operator_user, writable=t.writable_environment,
             )
             if check:
-                adapter = None
-                try:
-                    adapter = adapter_for(t)
-                    ident = adapter.identity()
-                    model.reachable = True
-                    model.server_version = ident.get("version_num")
-                    model.identity_matches = (ident.get("instance_marker") == t.instance_marker
-                                              and ident.get("system_identifier") == t.system_identifier)
-                except Exception as exc:
-                    model.reachable, model.detail = False, str(exc)[:300]
-                finally:
-                    if adapter is not None:
-                        adapter.close()
+                live = svc.live(t, max_age=0)
+                model.reachable = live.get("reachable")
+                model.server_version = live.get("server_version_num")
+                model.identity_matches = live.get("identity_verified")
+                model.detail = live.get("detail") or ""
             out.append(model)
-        return DbTargetsResponse(targets=out, targets_file=str(path))
+        return DbTargetsResponse(targets=out, targets_file=str(svc.targets_path))
+
+    @app.get("/db/targets/{name}", response_model=DbTargetDetailResponse, dependencies=[Depends(require_token)])
+    def get_db_target(name: str) -> DbTargetDetailResponse:
+        target = call(svc.target, name)
+        card = views.target_card(svc, target)
+        authority, authority_detail, statements = None, None, None
+        adapter = None
+        try:
+            adapter = svc.open_adapter(target)
+            authority = adapter.authority_facts()
+            statements = adapter.statement_statistics()
+        except Exception as exc:  # noqa: BLE001 - shown as unavailable with the reason
+            from .targets import redact
+
+            authority_detail = redact(f"{type(exc).__name__}: {exc}")[:300]
+        finally:
+            if adapter is not None:
+                adapter.close()
+        snaps = Journal(cfg).snapshots(name, limit=1)
+        return DbTargetDetailResponse(card=DbTargetCard(**card), authority=authority, authority_detail=authority_detail,
+                                      snapshot=snaps[0] if snaps else None, statements=statements)
 
     @app.get("/db/workloads", response_model=DbWorkloadsResponse, dependencies=[Depends(require_token)])
     def get_db_workloads() -> DbWorkloadsResponse:
@@ -190,8 +393,9 @@ def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter
         items = []
         for path in sorted(WORKLOADS_DIR.glob("*.yaml")):
             w = load_workload(path)
-            items.append(DbWorkloadModel(name=w.name, file=path.name, queries=[
-                {"id": q.query_id, "kind": q.kind, "weight": q.weight, "sql": q.sql} for q in w.queries
+            items.append(DbWorkloadModel(name=w.name, file=path.name, version=w.version, queries=[
+                {"id": q.query_id, "kind": q.kind, "weight": q.weight, "sql": q.sql, "control": q.control,
+                 "repeat": q.repeat, "param_sets": len(q.params)} for q in w.queries
             ]))
         return DbWorkloadsResponse(workloads=items)
 
@@ -204,8 +408,8 @@ def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter
     def post_db_discover(body: DbDiscoverRequest) -> DbSnapshotModel:
         from .advisor import structural_findings
 
-        target = target_or_404(body.target)
-        adapter = adapter_for(target)
+        target = call(svc.target, body.target)
+        adapter = svc.open_adapter(target)
         try:
             identity = adapter.identity()
             snapshot = adapter.discover()
@@ -218,32 +422,92 @@ def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter
         assert row is not None
         return DbSnapshotModel(**{k: row[k] for k in DbSnapshotModel.model_fields})
 
+    # --- overview, policy, settings ----------------------------------------------------------
+    @app.get("/db/overview", response_model=DbOverviewResponse, dependencies=[Depends(require_token)])
+    def get_db_overview() -> DbOverviewResponse:
+        return DbOverviewResponse(**call(views.overview, svc))
+
+    @app.get("/db/policy", response_model=DbPolicyResponse, dependencies=[Depends(require_token)])
+    def get_db_policy() -> DbPolicyResponse:
+        return DbPolicyResponse(**views.policy_view(svc.policy()))
+
+    @app.get("/db/settings", response_model=DbSettingsResponse, dependencies=[Depends(require_token)])
+    def get_db_settings() -> DbSettingsResponse:
+        from .service import CONTROL_SEMANTICS
+
+        try:
+            known = svc.targets()
+        except ServiceError:
+            known = {}
+        return DbSettingsResponse(
+            targets_file=str(svc.targets_path), workloads_dir=str(WORKLOADS_DIR), journal_database=str(cfg.database),
+            evidence_root=str(cfg.outputs / "dbeng"), policy_source=str(svc.policy().source), llm_model=cfg.default_model,
+            passfile_configured={name: bool(t.passfile) for name, t in known.items()}, controls=CONTROL_SEMANTICS,
+        )
+
+    # --- operations -------------------------------------------------------------------------
     @app.get("/db/operations", response_model=DbOperationsResponse, dependencies=[Depends(require_token)])
     def get_db_operations(limit: int = 30) -> DbOperationsResponse:
-        return DbOperationsResponse(operations=[_operation_model(r) for r in Journal(cfg).recent(limit)], running=running["operation_id"])
+        running = svc.running()
+        return DbOperationsResponse(operations=[_operation_model(r) for r in Journal(cfg).recent(limit)],
+                                    running=next(iter(running.values()), None))
 
-    def _artifact_json(detail_artifacts: list[dict], name: str) -> dict:
-        for a in detail_artifacts:
-            if a["name"] == name and Path(a["path"]).exists():
-                return json.loads(Path(a["path"]).read_text(encoding="utf-8"))
-        return {}
+    @app.get("/db/operations-page", response_model=DbOperationsPage, dependencies=[Depends(require_token)])
+    def get_db_operations_page(target: str | None = None, status: str | None = None, kind: str | None = None, q: str | None = None,
+                               sort: str = "started_at", order: Literal["asc", "desc"] = "desc", offset: int = 0,
+                               limit: int = 25) -> DbOperationsPage:
+        journal = Journal(cfg)
+        total, rows = journal.query(target=target, status=status, kind=kind, text=q, sort=sort, descending=order == "desc",
+                                    offset=offset, limit=limit)
+        return DbOperationsPage(total=total, offset=offset, limit=limit, running=svc.running(),
+                                items=[DbOperationSummary(**views.operation_summary(journal, r)) for r in rows])
 
     @app.get("/db/operations/{operation_id}", response_model=DbOperationDetailResponse, dependencies=[Depends(require_token)])
     def get_db_operation(operation_id: str) -> DbOperationDetailResponse:
-        journal = Journal(cfg)
-        record = journal.get(operation_id)
-        if record is None:
+        view = views.operation_view(cfg, operation_id)
+        if view is None:
             raise HTTPException(status_code=404, detail=f"No operation {operation_id}")
-        artifacts = journal.artifacts(operation_id)
-        verdicts = _artifact_json(artifacts, "policy_verdicts.json").get("verdicts", {})
+        record = Journal(cfg).get(operation_id)
+        assert record is not None
         return DbOperationDetailResponse(
-            operation=_operation_model(record), request=record.request, decision=record.decision,
-            steps=journal.steps(operation_id), changes=journal.changes(operation_id),
-            artifacts=[{k: a[k] for k in ("name", "kind", "sha256", "bytes", "created_at")} for a in artifacts],
-            candidates=_artifact_json(artifacts, "candidates.json").get("candidates", []),
-            verdicts={cid: {"key": v["candidate"]["key"], "eligible": v["eligible"], "blocking": v["blocking"],
-                            "checks": v["checks"]} for cid, v in verdicts.items()},
+            operation=_operation_model(record), request=view["request"], decision=view["decision"], steps=view["timeline"],
+            changes=view["changes"], artifacts=view["artifacts"], candidates=view["candidates"], verdicts=view["verdicts"],
         )
+
+    @app.get("/db/operations/{operation_id}/view", response_model=DbOperationView, dependencies=[Depends(require_token)])
+    def get_db_operation_view(operation_id: str) -> DbOperationView:
+        view = views.operation_view(cfg, operation_id)
+        if view is None:
+            raise HTTPException(status_code=404, detail=f"No operation {operation_id}")
+        return DbOperationView(**view)
+
+    @app.get("/db/operations/{operation_id}/measurements", response_model=DbMeasurementsResponse, dependencies=[Depends(require_token)])
+    def get_db_operation_measurements(operation_id: str) -> DbMeasurementsResponse:
+        view = views.measurements_view(cfg, operation_id)
+        if view is None:
+            raise HTTPException(status_code=404, detail=f"No operation {operation_id}")
+        return DbMeasurementsResponse(**view)
+
+    @app.get("/db/operations/{operation_id}/verify", response_model=DbVerificationResponse, dependencies=[Depends(require_token)])
+    def get_db_operation_verify(operation_id: str) -> DbVerificationResponse:
+        from .export import verification
+
+        if Journal(cfg).get(operation_id) is None:
+            raise HTTPException(status_code=404, detail=f"No operation {operation_id}")
+        return DbVerificationResponse(**verification(cfg, operation_id))
+
+    @app.get("/db/operations/{operation_id}/artifacts/{name}", dependencies=[Depends(require_token)])
+    def get_db_operation_artifact(operation_id: str, name: str, redact: bool = True) -> PlainTextResponse:
+        from .export import redact_document
+
+        artifact = next((a for a in Journal(cfg).artifacts(operation_id) if a["name"] == name), None)
+        if artifact is None or not Path(artifact["path"]).exists():
+            raise HTTPException(status_code=404, detail=f"No artifact {name!r} for {operation_id}")
+        text = Path(artifact["path"]).read_text(encoding="utf-8")
+        if redact and name.endswith(".json"):
+            text = json.dumps(redact_document(json.loads(text)), indent=2, sort_keys=True, ensure_ascii=False)
+        media = "application/json" if name.endswith(".json") else "text/markdown" if name.endswith(".md") else "text/plain"
+        return PlainTextResponse(text, media_type=media)
 
     @app.get("/db/operations/{operation_id}/report", response_class=PlainTextResponse, dependencies=[Depends(require_token)])
     def get_db_operation_report(operation_id: str) -> PlainTextResponse:
@@ -253,66 +517,41 @@ def register_db_routes(app: FastAPI, cfg: AppConfig, require_token, open_adapter
         return PlainTextResponse(Path(report["path"]).read_text(encoding="utf-8"), media_type="text/markdown")
 
     @app.get("/db/operations/{operation_id}/evidence", dependencies=[Depends(require_token)])
-    def get_db_operation_evidence(operation_id: str) -> StreamingResponse:
-        artifacts = Journal(cfg).artifacts(operation_id)
-        if not artifacts:
+    def get_db_operation_evidence(operation_id: str, redact: bool = True) -> StreamingResponse:
+        from .export import build_bundle
+
+        record = Journal(cfg).get(operation_id)
+        if record is None or not Journal(cfg).artifacts(operation_id):
             raise HTTPException(status_code=404, detail=f"No evidence for {operation_id}")
-        buffer = io.BytesIO()
-        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
-            for a in artifacts:
-                zf.write(a["path"], arcname=a["name"])
-            zf.writestr("MANIFEST.json", json.dumps(
-                [{k: a[k] for k in ("name", "kind", "sha256", "bytes", "created_at")} for a in artifacts], indent=2))
-        buffer.seek(0)
-        return StreamingResponse(buffer, media_type="application/zip",
+        classification = "unspecified"  # an unknown target is exported under the strictest rules
+        with contextlib.suppress(ServiceError):
+            classification = svc.target(record.target).data_classification
+        if not redact and classification != "synthetic":
+            raise HTTPException(status_code=403, detail="Unredacted export is only available for a synthetic lab target.")
+        data = build_bundle(cfg, operation_id, redact=redact, data_classification=classification)
+        return StreamingResponse(io.BytesIO(data), media_type="application/zip",
                                  headers={"Content-Disposition": f'attachment; filename="{operation_id}-evidence.zip"'})
 
     @app.post("/db/operations", response_model=DbOptimizeResponse, status_code=202, dependencies=[Depends(require_token)])
     def post_db_operation(body: DbOptimizeRequest) -> DbOptimizeResponse:
-        from .operation import IndexOptimization, OptimizeRequest, new_operation_id
-        from .policy import load_policy
-        from .workload import load_workload
+        launch = call(svc.start_optimization, target=body.target, workload=body.workload, candidates=body.candidates,
+                      use_llm=body.use_llm, llm_model=body.llm_model, request_id=body.request_id, actor=ACTOR_SERVER)
+        return DbOptimizeResponse(operation_id=launch.operation_id, status=launch.status, created=launch.created)
 
-        target = target_or_404(body.target)
-        workload_path = WORKLOADS_DIR / body.workload
-        if Path(body.workload).name != body.workload or not workload_path.is_file():
-            raise HTTPException(status_code=400, detail=f"Unknown workload {body.workload!r}; see GET /db/workloads")
-        if not lock.acquire(blocking=False):
-            raise HTTPException(status_code=409, detail=f"Operation {running['operation_id']} is still running")
-        operation_id = new_operation_id()
-        running["operation_id"] = operation_id
+    @app.post("/db/operations/{operation_id}/control", response_model=DbControlResponse, dependencies=[Depends(require_token)])
+    def post_db_operation_control(operation_id: str, body: DbControlRequest) -> DbControlResponse:
+        return DbControlResponse(**call(svc.control, operation_id, body.action))
 
-        def work() -> None:
-            adapter = None
-            try:
-                adapter = adapter_for(target)
-                request = OptimizeRequest(target=target.name, workload_path=str(workload_path), candidates=body.candidates,
-                                          use_llm=body.use_llm, llm_model=body.llm_model, actor=ACTOR_SERVER)
-                IndexOptimization(cfg, target, adapter, load_policy(), load_workload(workload_path), request,
-                                  operation_id=operation_id).run()
-            finally:
-                if adapter is not None:
-                    adapter.close()
-                running["operation_id"] = None
-                lock.release()
-
-        threading.Thread(target=work, name=f"dbeng-{operation_id}", daemon=True).start()
-        return DbOptimizeResponse(operation_id=operation_id, status="RUNNING")
+    # --- incidents and recovery ---------------------------------------------------------------
+    @app.get("/db/targets/{name}/incidents", response_model=DbDetectionResponse, dependencies=[Depends(require_token)])
+    def get_db_incidents(name: str) -> DbDetectionResponse:
+        return DbDetectionResponse(target=name, detection=call(svc.detect, name))
 
     @app.post("/db/recover", response_model=DbRecoverResponse, dependencies=[Depends(require_token)])
     def post_db_recover(body: DbRecoverRequest) -> DbRecoverResponse:
-        from .operation import recover
-        from .policy import load_policy
+        report = call(svc.recover, body.target)
+        return DbRecoverResponse(target=body.target, actions=report["actions"], run_id=report["run_id"], status=report["status"],
+                                 message=report["message"], mode=report["mode"], blocked=report["blocked"],
+                                 detection=report["detection"])
 
-        target = target_or_404(body.target)
-        if not lock.acquire(blocking=False):
-            raise HTTPException(status_code=409, detail=f"Operation {running['operation_id']} is still running")
-        adapter = None
-        try:
-            adapter = adapter_for(target)
-            actions = recover(cfg, target, adapter, load_policy(), actor=ACTOR_SERVER)
-        finally:
-            if adapter is not None:
-                adapter.close()
-            lock.release()
-        return DbRecoverResponse(target=target.name, actions=actions)
+    return svc

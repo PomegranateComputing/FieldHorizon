@@ -841,6 +841,71 @@
         "title": "CycleSourceModel",
         "type": "object"
       },
+      "DbControlRequest": {
+        "properties": {
+          "action": {
+            "enum": [
+              "pause",
+              "resume",
+              "cancel"
+            ],
+            "title": "Action",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "DbControlRequest",
+        "type": "object"
+      },
+      "DbControlResponse": {
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "semantics": {
+            "title": "Semantics",
+            "type": "string"
+          },
+          "seq": {
+            "title": "Seq",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "operation_id",
+          "seq",
+          "action",
+          "semantics"
+        ],
+        "title": "DbControlResponse",
+        "type": "object"
+      },
+      "DbDetectionResponse": {
+        "properties": {
+          "detection": {
+            "additionalProperties": true,
+            "title": "Detection",
+            "type": "object"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target",
+          "detection"
+        ],
+        "title": "DbDetectionResponse",
+        "type": "object"
+      },
       "DbDiscoverRequest": {
         "properties": {
           "target": {
@@ -852,6 +917,214 @@
           "target"
         ],
         "title": "DbDiscoverRequest",
+        "type": "object"
+      },
+      "DbLiveState": {
+        "properties": {
+          "build_progress": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Build Progress",
+            "type": "array"
+          },
+          "checked_at": {
+            "title": "Checked At",
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "detection": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detection"
+          },
+          "fieldhorizon_indexes": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Fieldhorizon Indexes",
+            "type": "array"
+          },
+          "identity_verified": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Identity Verified"
+          },
+          "in_recovery": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "In Recovery"
+          },
+          "instance_marker_live": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instance Marker Live"
+          },
+          "ledger": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Ledger",
+            "type": "array"
+          },
+          "reachable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reachable"
+          },
+          "server_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Server Version"
+          },
+          "server_version_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Server Version Num"
+          },
+          "system_identifier_live": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "System Identifier Live"
+          }
+        },
+        "required": [
+          "checked_at"
+        ],
+        "title": "DbLiveState",
+        "type": "object"
+      },
+      "DbMeasurementsResponse": {
+        "properties": {
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "queries": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Queries",
+            "type": "array"
+          },
+          "side_effects": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Side Effects"
+          },
+          "units": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Units",
+            "type": "object"
+          },
+          "weighted": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weighted"
+          }
+        },
+        "required": [
+          "operation_id",
+          "queries",
+          "weighted",
+          "side_effects",
+          "outcome",
+          "units"
+        ],
+        "title": "DbMeasurementsResponse",
         "type": "object"
       },
       "DbOperationDetailResponse": {
@@ -989,6 +1262,443 @@
         "title": "DbOperationModel",
         "type": "object"
       },
+      "DbOperationSummary": {
+        "properties": {
+          "candidate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Candidate"
+          },
+          "cause": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cause"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "lease_token": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lease Token"
+          },
+          "live": {
+            "title": "Live",
+            "type": "boolean"
+          },
+          "llm": {
+            "title": "Llm",
+            "type": "boolean"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "recovered_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recovered By"
+          },
+          "recovery_mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recovery Mode"
+          },
+          "started_at": {
+            "title": "Started At",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          },
+          "weighted_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weighted Ratio"
+          },
+          "workload": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workload"
+          }
+        },
+        "required": [
+          "operation_id",
+          "kind",
+          "target",
+          "status",
+          "state",
+          "cause",
+          "message",
+          "started_at",
+          "finished_at",
+          "live",
+          "workload",
+          "candidate",
+          "outcome",
+          "weighted_ratio",
+          "recovery_mode",
+          "recovered_by",
+          "lease_token",
+          "llm"
+        ],
+        "title": "DbOperationSummary",
+        "type": "object"
+      },
+      "DbOperationView": {
+        "properties": {
+          "artifacts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Artifacts",
+            "type": "array"
+          },
+          "authority": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority"
+          },
+          "authorization": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authorization"
+          },
+          "candidates": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "change": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change"
+          },
+          "changes": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "claims": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claims"
+          },
+          "compensation": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Compensation"
+          },
+          "controls": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Controls",
+            "type": "array"
+          },
+          "controls_available": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Controls Available",
+            "type": "array"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "execution_failure": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Execution Failure"
+          },
+          "final_state": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final State"
+          },
+          "lease": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lease"
+          },
+          "measurements_available": {
+            "title": "Measurements Available",
+            "type": "boolean"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/DbOperationSummary"
+          },
+          "recovery": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recovery"
+          },
+          "report_available": {
+            "title": "Report Available",
+            "type": "boolean"
+          },
+          "request": {
+            "additionalProperties": true,
+            "title": "Request",
+            "type": "object"
+          },
+          "runtime": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Runtime"
+          },
+          "timeline": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Timeline",
+            "type": "array"
+          },
+          "verdicts": {
+            "additionalProperties": true,
+            "title": "Verdicts",
+            "type": "object"
+          }
+        },
+        "required": [
+          "operation",
+          "request",
+          "runtime",
+          "controls_available",
+          "timeline",
+          "controls",
+          "changes",
+          "decision",
+          "candidates",
+          "verdicts",
+          "authority",
+          "authorization",
+          "change",
+          "compensation",
+          "final_state",
+          "claims",
+          "recovery",
+          "execution_failure",
+          "lease",
+          "artifacts",
+          "report_available",
+          "measurements_available"
+        ],
+        "title": "DbOperationView",
+        "type": "object"
+      },
+      "DbOperationsPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DbOperationSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "running": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Running",
+            "type": "object"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "offset",
+          "limit",
+          "items",
+          "running"
+        ],
+        "title": "DbOperationsPage",
+        "type": "object"
+      },
       "DbOperationsResponse": {
         "properties": {
           "operations": {
@@ -1038,6 +1748,19 @@
             ],
             "title": "Llm Model"
           },
+          "request_id": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "pattern": "^[A-Za-z0-9_.:-]+$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
           "target": {
             "title": "Target",
             "type": "string"
@@ -1061,6 +1784,11 @@
       },
       "DbOptimizeResponse": {
         "properties": {
+          "created": {
+            "default": true,
+            "title": "Created",
+            "type": "boolean"
+          },
           "operation_id": {
             "title": "Operation Id",
             "type": "string"
@@ -1075,6 +1803,148 @@
           "status"
         ],
         "title": "DbOptimizeResponse",
+        "type": "object"
+      },
+      "DbOverviewResponse": {
+        "properties": {
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Counts",
+            "type": "object"
+          },
+          "generated_at": {
+            "title": "Generated At",
+            "type": "string"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/DbPolicySummary"
+          },
+          "recent": {
+            "items": {
+              "$ref": "#/components/schemas/DbOperationSummary"
+            },
+            "title": "Recent",
+            "type": "array"
+          },
+          "recoveries": {
+            "items": {
+              "$ref": "#/components/schemas/DbOperationSummary"
+            },
+            "title": "Recoveries",
+            "type": "array"
+          },
+          "running": {
+            "items": {
+              "$ref": "#/components/schemas/DbOperationSummary"
+            },
+            "title": "Running",
+            "type": "array"
+          },
+          "startup": {
+            "additionalProperties": true,
+            "title": "Startup",
+            "type": "object"
+          },
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/DbTargetCard"
+            },
+            "title": "Targets",
+            "type": "array"
+          }
+        },
+        "required": [
+          "generated_at",
+          "policy",
+          "targets",
+          "running",
+          "recent",
+          "recoveries",
+          "counts",
+          "startup"
+        ],
+        "title": "DbOverviewResponse",
+        "type": "object"
+      },
+      "DbPolicyResponse": {
+        "properties": {
+          "document": {
+            "additionalProperties": true,
+            "title": "Document",
+            "type": "object"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "sha256",
+          "source",
+          "document",
+          "text"
+        ],
+        "title": "DbPolicyResponse",
+        "type": "object"
+      },
+      "DbPolicySummary": {
+        "properties": {
+          "max_authorization_age_seconds": {
+            "title": "Max Authorization Age Seconds",
+            "type": "number"
+          },
+          "orphan_wait_seconds": {
+            "title": "Orphan Wait Seconds",
+            "type": "number"
+          },
+          "recovery_automatic": {
+            "title": "Recovery Automatic",
+            "type": "boolean"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "sha256",
+          "source",
+          "recovery_automatic",
+          "max_authorization_age_seconds",
+          "orphan_wait_seconds"
+        ],
+        "title": "DbPolicySummary",
         "type": "object"
       },
       "DbRecoverRequest": {
@@ -1100,6 +1970,71 @@
             "title": "Actions",
             "type": "array"
           },
+          "blocked": {
+            "default": [],
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Blocked",
+            "type": "array"
+          },
+          "detection": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detection"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mode"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
           "target": {
             "title": "Target",
             "type": "string"
@@ -1110,6 +2045,60 @@
           "actions"
         ],
         "title": "DbRecoverResponse",
+        "type": "object"
+      },
+      "DbSettingsResponse": {
+        "properties": {
+          "controls": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Controls",
+            "type": "object"
+          },
+          "evidence_root": {
+            "title": "Evidence Root",
+            "type": "string"
+          },
+          "journal_database": {
+            "title": "Journal Database",
+            "type": "string"
+          },
+          "llm_model": {
+            "title": "Llm Model",
+            "type": "string"
+          },
+          "passfile_configured": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "title": "Passfile Configured",
+            "type": "object"
+          },
+          "policy_source": {
+            "title": "Policy Source",
+            "type": "string"
+          },
+          "targets_file": {
+            "title": "Targets File",
+            "type": "string"
+          },
+          "workloads_dir": {
+            "title": "Workloads Dir",
+            "type": "string"
+          }
+        },
+        "required": [
+          "targets_file",
+          "workloads_dir",
+          "journal_database",
+          "evidence_root",
+          "policy_source",
+          "llm_model",
+          "passfile_configured",
+          "controls"
+        ],
+        "title": "DbSettingsResponse",
         "type": "object"
       },
       "DbSnapshotModel": {
@@ -1184,6 +2173,191 @@
           "snapshots"
         ],
         "title": "DbSnapshotsResponse",
+        "type": "object"
+      },
+      "DbTargetCard": {
+        "properties": {
+          "data_classification": {
+            "title": "Data Classification",
+            "type": "string"
+          },
+          "dbname": {
+            "title": "Dbname",
+            "type": "string"
+          },
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "fingerprint": {
+            "title": "Fingerprint",
+            "type": "string"
+          },
+          "host": {
+            "title": "Host",
+            "type": "string"
+          },
+          "identities": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Identities",
+            "type": "object"
+          },
+          "live": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DbLiveState"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pinned": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Pinned",
+            "type": "object"
+          },
+          "port": {
+            "title": "Port",
+            "type": "integer"
+          },
+          "reconciling": {
+            "title": "Reconciling",
+            "type": "boolean"
+          },
+          "running_operation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Running Operation"
+          },
+          "startup": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startup"
+          },
+          "writable": {
+            "title": "Writable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "engine",
+          "host",
+          "port",
+          "dbname",
+          "environment",
+          "writable",
+          "data_classification",
+          "identities",
+          "pinned",
+          "fingerprint",
+          "running_operation",
+          "reconciling",
+          "startup"
+        ],
+        "title": "DbTargetCard",
+        "type": "object"
+      },
+      "DbTargetDetailResponse": {
+        "properties": {
+          "authority": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority"
+          },
+          "authority_detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authority Detail"
+          },
+          "card": {
+            "$ref": "#/components/schemas/DbTargetCard"
+          },
+          "snapshot": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot"
+          },
+          "statements": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Statements"
+          }
+        },
+        "required": [
+          "card",
+          "authority",
+          "snapshot",
+          "statements"
+        ],
+        "title": "DbTargetDetailResponse",
         "type": "object"
       },
       "DbTargetModel": {
@@ -1305,6 +2479,42 @@
         "title": "DbTargetsResponse",
         "type": "object"
       },
+      "DbVerificationResponse": {
+        "properties": {
+          "attestation": {
+            "additionalProperties": true,
+            "title": "Attestation",
+            "type": "object"
+          },
+          "checked_at": {
+            "title": "Checked At",
+            "type": "string"
+          },
+          "integrity": {
+            "additionalProperties": true,
+            "title": "Integrity",
+            "type": "object"
+          },
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "recomputation": {
+            "additionalProperties": true,
+            "title": "Recomputation",
+            "type": "object"
+          }
+        },
+        "required": [
+          "operation_id",
+          "checked_at",
+          "integrity",
+          "recomputation",
+          "attestation"
+        ],
+        "title": "DbVerificationResponse",
+        "type": "object"
+      },
       "DbWorkloadModel": {
         "properties": {
           "file": {
@@ -1322,6 +2532,11 @@
             },
             "title": "Queries",
             "type": "array"
+          },
+          "version": {
+            "default": 1,
+            "title": "Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -3940,6 +5155,54 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/admin/shutdown": {
+      "post": {
+        "description": "Graceful stop for the launcher. Refused while a DB operation runs, unless\n``force``: then each running operation is asked to cancel (it removes its\nchange at its next safe point) and the server waits up to 120 s for them.\nAn operation still running after that is recovered at the next start.",
+        "operationId": "admin_shutdown_admin_shutdown_post",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "force",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Force",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Admin Shutdown Admin Shutdown Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Admin Shutdown"
+      }
+    },
     "/canon": {
       "get": {
         "description": "as_of_cycle/as_of_timestamp (Implementation Brief III, Phase D) each\nreconstruct active CANON as of a point in time -- verdict/include_retired/\nlimit are ignored in that mode, matching engine.canon_as_of_cycle/timestamp's\nown fixed shape (they always return active CANON, nothing else).",
@@ -4491,6 +5754,149 @@
         "summary": "Post Db Operation"
       }
     },
+    "/db/operations-page": {
+      "get": {
+        "operationId": "get_db_operations_page_db_operations_page_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Kind"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "started_at",
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "required": false,
+            "schema": {
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "title": "Order",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbOperationsPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operations Page"
+      }
+    },
     "/db/operations/{operation_id}": {
       "get": {
         "operationId": "get_db_operation_db_operations__operation_id__get",
@@ -4535,6 +5941,121 @@
         "summary": "Get Db Operation"
       }
     },
+    "/db/operations/{operation_id}/artifacts/{name}": {
+      "get": {
+        "operationId": "get_db_operation_artifact_db_operations__operation_id__artifacts__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "redact",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Redact",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation Artifact"
+      }
+    },
+    "/db/operations/{operation_id}/control": {
+      "post": {
+        "operationId": "post_db_operation_control_db_operations__operation_id__control_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DbControlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbControlResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Post Db Operation Control"
+      }
+    },
     "/db/operations/{operation_id}/evidence": {
       "get": {
         "operationId": "get_db_operation_evidence_db_operations__operation_id__evidence_get",
@@ -4546,6 +6067,16 @@
             "schema": {
               "title": "Operation Id",
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "redact",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Redact",
+              "type": "boolean"
             }
           }
         ],
@@ -4575,6 +6106,50 @@
           }
         ],
         "summary": "Get Db Operation Evidence"
+      }
+    },
+    "/db/operations/{operation_id}/measurements": {
+      "get": {
+        "operationId": "get_db_operation_measurements_db_operations__operation_id__measurements_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbMeasurementsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation Measurements"
       }
     },
     "/db/operations/{operation_id}/report": {
@@ -4621,6 +6196,140 @@
         "summary": "Get Db Operation Report"
       }
     },
+    "/db/operations/{operation_id}/verify": {
+      "get": {
+        "operationId": "get_db_operation_verify_db_operations__operation_id__verify_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbVerificationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation Verify"
+      }
+    },
+    "/db/operations/{operation_id}/view": {
+      "get": {
+        "operationId": "get_db_operation_view_db_operations__operation_id__view_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbOperationView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation View"
+      }
+    },
+    "/db/overview": {
+      "get": {
+        "operationId": "get_db_overview_db_overview_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbOverviewResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Overview"
+      }
+    },
+    "/db/policy": {
+      "get": {
+        "operationId": "get_db_policy_db_policy_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbPolicyResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Policy"
+      }
+    },
     "/db/recover": {
       "post": {
         "operationId": "post_db_recover_db_recover_post",
@@ -4662,6 +6371,29 @@
           }
         ],
         "summary": "Post Db Recover"
+      }
+    },
+    "/db/settings": {
+      "get": {
+        "operationId": "get_db_settings_db_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbSettingsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Settings"
       }
     },
     "/db/snapshots": {
@@ -4768,6 +6500,94 @@
           }
         ],
         "summary": "Get Db Targets"
+      }
+    },
+    "/db/targets/{name}": {
+      "get": {
+        "operationId": "get_db_target_db_targets__name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbTargetDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Target"
+      }
+    },
+    "/db/targets/{name}/incidents": {
+      "get": {
+        "operationId": "get_db_incidents_db_targets__name__incidents_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbDetectionResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Incidents"
       }
     },
     "/db/workloads": {
