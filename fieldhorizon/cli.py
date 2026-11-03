@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
+from dataclasses import asdict
 from pathlib import Path
 
 import yaml
@@ -552,6 +554,41 @@ def cmd_generate_axioms(args) -> None:
         init_db(cfg.database)
         count = ingest_json_corpus(cfg)
         console.print(f"[green]Auto-ingested JSON entries:[/green] {count}")
+
+
+def cmd_cycle_evaluation(args) -> None:
+    cfg = load_config(args.config)
+    init_db(cfg.database)
+    report = FieldHorizonEngine(cfg).cycle_evaluation(args.cycle_id, recompute=not args.no_recompute)
+    if report is None:
+        console.print(f"[red]No cycle with id {args.cycle_id}.[/red]")
+        raise SystemExit(1)
+    if args.json:
+        print(json.dumps(asdict(report), indent=2, ensure_ascii=False))
+        return
+
+    console.print(f"Cycle {report.cycle_id} -- persisted decision: {report.persisted_verdict} ({report.persisted_final_score})")
+    if report.original_status != "recorded":
+        console.print(f"[yellow]Original components unavailable:[/yellow] {report.original_unavailable_reason}")
+    for original in report.original:
+        marker = " (selected)" if original.selected else ""
+        console.print(
+            f"Original {original.role}{marker}: {original.verdict} {original.final_score} "
+            f"[{original.evaluator_version}, recorded {original.recorded_at}]"
+        )
+    recomputation = report.recomputation
+    if recomputation is not None:
+        verdict = "matches" if recomputation.matches_persisted_decision else "DIFFERS FROM"
+        console.print(
+            f"Recomputation {recomputation.recomputed_at} [{recomputation.evaluator_version}]: "
+            f"{recomputation.verdict} {recomputation.final_score} -- {verdict} the persisted decision "
+            f"(delta {recomputation.score_delta:+.3f})"
+        )
+        if recomputation.missing_json_refs:
+            console.print(f"[yellow]Context refs no longer in json_entries:[/yellow] {recomputation.missing_json_refs}")
+        if recomputation.component_deltas:
+            console.print(f"Component deltas vs original: {recomputation.component_deltas}")
+
 
 def cmd_lineage(args) -> None:
     cfg = load_config(args.config)
@@ -1245,6 +1282,15 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("lineage")
     s.add_argument("target_id", help="A json_entries axiom id, or a numeric cycles.id for canon genealogy.")
     s.set_defaults(func=cmd_lineage)
+
+    s = sub.add_parser(
+        "cycle-evaluation",
+        help="A cycle's persisted decision, original evaluation components, and a labeled recomputation.",
+    )
+    s.add_argument("cycle_id", type=int)
+    s.add_argument("--no-recompute", action="store_true", help="Show only what was persisted; call no evaluator.")
+    s.add_argument("--json", action="store_true")
+    s.set_defaults(func=cmd_cycle_evaluation)
 
     s = sub.add_parser("canon", help="List canon, now or reconstructed as of a historical point (Implementation Brief III, Phase D).")
     s.add_argument("--verdict", default="CANON")

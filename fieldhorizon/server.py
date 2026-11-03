@@ -8,6 +8,7 @@ import sqlite3
 import threading
 import time
 from collections import deque
+from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
@@ -39,6 +40,7 @@ from .contracts import (
     CouncilsResponse,
     CycleDetailModel,
     CycleDetailResponse,
+    CycleEvaluationResponse,
     CycleEvidenceResponse,
     CycleRequest,
     CycleResponse,
@@ -619,6 +621,17 @@ def create_app(cfg: AppConfig, token: str) -> FastAPI:
     def get_cycle_evidence(cycle_id: int) -> CycleEvidenceResponse:
         """The verbatim evidence text recorded in cycle_sources at cycle time -- the same table replay.py's replay_cycle_level3 reads for exact reproduction, now reachable from the API too."""
         return CycleEvidenceResponse(evidence=[CycleSourceModel(**e.__dict__) for e in engine.cycle_evidence(cycle_id)])
+
+    @app.get("/cycles/{cycle_id}/evaluation", response_model=CycleEvaluationResponse, dependencies=[Depends(require_token)])
+    def get_cycle_evaluation(cycle_id: int, recompute: bool = True) -> CycleEvaluationResponse:
+        """The persisted decision, the original per-component evaluation (or why it is unavailable), and a recomputation in the cycle's own retrieval context, each labeled as what it is."""
+        report = engine.cycle_evaluation(cycle_id, recompute=recompute)
+        if report is None:
+            raise FieldHorizonAPIError(
+                404, "FH_CYCLE_NOT_FOUND", "Cycle not found", f"No cycle with id {cycle_id}.",
+                "Check GET /canon or GET /events for valid cycle ids.",
+            )
+        return CycleEvaluationResponse(**asdict(report))
 
     @app.get("/registry/{kind}", response_model=RegistryEntriesResponse, dependencies=[Depends(require_token)])
     def get_registry_list(kind: str) -> RegistryEntriesResponse:

@@ -26,6 +26,48 @@ STRUCTURE_WEIGHT = 0.182
 # canon_loop_penalty.
 MOTIF_FREQUENCY_RATIO = 0.3
 
+STUFFING_PENALTY_WEIGHT = 0.15
+GENERIC_PENALTY_WEIGHT = 0.10
+TRUNCATION_PENALTY = 0.35
+CANON_THRESHOLD = 0.82
+USEFUL_FRAGMENT_THRESHOLD = 0.68
+HERESY_THRESHOLD = 0.50
+CANON_GATE_MIN_ENFORCEMENT = 0.75
+CANON_GATE_MAX_LOOP_PENALTY = 0.20
+
+# Identifies the scoring rules a persisted evaluation was produced with
+# (fieldhorizon.evaluation_record). Bump it whenever a weight, threshold,
+# gate or component definition below changes, so an original evaluation is
+# never compared against a recomputation as if they used the same rules.
+EVALUATOR_VERSION = "evaluate_cycle/1"
+
+
+def evaluator_parameters() -> dict:
+    return {
+        "weights": {
+            "doctrinal_enforcement": DOCTRINAL_ENFORCEMENT_WEIGHT,
+            "symbolic_density": SYMBOLIC_DENSITY_WEIGHT,
+            "length_score": LENGTH_WEIGHT,
+            "structure_score": STRUCTURE_WEIGHT,
+            "stuffing_penalty": -STUFFING_PENALTY_WEIGHT,
+            "generic_penalty": -GENERIC_PENALTY_WEIGHT,
+            "truncation_penalty": -1.0,
+            "canon_loop_penalty": -1.0,
+        },
+        "thresholds": {
+            "CANON": CANON_THRESHOLD,
+            "USEFUL_FRAGMENT": USEFUL_FRAGMENT_THRESHOLD,
+            "HERESY": HERESY_THRESHOLD,
+        },
+        "canon_gate": {
+            "min_words": MIN_WORDS,
+            "min_paragraphs": 2,
+            "min_doctrinal_enforcement": CANON_GATE_MIN_ENFORCEMENT,
+            "max_canon_loop_penalty": CANON_GATE_MAX_LOOP_PENALTY,
+        },
+        "motif_frequency_ratio": MOTIF_FREQUENCY_RATIO,
+    }
+
 
 @dataclass
 class CycleEvaluation:
@@ -40,6 +82,14 @@ class CycleEvaluation:
     final_score: float
     verdict: str
     notes: list[str]
+    # Everything else final_score and verdict depend on, so a persisted
+    # evaluation fully explains its own result. Defaulted for callers (and
+    # tests) that build a CycleEvaluation by hand.
+    truncation_penalty: float = 0.0
+    canon_loop_penalty: float = 0.0
+    word_count: int = 0
+    paragraph_count: int = 0
+    canon_gate_passed: bool = False
 
 
 GENERIC_PHRASES = [
@@ -157,7 +207,7 @@ def evaluate_cycle(
     s_score = structure_score(fragment)
     stuff_penalty = stuffing_penalty(fragment, json_rows)
     g_penalty = generic_penalty(response)
-    t_penalty = 0.35 if has_truncation_marker(fragment) else 0.0
+    t_penalty = TRUNCATION_PENALTY if has_truncation_marker(fragment) else 0.0
     loop_penalty = canon_loop_penalty(fragment, motif_counts)
 
     if words < MIN_WORDS:
@@ -183,8 +233,8 @@ def evaluate_cycle(
         + density * SYMBOLIC_DENSITY_WEIGHT
         + l_score * LENGTH_WEIGHT
         + s_score * STRUCTURE_WEIGHT
-        - stuff_penalty * 0.15
-        - g_penalty * 0.10
+        - stuff_penalty * STUFFING_PENALTY_WEIGHT
+        - g_penalty * GENERIC_PENALTY_WEIGHT
         - t_penalty
         - loop_penalty
     )
@@ -195,16 +245,16 @@ def evaluate_cycle(
     canon_allowed = (
         words >= MIN_WORDS
         and paras >= 2
-        and enforcement >= 0.75
+        and enforcement >= CANON_GATE_MIN_ENFORCEMENT
         and t_penalty <= 0
-        and loop_penalty < 0.20
+        and loop_penalty < CANON_GATE_MAX_LOOP_PENALTY
     )
 
-    if final_score >= 0.82 and canon_allowed:
+    if final_score >= CANON_THRESHOLD and canon_allowed:
         verdict = "CANON"
-    elif final_score >= 0.68:
+    elif final_score >= USEFUL_FRAGMENT_THRESHOLD:
         verdict = "USEFUL_FRAGMENT"
-    elif final_score >= 0.50:
+    elif final_score >= HERESY_THRESHOLD:
         verdict = "HERESY"
     else:
         verdict = "NOISE"
@@ -221,6 +271,11 @@ def evaluate_cycle(
         final_score=round(final_score, 3),
         verdict=verdict,
         notes=notes,
+        truncation_penalty=round(t_penalty, 3),
+        canon_loop_penalty=round(loop_penalty, 3),
+        word_count=words,
+        paragraph_count=paras,
+        canon_gate_passed=canon_allowed,
     )
 
 

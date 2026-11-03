@@ -633,6 +633,85 @@
         "title": "CycleDetailResponse",
         "type": "object"
       },
+      "CycleEvaluationResponse": {
+        "description": "Three things the reproducible bundle used to conflate: the persisted\ndecision (always original), the original per-component breakdown\n(status \"unavailable\" for cycles older than schema version 7 -- never\nreconstructed), and a recomputation labeled as such.",
+        "properties": {
+          "cycle_id": {
+            "title": "Cycle Id",
+            "type": "integer"
+          },
+          "original": {
+            "items": {
+              "$ref": "#/components/schemas/OriginalEvaluationModel"
+            },
+            "title": "Original",
+            "type": "array"
+          },
+          "original_status": {
+            "title": "Original Status",
+            "type": "string"
+          },
+          "original_unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original Unavailable Reason"
+          },
+          "persisted_final_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persisted Final Score"
+          },
+          "persisted_verdict": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Persisted Verdict"
+          },
+          "recomputation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EvaluationRecomputationModel"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "schema_version": {
+            "default": 1,
+            "title": "Schema Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "cycle_id",
+          "persisted_final_score",
+          "persisted_verdict",
+          "original_status",
+          "original_unavailable_reason",
+          "original",
+          "recomputation"
+        ],
+        "title": "CycleEvaluationResponse",
+        "type": "object"
+      },
       "CycleEvidenceResponse": {
         "properties": {
           "evidence": {
@@ -920,6 +999,16 @@
       },
       "EvaluationPreviewResponse": {
         "properties": {
+          "canon_gate_passed": {
+            "default": false,
+            "title": "Canon Gate Passed",
+            "type": "boolean"
+          },
+          "canon_loop_penalty": {
+            "default": 0.0,
+            "title": "Canon Loop Penalty",
+            "type": "number"
+          },
           "doctrinal_enforcement": {
             "title": "Doctrinal Enforcement",
             "type": "number"
@@ -947,6 +1036,11 @@
             "title": "Notes",
             "type": "array"
           },
+          "paragraph_count": {
+            "default": 0,
+            "title": "Paragraph Count",
+            "type": "integer"
+          },
           "schema_version": {
             "default": 1,
             "title": "Schema Version",
@@ -968,9 +1062,19 @@
             "title": "Symbolic Density Method",
             "type": "string"
           },
+          "truncation_penalty": {
+            "default": 0.0,
+            "title": "Truncation Penalty",
+            "type": "number"
+          },
           "verdict": {
             "title": "Verdict",
             "type": "string"
+          },
+          "word_count": {
+            "default": 0,
+            "title": "Word Count",
+            "type": "integer"
           }
         },
         "required": [
@@ -987,6 +1091,121 @@
           "notes"
         ],
         "title": "EvaluationPreviewResponse",
+        "type": "object"
+      },
+      "EvaluationRecomputationModel": {
+        "description": "Mirrors evaluation_record.Recomputation -- evaluate_cycle re-run now, in the cycle's recorded retrieval context.",
+        "properties": {
+          "component_deltas": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Component Deltas"
+          },
+          "components": {
+            "additionalProperties": true,
+            "title": "Components",
+            "type": "object"
+          },
+          "evaluator_version": {
+            "title": "Evaluator Version",
+            "type": "string"
+          },
+          "final_score": {
+            "title": "Final Score",
+            "type": "number"
+          },
+          "json_context_matches_original": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Json Context Matches Original"
+          },
+          "json_context_sha256": {
+            "title": "Json Context Sha256",
+            "type": "string"
+          },
+          "json_refs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Json Refs",
+            "type": "array"
+          },
+          "matches_persisted_decision": {
+            "title": "Matches Persisted Decision",
+            "type": "boolean"
+          },
+          "missing_json_refs": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Json Refs",
+            "type": "array"
+          },
+          "motif_counts_matches_original": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motif Counts Matches Original"
+          },
+          "recomputed_at": {
+            "title": "Recomputed At",
+            "type": "string"
+          },
+          "same_evaluator_version": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Same Evaluator Version"
+          },
+          "score_delta": {
+            "title": "Score Delta",
+            "type": "number"
+          },
+          "verdict": {
+            "title": "Verdict",
+            "type": "string"
+          }
+        },
+        "required": [
+          "recomputed_at",
+          "evaluator_version",
+          "same_evaluator_version",
+          "json_refs",
+          "missing_json_refs",
+          "json_context_sha256",
+          "json_context_matches_original",
+          "motif_counts_matches_original",
+          "final_score",
+          "verdict",
+          "components",
+          "matches_persisted_decision",
+          "score_delta",
+          "component_deltas"
+        ],
+        "title": "EvaluationRecomputationModel",
         "type": "object"
       },
       "EventModel": {
@@ -1667,6 +1886,57 @@
           "correlation_id"
         ],
         "title": "MultiCycleResponse",
+        "type": "object"
+      },
+      "OriginalEvaluationModel": {
+        "description": "Mirrors evaluation_record.OriginalEvaluation -- written at decision time, never recomputed.",
+        "properties": {
+          "components": {
+            "additionalProperties": true,
+            "title": "Components",
+            "type": "object"
+          },
+          "context": {
+            "additionalProperties": true,
+            "title": "Context",
+            "type": "object"
+          },
+          "evaluator_version": {
+            "title": "Evaluator Version",
+            "type": "string"
+          },
+          "final_score": {
+            "title": "Final Score",
+            "type": "number"
+          },
+          "recorded_at": {
+            "title": "Recorded At",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "selected": {
+            "title": "Selected",
+            "type": "boolean"
+          },
+          "verdict": {
+            "title": "Verdict",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role",
+          "selected",
+          "evaluator_version",
+          "final_score",
+          "verdict",
+          "components",
+          "context",
+          "recorded_at"
+        ],
+        "title": "OriginalEvaluationModel",
         "type": "object"
       },
       "ProposalActionResponse": {
@@ -3483,6 +3753,61 @@
           }
         ],
         "summary": "Get Cycle Detail"
+      }
+    },
+    "/cycles/{cycle_id}/evaluation": {
+      "get": {
+        "description": "The persisted decision, the original per-component evaluation (or why it is unavailable), and a recomputation in the cycle's own retrieval context, each labeled as what it is.",
+        "operationId": "get_cycle_evaluation_cycles__cycle_id__evaluation_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cycle_id",
+            "required": true,
+            "schema": {
+              "title": "Cycle Id",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "recompute",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Recompute",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CycleEvaluationResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Cycle Evaluation"
       }
     },
     "/cycles/{cycle_id}/evidence": {

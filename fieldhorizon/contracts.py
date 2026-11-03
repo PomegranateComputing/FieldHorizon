@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 SCHEMA_VERSION = 1
@@ -287,6 +289,11 @@ class EvaluationPreviewResponse(BaseModel):
     final_score: float
     verdict: str
     notes: list[str]
+    truncation_penalty: float = 0.0
+    canon_loop_penalty: float = 0.0
+    word_count: int = 0
+    paragraph_count: int = 0
+    canon_gate_passed: bool = False
 
 
 class RetrieveResponse(BaseModel):
@@ -522,6 +529,53 @@ class CycleSourceModel(BaseModel):
 class CycleEvidenceResponse(BaseModel):
     schema_version: int = SCHEMA_VERSION
     evidence: list[CycleSourceModel]
+
+
+class OriginalEvaluationModel(BaseModel):
+    """Mirrors evaluation_record.OriginalEvaluation -- written at decision time, never recomputed."""
+    role: str
+    selected: bool
+    evaluator_version: str
+    final_score: float
+    verdict: str
+    components: dict[str, Any]
+    context: dict[str, Any]
+    recorded_at: str
+
+
+class EvaluationRecomputationModel(BaseModel):
+    """Mirrors evaluation_record.Recomputation -- evaluate_cycle re-run now, in the cycle's recorded retrieval context."""
+    recomputed_at: str
+    evaluator_version: str
+    same_evaluator_version: bool | None
+    json_refs: list[str]
+    missing_json_refs: list[str]
+    json_context_sha256: str
+    json_context_matches_original: bool | None
+    motif_counts_matches_original: bool | None
+    final_score: float
+    verdict: str
+    components: dict[str, Any]
+    matches_persisted_decision: bool
+    score_delta: float
+    component_deltas: dict[str, Any] | None
+
+
+class CycleEvaluationResponse(BaseModel):
+    """
+    Three things the reproducible bundle used to conflate: the persisted
+    decision (always original), the original per-component breakdown
+    (status "unavailable" for cycles older than schema version 7 -- never
+    reconstructed), and a recomputation labeled as such.
+    """
+    schema_version: int = SCHEMA_VERSION
+    cycle_id: int
+    persisted_final_score: float | None
+    persisted_verdict: str | None
+    original_status: str
+    original_unavailable_reason: str | None
+    original: list[OriginalEvaluationModel]
+    recomputation: EvaluationRecomputationModel | None
 
 
 class ConfigResponse(BaseModel):

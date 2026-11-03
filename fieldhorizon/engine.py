@@ -15,6 +15,7 @@ from .cycle import run_cycle
 from .db import connect
 from .dream import DreamRun, DreamRunSummary, dream_run_events, list_dream_runs, run_dream
 from .evaluate import CycleEvaluation, evaluate_cycle
+from .evaluation_record import CycleEvaluationReport, cycle_evaluation_report
 from .events import ACTOR_CLI, DomainEvent, EventRepository, query_events
 from .fingerprint import SourceFingerprint, get_or_compute_fingerprint
 from .ingest import ManifestIngestResult, ingest_books, ingest_from_manifest, ingest_json_corpus, manifest_path
@@ -712,6 +713,10 @@ class FieldHorizonEngine:
                 "SELECT source_kind, ref, content FROM cycle_sources WHERE cycle_id = ?", (cycle_id,)
             ).fetchall()
         return [CycleSourceEntry(source_kind=row["source_kind"], ref=row["ref"], content=row["content"]) for row in rows]
+
+    def cycle_evaluation(self, cycle_id: int, recompute: bool = True) -> CycleEvaluationReport | None:
+        """Persisted decision, original components (or why they are unavailable), and a labeled recomputation in the cycle's own retrieval context."""
+        return cycle_evaluation_report(self.cfg, cycle_id, recompute=recompute)
 
     def source(self, source_id: int) -> SourceEntry | None:
         with connect(self.cfg.database) as conn:

@@ -38,6 +38,7 @@ export type CycleDetailModel = components["schemas"]["CycleDetailModel"];
 export type CycleDetailResponse = components["schemas"]["CycleDetailResponse"];
 export type CycleSourceModel = components["schemas"]["CycleSourceModel"];
 export type CycleEvidenceResponse = components["schemas"]["CycleEvidenceResponse"];
+export type CycleEvaluationResponse = components["schemas"]["CycleEvaluationResponse"];
 export type ConfigResponse = components["schemas"]["ConfigResponse"];
 export type ManifestEntryModel = components["schemas"]["ManifestEntryModel"];
 export type ManifestResponse = components["schemas"]["ManifestResponse"];

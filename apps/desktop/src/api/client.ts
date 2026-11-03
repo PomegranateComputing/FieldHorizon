@@ -8,6 +8,7 @@ import type {
   CouncilDetailResponse,
   CouncilsResponse,
   CycleDetailResponse,
+  CycleEvaluationResponse,
   CycleEvidenceResponse,
   DreamRunEventsResponse,
   DreamRunsResponse,
@@ -287,6 +288,11 @@ export function getCycleDetail(cycleId: number): Promise<CycleDetailResponse> {
 
 export function getCycleEvidence(cycleId: number): Promise<CycleEvidenceResponse> {
   return apiFetch<CycleEvidenceResponse>(`/cycles/${cycleId}/evidence`);
+}
+
+/** Persisted decision, original evaluation components (or why they are unavailable), and a labeled recomputation. */
+export function getCycleEvaluation(cycleId: number): Promise<CycleEvaluationResponse> {
+  return apiFetch<CycleEvaluationResponse>(`/cycles/${cycleId}/evaluation`);
 }
 
 export function getManifest(): Promise<ManifestResponse> {

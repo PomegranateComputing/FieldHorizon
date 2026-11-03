@@ -11,6 +11,7 @@ from .critic import critique_response
 from .db import connect
 from .embeddings import embed_and_store_fragment
 from .evaluate import evaluate_cycle, evaluation_to_markdown
+from .evaluation_record import evaluation_context, record_cycle_evaluations
 from .events import (
     ACTOR_CLI,
     AGGREGATE_CYCLE,
@@ -228,6 +229,15 @@ def _run_cycle_body(
                 "INSERT INTO cycle_sources(cycle_id, source_kind, ref, content) VALUES (?, ?, ?, ?)",
                 (cycle_id, "book", row["canonical_ref"], row["content"]),
             )
+
+        record_cycle_evaluations(
+            conn,
+            cycle_id,
+            initial=evaluation,
+            rewritten=rewritten_evaluation,
+            selected=final_evaluation,
+            context=evaluation_context(cfg, json_dicts, motif_counts),
+        )
 
         for row in json_rows:
             conn.execute(

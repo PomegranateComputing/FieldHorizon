@@ -135,6 +135,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/cycles/{cycle_id}/evaluation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Cycle Evaluation
+         * @description The persisted decision, the original per-component evaluation (or why it is unavailable), and a recomputation in the cycle's own retrieval context, each labeled as what it is.
+         */
+        get: operations["get_cycle_evaluation_cycles__cycle_id__evaluation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/cycles/{cycle_id}/evidence": {
         parameters: {
             query?: never;
@@ -1128,6 +1148,33 @@ export interface components {
              */
             schema_version: number;
         };
+        /**
+         * CycleEvaluationResponse
+         * @description Three things the reproducible bundle used to conflate: the persisted
+         *     decision (always original), the original per-component breakdown
+         *     (status "unavailable" for cycles older than schema version 7 -- never
+         *     reconstructed), and a recomputation labeled as such.
+         */
+        CycleEvaluationResponse: {
+            /** Cycle Id */
+            cycle_id: number;
+            /** Original */
+            original: components["schemas"]["OriginalEvaluationModel"][];
+            /** Original Status */
+            original_status: string;
+            /** Original Unavailable Reason */
+            original_unavailable_reason: string | null;
+            /** Persisted Final Score */
+            persisted_final_score: number | null;
+            /** Persisted Verdict */
+            persisted_verdict: string | null;
+            recomputation: components["schemas"]["EvaluationRecomputationModel"] | null;
+            /**
+             * Schema Version
+             * @default 1
+             */
+            schema_version: number;
+        };
         /** CycleEvidenceResponse */
         CycleEvidenceResponse: {
             /** Evidence */
@@ -1249,6 +1296,16 @@ export interface components {
         };
         /** EvaluationPreviewResponse */
         EvaluationPreviewResponse: {
+            /**
+             * Canon Gate Passed
+             * @default false
+             */
+            canon_gate_passed: boolean;
+            /**
+             * Canon Loop Penalty
+             * @default 0
+             */
+            canon_loop_penalty: number;
             /** Doctrinal Enforcement */
             doctrinal_enforcement: number;
             /** Doctrinal Enforcement Method */
@@ -1262,6 +1319,11 @@ export interface components {
             /** Notes */
             notes: string[];
             /**
+             * Paragraph Count
+             * @default 0
+             */
+            paragraph_count: number;
+            /**
              * Schema Version
              * @default 1
              */
@@ -1274,6 +1336,54 @@ export interface components {
             symbolic_density: number;
             /** Symbolic Density Method */
             symbolic_density_method: string;
+            /**
+             * Truncation Penalty
+             * @default 0
+             */
+            truncation_penalty: number;
+            /** Verdict */
+            verdict: string;
+            /**
+             * Word Count
+             * @default 0
+             */
+            word_count: number;
+        };
+        /**
+         * EvaluationRecomputationModel
+         * @description Mirrors evaluation_record.Recomputation -- evaluate_cycle re-run now, in the cycle's recorded retrieval context.
+         */
+        EvaluationRecomputationModel: {
+            /** Component Deltas */
+            component_deltas: {
+                [key: string]: unknown;
+            } | null;
+            /** Components */
+            components: {
+                [key: string]: unknown;
+            };
+            /** Evaluator Version */
+            evaluator_version: string;
+            /** Final Score */
+            final_score: number;
+            /** Json Context Matches Original */
+            json_context_matches_original: boolean | null;
+            /** Json Context Sha256 */
+            json_context_sha256: string;
+            /** Json Refs */
+            json_refs: string[];
+            /** Matches Persisted Decision */
+            matches_persisted_decision: boolean;
+            /** Missing Json Refs */
+            missing_json_refs: string[];
+            /** Motif Counts Matches Original */
+            motif_counts_matches_original: boolean | null;
+            /** Recomputed At */
+            recomputed_at: string;
+            /** Same Evaluator Version */
+            same_evaluator_version: boolean | null;
+            /** Score Delta */
+            score_delta: number;
             /** Verdict */
             verdict: string;
         };
@@ -1548,6 +1658,32 @@ export interface components {
              * @default 1
              */
             schema_version: number;
+        };
+        /**
+         * OriginalEvaluationModel
+         * @description Mirrors evaluation_record.OriginalEvaluation -- written at decision time, never recomputed.
+         */
+        OriginalEvaluationModel: {
+            /** Components */
+            components: {
+                [key: string]: unknown;
+            };
+            /** Context */
+            context: {
+                [key: string]: unknown;
+            };
+            /** Evaluator Version */
+            evaluator_version: string;
+            /** Final Score */
+            final_score: number;
+            /** Recorded At */
+            recorded_at: string;
+            /** Role */
+            role: string;
+            /** Selected */
+            selected: boolean;
+            /** Verdict */
+            verdict: string;
         };
         /** ProposalActionResponse */
         ProposalActionResponse: {
@@ -2351,6 +2487,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CycleDetailResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_cycle_evaluation_cycles__cycle_id__evaluation_get: {
+        parameters: {
+            query?: {
+                recompute?: boolean;
+            };
+            header?: never;
+            path: {
+                cycle_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CycleEvaluationResponse"];
                 };
             };
             /** @description Validation Error */

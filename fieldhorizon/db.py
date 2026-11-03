@@ -126,6 +126,26 @@ CREATE TABLE IF NOT EXISTS cycle_sources (
     content TEXT NOT NULL
 );
 
+-- Original evaluation record (schema version 7): the full per-component
+-- breakdown a cycle was judged with, written in the same transaction as the
+-- cycle itself. Before this table only cycles.final_score/verdict survived,
+-- so any later "evaluation" of an old cycle was a recomputation in a
+-- different context, never the original. One row per evaluation the cycle
+-- actually ran: 'initial' always, 'rewritten' only when the critic/rewrite
+-- pass ran; selected = 1 marks the one whose score/verdict cycles stores.
+CREATE TABLE IF NOT EXISTS cycle_evaluations (
+    cycle_id INTEGER NOT NULL REFERENCES cycles(id) ON DELETE CASCADE,
+    role TEXT NOT NULL CHECK (role IN ('initial', 'rewritten')),
+    selected INTEGER NOT NULL CHECK (selected IN (0, 1)),
+    evaluator_version TEXT NOT NULL,
+    final_score REAL NOT NULL,
+    verdict TEXT NOT NULL,
+    components_json TEXT NOT NULL,
+    context_json TEXT NOT NULL,
+    recorded_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (cycle_id, role)
+);
+
 -- Genealogical event log (Civilization Engine phase): every promotion,
 -- retirement, and council verdict a cycle ever receives, append-only.
 -- event is one of PROMOTED, RETIRED, REHABILITATED, COUNCIL_UPHELD,
@@ -724,7 +744,7 @@ def _migrate_domain_events_table(conn: sqlite3.Connection) -> None:
 # raised, never lowered; _migrate_schema_version is a no-op once a
 # database's PRAGMA user_version already meets or exceeds it, so re-running
 # init_db is always safe.
-CURRENT_SCHEMA_VERSION = 6
+CURRENT_SCHEMA_VERSION = 7
 
 
 def _migrate_schema_version(conn: sqlite3.Connection) -> None:
