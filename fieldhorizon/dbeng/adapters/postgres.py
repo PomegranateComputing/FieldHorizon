@@ -1,23 +1,27 @@
 """
-PostgreSQL adapter (psycopg 3).
+PostgreSQL adapter (psycopg 3): observation and workload measurement only.
 
-Two identities, two connections, both lazily opened:
+Two identities here, each on its own lazily opened, autocommit connection:
 
-* observer -- discovery, plans, statistics, timing of read queries. Its
-  connections run with default_transaction_read_only=on, on top of the
-  role-level default the bench setup applies.
-* operator -- CREATE/DROP INDEX CONCURRENTLY, ANALYZE, and timing of write
-  queries inside a transaction that is always rolled back. Autocommit:
-  PostgreSQL refuses CREATE INDEX CONCURRENTLY inside a transaction block.
+* observer -- discovery, plans of record, statistics, server activity and
+  the coordination tables. Read-only by role default and by session setting.
+* measure  -- workload execution for measurement: EXPLAIN ANALYZE and
+  client-timed plain execution. Writes run inside a transaction that is
+  always rolled back. It owns nothing.
 
-Every identifier reaching SQL is composed with psycopg.sql, never with
-string formatting. Statistics that cannot be read are reported with an
-availability status, never defaulted to zero.
+No DDL leaves this module: the privileged operator identity lives only in
+executor.PostgresExecutor. Every connection is tagged with
+``application_name = fh-dbeng/<identity>/<operation>`` so that, after a
+client loss, server-side activity can be traced to the operation and the
+identity that started it. Every identifier reaching SQL is composed with
+psycopg.sql, never with string formatting. Statistics that cannot be read
+are reported with an availability status, never defaulted to zero.
 """
 from __future__ import annotations
 
 import json
 import re
+import time
 from datetime import UTC, datetime
 from typing import Any
 
@@ -26,13 +30,13 @@ from psycopg import sql
 from psycopg.conninfo import make_conninfo
 from psycopg.rows import dict_row
 
-from ..model import AVAILABLE, UNAVAILABLE, UNSUPPORTED, UNVERIFIED, ExplainResult, IndexSpec, IndexState
+from ..model import AVAILABLE, UNAVAILABLE, UNSUPPORTED, UNVERIFIED, ExplainResult, IndexState
 from ..targets import TargetConfig, redact
 
-APPLICATION_NAME = "fieldhorizon-dbeng"
+APPLICATION_PREFIX = "fh-dbeng"
+LOCK_NAMESPACE = "fieldhorizon.dbeng"
 MARKER_KEY = "fieldhorizon"
 MARKER_VALUE = "dbeng"
-ALLOWED_METHODS = {"btree"}
 
 SYSTEM_SCHEMAS = ("pg_catalog", "information_schema", "pg_toast")
 
@@ -59,6 +63,29 @@ _PREDICATE = re.compile(
     re.IGNORECASE | re.VERBOSE,
 )
 _LITERAL_RHS = re.compile(r"^\(*\s*('|\$\d|-?\d|true\b|false\b|ANY\s*\()", re.IGNORECASE)
+
+_INDEX_STATE_SELECT = """
+    SELECT n.nspname AS schema, i.relname AS name, t.relname AS table, x.indisvalid AS valid, x.indisready AS ready,
+           pg_get_indexdef(i.oid) AS definition, obj_description(i.oid, 'pg_class') AS comment,
+           pg_relation_size(i.oid) AS size_bytes, i.oid::bigint AS oid, am.amname AS method,
+           x.indisunique AS is_unique, (x.indexprs IS NOT NULL) AS has_expressions, (x.indpred IS NOT NULL) AS is_partial,
+           ARRAY(SELECT a.attname FROM unnest(x.indkey) WITH ORDINALITY k(attnum, ord)
+                 JOIN pg_attribute a ON a.attrelid = x.indrelid AND a.attnum = k.attnum ORDER BY k.ord)::text[] AS columns
+    FROM pg_class i JOIN pg_index x ON x.indexrelid = i.oid JOIN pg_class t ON t.oid = x.indrelid
+    JOIN pg_namespace n ON n.oid = i.relnamespace JOIN pg_am am ON am.oid = i.relam
+"""
+
+
+def application_name(identity: str, operation_id: str | None) -> str:
+    """fh-dbeng/<identity>/<operation>: how server-side activity is traced back to its origin."""
+    return f"{APPLICATION_PREFIX}/{identity}/{operation_id or 'idle'}"[:63]
+
+
+def parse_application_name(name: str | None) -> tuple[str, str] | None:
+    parts = (name or "").split("/")
+    if len(parts) == 3 and parts[0] == APPLICATION_PREFIX:
+        return parts[1], parts[2]
+    return None
 
 
 def parse_filter(filter_text: str) -> list[dict]:
@@ -135,53 +162,63 @@ def explain_result_from_json(doc: list | dict) -> ExplainResult:
 class PostgresAdapter:
     engine = "postgresql"
 
-    def __init__(self, target: TargetConfig):
+    def __init__(self, target: TargetConfig, operation_id: str | None = None):
         self.target = target
+        self.operation_id = operation_id
         self._observer: psycopg.Connection[dict[str, Any]] | None = None
-        self._operator: psycopg.Connection[dict[str, Any]] | None = None
+        self._measure: psycopg.Connection[dict[str, Any]] | None = None
+
+    def bind_operation(self, operation_id: str | None) -> None:
+        """Tags this adapter's sessions with the operation (closing sessions opened under another tag)."""
+        if operation_id != self.operation_id:
+            self.close()
+            self.operation_id = operation_id
 
     # --- connections -------------------------------------------------------
-    def _conninfo(self, user: str, read_only: bool) -> str:
-        options = "-c default_transaction_read_only=on -c statement_timeout=120000" if read_only else ""
+    def _conninfo(self, user: str, identity: str, read_only: bool) -> str:
+        options = "-c default_transaction_read_only=on -c statement_timeout=120000" if read_only else "-c statement_timeout=300000"
         params: dict[str, Any] = {
             "host": self.target.host,
             "port": self.target.port,
             "dbname": self.target.dbname,
             "user": user,
             "sslmode": self.target.sslmode,
-            "application_name": APPLICATION_NAME,
+            "application_name": application_name(identity, self.operation_id),
             "connect_timeout": 10,
+            "options": options,
         }
         if self.target.passfile:
             params["passfile"] = self.target.passfile
-        if options:
-            params["options"] = options
         return make_conninfo(**params)
 
-    def _connect(self, user: str, read_only: bool) -> psycopg.Connection[dict[str, Any]]:
+    def _connect(self, user: str, identity: str, read_only: bool) -> psycopg.Connection[dict[str, Any]]:
         try:
-            return psycopg.connect(self._conninfo(user, read_only), autocommit=True, row_factory=dict_row)
+            return psycopg.connect(self._conninfo(user, identity, read_only), autocommit=True, row_factory=dict_row)
         except psycopg.OperationalError as exc:
             raise ConnectionError(redact(str(exc)).strip()) from None
 
     @property
     def observer(self) -> psycopg.Connection[dict[str, Any]]:
         if self._observer is None or self._observer.closed:
-            self._observer = self._connect(self.target.observer_user, read_only=True)
+            self._observer = self._connect(self.target.observer_user, "observer", read_only=True)
         return self._observer
 
     @property
-    def operator(self) -> psycopg.Connection[dict[str, Any]]:
-        if not self.target.operator_user:
-            raise PermissionError(f"Target {self.target.name!r} declares no operator identity; it is read-only.")
-        if self._operator is None or self._operator.closed:
-            self._operator = self._connect(self.target.operator_user, read_only=False)
-        return self._operator
+    def measure(self) -> psycopg.Connection[dict[str, Any]]:
+        if not self.target.measure_user:
+            raise PermissionError(
+                f"Target {self.target.name!r} declares no measurement identity (measure_user); "
+                "workload measurement never borrows the operator's rights."
+            )
+        if self._measure is None or self._measure.closed:
+            self._measure = self._connect(self.target.measure_user, "measure", read_only=False)
+        return self._measure
 
     def close(self) -> None:
-        for conn in (self._observer, self._operator):
+        for conn in (self._observer, self._measure):
             if conn is not None and not conn.closed:
                 conn.close()
+        self._observer = self._measure = None
 
     def _rows(self, query, params=None, conn: psycopg.Connection[dict[str, Any]] | None = None) -> list[dict]:
         with (conn or self.observer).cursor() as cur:
@@ -326,17 +363,12 @@ class PostgresAdapter:
         )
         availability["column_statistics"] = {"status": column_stats_status, "detail": column_stats_detail}
         if "pg_stat_statements" in installed:
-            st, statements, detail = self._optional(
-                """
-                SELECT queryid::text, left(query, 500) AS query, calls, round(total_exec_time::numeric, 3) AS total_ms,
-                       round(mean_exec_time::numeric, 3) AS mean_ms, rows, shared_blks_hit, shared_blks_read
-                FROM pg_stat_statements WHERE dbid = (SELECT oid FROM pg_database WHERE datname = current_database())
-                  -- defensive: never carry a role-password statement into a snapshot
-                  AND query NOT ILIKE '%password%'
-                ORDER BY total_exec_time DESC LIMIT 25
-                """
-            )
-            availability["pg_stat_statements"] = {"status": st, "detail": detail or availability["pg_stat_statements"]["detail"]}
+            observed = self.statement_statistics()
+            statements = observed["statements"]
+            availability["pg_stat_statements"] = {
+                "status": observed["status"],
+                "detail": observed["detail"] or "observed traffic, normalised: informs diagnosis, never replayed",
+            }
         else:
             statements = []
 
@@ -361,18 +393,25 @@ class PostgresAdapter:
             "statements": statements,
         }
 
+    # --- measurement (measure identity) ----------------------------------------
+    def _measure_conn(self, write: bool) -> psycopg.Connection[dict[str, Any]]:
+        if self.target.measure_user:
+            return self.measure
+        if write:
+            raise PermissionError(f"Target {self.target.name!r}: write queries need a measurement identity (measure_user).")
+        return self.observer
+
     def explain(self, query: str, params: dict | None = None, *, write: bool = False) -> ExplainResult:
         """
-        EXPLAIN (ANALYZE, BUFFERS, TIMING OFF, VERBOSE, FORMAT JSON): the
-        server's own execution time, free of network and client overhead,
-        plus the plan that produced it. Parameters are inlined client-side
-        so the planner sees literal values (a custom plan), exactly as for
-        a one-off execution. A write statement is executed inside a
-        transaction that is always rolled back, so measuring it changes
-        nothing.
+        EXPLAIN (ANALYZE, BUFFERS, TIMING OFF, VERBOSE, FORMAT JSON) under the
+        measurement identity: the server's own execution time, free of network
+        and client overhead, plus the plan that produced it. Parameters are
+        inlined client-side so the planner sees literal values (a custom plan),
+        exactly as for a one-off execution. A write statement is executed inside
+        a transaction that is always rolled back.
         """
         statement = sql.SQL("EXPLAIN (ANALYZE, BUFFERS, TIMING OFF, VERBOSE, FORMAT JSON) ") + sql.SQL(query)  # type: ignore[arg-type,unused-ignore]
-        conn = self.operator if write else self.observer
+        conn = self._measure_conn(write)
         with psycopg.ClientCursor(conn) as cur:
             if write:
                 with conn.transaction(force_rollback=True):
@@ -385,6 +424,30 @@ class PostgresAdapter:
         value = doc["QUERY PLAN"] if isinstance(doc, dict) else doc[0]
         return explain_result_from_json(value if not isinstance(value, str) else json.loads(value))
 
+    def execute_timed(self, query: str, params: dict | None = None, *, write: bool = False) -> float:
+        """
+        Client-side latency of the plain statement (send, execute, fetch every
+        row) in ms, under the measurement identity: what an application on
+        this connection would see. Writes are rolled back.
+        """
+        conn = self._measure_conn(write)
+        with psycopg.ClientCursor(conn) as cur:
+            if write:
+                with conn.transaction(force_rollback=True):
+                    started = time.perf_counter()
+                    cur.execute(query, params)  # type: ignore[arg-type,unused-ignore]
+                    if cur.description:
+                        cur.fetchall()
+                    elapsed = time.perf_counter() - started
+            else:
+                started = time.perf_counter()
+                cur.execute(query, params)  # type: ignore[arg-type,unused-ignore]
+                if cur.description:
+                    cur.fetchall()
+                elapsed = time.perf_counter() - started
+        return elapsed * 1000.0
+
+    # --- objects -------------------------------------------------------------------
     def table_facts(self, schema: str, table: str) -> dict:
         rows = self._rows(
             """
@@ -436,17 +499,23 @@ class PostgresAdapter:
             """,
             (facts["oid"], facts["oid"]),
         )]
-        if self.target.operator_user:
-            priv = self._rows(
-                "SELECT pg_has_role(%s, c.relowner, 'USAGE') AS operator_can_create_index FROM pg_class c WHERE c.oid = %s",
-                (self.target.operator_user, facts["oid"]),
-            )
-            facts["operator_can_create_index"] = bool(priv[0]["operator_can_create_index"]) if priv else False
-        else:
-            facts["operator_can_create_index"] = False
+        facts["operator_can_create_index"] = self._operator_reaches_owner(facts["owner"])
         facts["partitioning"] = UNSUPPORTED if facts["kind"] == "partitioned_table" or facts["child_count"] else AVAILABLE
         facts["dependency_status"] = UNVERIFIED if facts["unverified_dependencies"] else AVAILABLE
         return facts
+
+    def _operator_reaches_owner(self, owner: str | None) -> bool:
+        """
+        The operator can build an index on a table only through SET ROLE to its
+        owner: membership WITH SET, and the owner must be the declared owner_role
+        (a table owned by anyone else is out of reach by design).
+        """
+        if not self.target.operator_user or not owner:
+            return False
+        if self.target.owner_role and owner != self.target.owner_role:
+            return False
+        rows = self._rows("SELECT pg_has_role(%s, %s, 'SET') AS can_set", (self.target.operator_user, owner))
+        return bool(rows and rows[0]["can_set"])
 
     def column_statistics(self, schema: str, table: str, columns: list[str]) -> dict[str, dict]:
         rows = self._rows(
@@ -461,7 +530,8 @@ class PostgresAdapter:
     def running_transactions(self) -> list[dict]:
         return self._rows(
             """
-            SELECT pid, usename, application_name, state, extract(epoch FROM now() - xact_start)::float8 AS xact_seconds
+            SELECT pid, usename, application_name, state, extract(epoch FROM now() - xact_start)::float8 AS xact_seconds,
+                   backend_xmin IS NOT NULL AS holds_snapshot
             FROM pg_stat_activity
             WHERE xact_start IS NOT NULL AND pid <> pg_backend_pid() AND datname = current_database()
               AND backend_type = 'client backend'
@@ -470,93 +540,211 @@ class PostgresAdapter:
         )
 
     def index_state(self, schema: str, name: str) -> IndexState | None:
-        rows = self._rows(
-            """
-            SELECT n.nspname AS schema, i.relname AS name, t.relname AS table, x.indisvalid AS valid, x.indisready AS ready,
-                   pg_get_indexdef(i.oid) AS definition, obj_description(i.oid, 'pg_class') AS comment,
-                   pg_relation_size(i.oid) AS size_bytes
-            FROM pg_class i JOIN pg_index x ON x.indexrelid = i.oid JOIN pg_class t ON t.oid = x.indrelid
-            JOIN pg_namespace n ON n.oid = i.relnamespace
-            WHERE n.nspname = %s AND i.relname = %s
-            """,
-            (schema, name),
-        )
+        rows = self._rows(_INDEX_STATE_SELECT + " WHERE n.nspname = %s AND i.relname = %s", (schema, name))
         return _index_state(rows[0]) if rows else None
 
     def fieldhorizon_indexes(self) -> list[IndexState]:
         rows = self._rows(
-            """
-            SELECT n.nspname AS schema, i.relname AS name, t.relname AS table, x.indisvalid AS valid, x.indisready AS ready,
-                   pg_get_indexdef(i.oid) AS definition, obj_description(i.oid, 'pg_class') AS comment,
-                   pg_relation_size(i.oid) AS size_bytes
-            FROM pg_class i JOIN pg_index x ON x.indexrelid = i.oid JOIN pg_class t ON t.oid = x.indrelid
-            JOIN pg_namespace n ON n.oid = i.relnamespace
-            WHERE i.relname LIKE 'fhx\\_%%' OR obj_description(i.oid, 'pg_class') LIKE %s
-            ORDER BY 1, 2
-            """,
+            _INDEX_STATE_SELECT + " WHERE i.relname LIKE 'fhx\\_%%' OR obj_description(i.oid, 'pg_class') LIKE %s ORDER BY 1, 2",
             (f'%"{MARKER_KEY}": "{MARKER_VALUE}"%',),
         )
         return [_index_state(r) for r in rows]
 
-    # --- change ----------------------------------------------------------------
-    def _session_timeouts(self, cur, lock_timeout_ms: int, statement_timeout_ms: int) -> None:
-        cur.execute(sql.SQL("SET lock_timeout = {}").format(sql.Literal(f"{int(lock_timeout_ms)}ms")))
-        cur.execute(sql.SQL("SET statement_timeout = {}").format(sql.Literal(f"{int(statement_timeout_ms)}ms")))
+    def invalid_indexes(self) -> list[dict]:
+        return self._rows(
+            "SELECT n.nspname AS schema, i.relname AS index, t.relname AS table FROM pg_index x "
+            "JOIN pg_class i ON i.oid = x.indexrelid JOIN pg_class t ON t.oid = x.indrelid "
+            "JOIN pg_namespace n ON n.oid = i.relnamespace WHERE NOT x.indisvalid AND n.nspname <> ALL(%s) ORDER BY 1, 2",
+            (list(SYSTEM_SCHEMAS),),
+        )
 
-    def create_index_concurrently(
-        self, spec: IndexSpec, marker: dict, *, lock_timeout_ms: int, statement_timeout_ms: int
-    ) -> IndexState:
-        if spec.method not in ALLOWED_METHODS:
-            raise ValueError(f"index method {spec.method!r} is not supported by this adapter")
-        conn = self.operator
-        assert conn.autocommit, "CREATE INDEX CONCURRENTLY cannot run inside a transaction block"
-        with conn.cursor() as cur:
-            self._session_timeouts(cur, lock_timeout_ms, statement_timeout_ms)
-            cur.execute(
-                sql.SQL("CREATE INDEX CONCURRENTLY {name} ON {schema}.{table} USING btree ({cols})").format(
-                    name=sql.Identifier(spec.name),
-                    schema=sql.Identifier(spec.schema),
-                    table=sql.Identifier(spec.table),
-                    cols=sql.SQL(", ").join(sql.Identifier(c) for c in spec.columns),
-                )
-            )
-            cur.execute(
-                sql.SQL("COMMENT ON INDEX {schema}.{name} IS {marker}").format(
-                    schema=sql.Identifier(spec.schema),
-                    name=sql.Identifier(spec.name),
-                    marker=sql.Literal(json.dumps({MARKER_KEY: MARKER_VALUE, **marker}, sort_keys=True)),
-                )
-            )
-        state = self.index_state(spec.schema, spec.name)
-        if state is None:
-            raise RuntimeError(f"index {spec.schema}.{spec.name} not found right after CREATE INDEX CONCURRENTLY")
-        return state
+    # --- coordination and server activity (observer, read-only) ---------------------
+    def lease_state(self, scope: str) -> dict:
+        """The target-side lease row, and whether its advisory lock is held right now -- and by which backend."""
+        status, rows, detail = self._optional(
+            "SELECT scope, fencing_token, holder_operation_id, holder_host, holder_pid, holder_backend_pid, holder_journal, "
+            "acquired_at::text, heartbeat_at::text, released_at::text, "
+            "extract(epoch FROM now() - heartbeat_at)::float8 AS heartbeat_age_seconds "
+            "FROM fieldhorizon_meta.operation_lease WHERE scope = %s",
+            (scope,),
+        )
+        lock_rows = self._rows(
+            "SELECT l.pid, a.application_name, a.state, a.backend_start::text, left(a.query, 200) AS query FROM pg_locks l "
+            "LEFT JOIN pg_stat_activity a ON a.pid = l.pid "
+            "WHERE l.locktype = 'advisory' AND l.granted AND l.objsubid = 2 "
+            "AND l.classid = hashtext(%s)::oid AND l.objid = hashtext(%s)::oid",
+            (LOCK_NAMESPACE, scope),
+        )
+        return {
+            "status": status,
+            "detail": detail,
+            "row": rows[0] if rows else None,
+            "lock_held": bool(lock_rows),
+            "lock_holder": lock_rows[0] if lock_rows else None,
+        }
 
-    def drop_index_concurrently(self, schema: str, name: str, *, lock_timeout_ms: int) -> bool:
-        conn = self.operator
-        with conn.cursor() as cur:
-            self._session_timeouts(cur, lock_timeout_ms, 600000)
-            cur.execute(
-                sql.SQL("DROP INDEX CONCURRENTLY IF EXISTS {schema}.{name}").format(
-                    schema=sql.Identifier(schema), name=sql.Identifier(name)
-                )
-            )
-        return self.index_state(schema, name) is None
+    def ledger_rows(self, *, unfinished_only: bool = False) -> list[dict]:
+        clause = " WHERE state NOT IN ('retained', 'reverted')" if unfinished_only else ""
+        status, rows, _ = self._optional(
+            "SELECT operation_id, change_id, fencing_token, action, index_schema, index_name, table_name, columns, definition, "
+            "index_oid, state, holder_host, holder_journal, recovered_by, note, created_at::text, updated_at::text "
+            "FROM fieldhorizon_meta.change_ledger" + clause + " ORDER BY created_at"
+        )
+        return rows if status == AVAILABLE else []
 
-    def analyze_table(self, schema: str, table: str) -> None:
-        with self.operator.cursor() as cur:
-            cur.execute(sql.SQL("ANALYZE {schema}.{table}").format(schema=sql.Identifier(schema), table=sql.Identifier(table)))
+    def fieldhorizon_activity(self) -> list[dict]:
+        """Every live session Field Horizon started on this database, whatever process or journal started it."""
+        rows = self._rows(
+            """
+            SELECT pid, usename, application_name, state, wait_event_type, wait_event, backend_start::text,
+                   query_start::text, xact_start::text,
+                   extract(epoch FROM now() - query_start)::float8 AS query_seconds, left(query, 300) AS query
+            FROM pg_stat_activity
+            WHERE application_name LIKE %s AND pid <> pg_backend_pid() AND datname = current_database()
+            ORDER BY backend_start
+            """,
+            (f"{APPLICATION_PREFIX}/%",),
+        )
+        for r in rows:
+            parsed = parse_application_name(r["application_name"])
+            r["identity"], r["operation_id"] = parsed if parsed else (None, None)
+        return rows
+
+    def index_build_progress(self) -> list[dict]:
+        status, rows, _ = self._optional(
+            "SELECT p.pid, p.relid::regclass::text AS table, p.index_relid::regclass::text AS index, p.phase, "
+            "p.blocks_total, p.blocks_done, p.tuples_total, p.tuples_done, a.application_name "
+            "FROM pg_stat_progress_create_index p LEFT JOIN pg_stat_activity a ON a.pid = p.pid"
+        )
+        return rows if status == AVAILABLE else []
+
+    def state_snapshot(self, schemas: tuple[str, ...] = ("bench",)) -> dict:
+        """
+        The measurable state of the lab around a measurement: live and dead
+        tuples, sizes, maintenance counters, identity-sequence positions.
+        Measurement writes are rolled back, yet they still leave dead tuples and
+        consume identity values: this is where that side effect is shown.
+        """
+        tables = self._rows(
+            """
+            SELECT s.schemaname AS schema, s.relname AS table, s.n_live_tup, s.n_dead_tup, s.n_tup_ins, s.n_tup_upd,
+                   s.n_tup_del, s.seq_scan, s.idx_scan, s.autovacuum_count, s.autoanalyze_count, s.vacuum_count,
+                   s.analyze_count, s.last_autovacuum::text, s.last_autoanalyze::text,
+                   pg_relation_size(s.relid) AS heap_bytes, pg_indexes_size(s.relid) AS index_bytes,
+                   pg_total_relation_size(s.relid) AS total_bytes
+            FROM pg_stat_user_tables s WHERE s.schemaname = ANY(%s) ORDER BY 1, 2
+            """,
+            (list(schemas),),
+        )
+        seq_status, sequences, seq_detail = self._optional(
+            "SELECT schemaname AS schema, sequencename AS sequence, last_value FROM pg_sequences WHERE schemaname = ANY(%s) ORDER BY 1, 2",
+            (list(schemas),),
+        )
+        db = self._rows("SELECT pg_database_size(current_database()) AS database_bytes, now()::text AS at")[0]
+        return {
+            "captured_at": datetime.now(UTC).isoformat(),
+            "server_time": db["at"],
+            "database_bytes": db["database_bytes"],
+            "tables": tables,
+            "sequences": sequences,
+            "sequences_status": seq_status,
+            "sequences_detail": seq_detail,
+            "maintenance": self.maintenance_activity(),
+        }
+
+    def maintenance_activity(self) -> list[dict]:
+        """VACUUM / ANALYZE running right now in this database (autovacuum included): measuring through it measures it."""
+        status, rows, _ = self._optional(
+            """
+            SELECT a.pid, a.backend_type, left(a.query, 200) AS query, a.query_start::text,
+                   extract(epoch FROM now() - a.query_start)::float8 AS seconds,
+                   v.relid::regclass::text AS vacuum_relation, v.phase AS vacuum_phase,
+                   z.relid::regclass::text AS analyze_relation, z.phase AS analyze_phase
+            FROM pg_stat_activity a
+            LEFT JOIN pg_stat_progress_vacuum v ON v.pid = a.pid
+            LEFT JOIN pg_stat_progress_analyze z ON z.pid = a.pid
+            WHERE a.datname = current_database() AND a.pid <> pg_backend_pid()
+              AND (a.backend_type = 'autovacuum worker' OR v.pid IS NOT NULL OR z.pid IS NOT NULL)
+            """
+        )
+        return rows if status == AVAILABLE else []
+
+    def authority_facts(self, schemas: tuple[str, ...] = ("bench",)) -> dict:
+        """
+        The privilege boundary as the server actually enforces it, read live from
+        the catalogs: role attributes, the operator's membership options, the
+        guards, table owners and per-identity table privileges.
+        """
+        roles = [r for r in (self.target.observer_user, self.target.measure_user, self.target.operator_user, self.target.owner_role) if r]
+        attributes = self._rows(
+            "SELECT rolname, rolsuper, rolcreaterole, rolcreatedb, rolbypassrls, rolinherit, rolcanlogin, "
+            "coalesce(rolconfig, '{}')::text[] AS settings FROM pg_roles WHERE rolname = ANY(%s) ORDER BY 1",
+            (roles,),
+        )
+        status, memberships, detail = self._optional(
+            "SELECT r.rolname AS member, g.rolname AS role, m.inherit_option, m.set_option, m.admin_option "
+            "FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.member JOIN pg_roles g ON g.oid = m.roleid "
+            "WHERE r.rolname = ANY(%s) ORDER BY 1, 2",
+            (roles,),
+        )
+        event_triggers = self._rows(
+            "SELECT evtname AS name, evtevent AS event, evtenabled::text AS enabled, evtfoid::regproc::text AS function "
+            "FROM pg_event_trigger ORDER BY 1"
+        )
+        dml_guards = self._rows(
+            "SELECT tgrelid::regclass::text AS table, tgname AS name, tgenabled::text AS enabled FROM pg_trigger "
+            "WHERE tgname = 'fieldhorizon_guard_operator_dml' ORDER BY 1"
+        )
+        tables = self._rows(
+            "SELECT n.nspname AS schema, c.relname AS table, c.relowner::regrole::text AS owner FROM pg_class c "
+            "JOIN pg_namespace n ON n.oid = c.relnamespace WHERE n.nspname = ANY(%s) AND c.relkind = 'r' ORDER BY 1, 2",
+            (list(schemas),),
+        )
+        privileges = []
+        for t in tables:
+            qualified = f"{t['schema']}.{t['table']}"
+            for role in roles:
+                row = self._rows(
+                    "SELECT has_table_privilege(%(r)s, %(t)s, 'SELECT') AS select, has_table_privilege(%(r)s, %(t)s, 'INSERT') AS insert, "
+                    "has_table_privilege(%(r)s, %(t)s, 'UPDATE') AS update, has_table_privilege(%(r)s, %(t)s, 'DELETE') AS delete, "
+                    "has_table_privilege(%(r)s, %(t)s, 'TRUNCATE') AS truncate",
+                    {"r": role, "t": qualified},
+                )[0]
+                privileges.append({"table": qualified, "role": role, **row})
+        return {"roles": attributes, "memberships": memberships, "memberships_status": status, "memberships_detail": detail,
+                "event_triggers": event_triggers, "dml_guards": dml_guards, "tables": tables, "privileges": privileges}
+
+    def statement_statistics(self, limit: int = 25) -> dict:
+        """pg_stat_statements as observed traffic: normalised, so it informs diagnosis; it is never replayed."""
+        status, rows, detail = self._optional(
+            """
+            SELECT queryid::text, left(query, 300) AS query, calls, round(total_exec_time::numeric, 3) AS total_ms,
+                   round(mean_exec_time::numeric, 3) AS mean_ms, rows, shared_blks_hit, shared_blks_read
+            FROM pg_stat_statements WHERE dbid = (SELECT oid FROM pg_database WHERE datname = current_database())
+              -- defensive: never carry a role-password statement into a snapshot
+              AND query NOT ILIKE '%%password%%'
+            ORDER BY total_exec_time DESC LIMIT %s
+            """,
+            (limit,),
+        )
+        return {"status": status, "detail": detail, "statements": rows}
+
+
+def parse_marker(comment: str | None) -> dict | None:
+    if not comment:
+        return None
+    try:
+        parsed = json.loads(comment)
+    except json.JSONDecodeError:
+        return None
+    return parsed if isinstance(parsed, dict) and parsed.get(MARKER_KEY) == MARKER_VALUE else None
 
 
 def _index_state(row: dict) -> IndexState:
-    marker = None
-    if row.get("comment"):
-        try:
-            parsed = json.loads(row["comment"])
-            marker = parsed if isinstance(parsed, dict) and parsed.get(MARKER_KEY) == MARKER_VALUE else None
-        except json.JSONDecodeError:
-            marker = None
     return IndexState(
         schema=row["schema"], name=row["name"], table=row["table"], valid=bool(row["valid"]), ready=bool(row["ready"]),
-        definition=row["definition"], marker=marker, size_bytes=int(row["size_bytes"] or 0),
+        definition=row["definition"], marker=parse_marker(row.get("comment")), size_bytes=int(row["size_bytes"] or 0),
+        oid=int(row["oid"]) if row.get("oid") is not None else None, method=row.get("method"),
+        columns=tuple(row.get("columns") or ()), is_unique=bool(row.get("is_unique")),
+        has_expressions=bool(row.get("has_expressions")), is_partial=bool(row.get("is_partial")),
     )

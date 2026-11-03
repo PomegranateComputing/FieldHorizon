@@ -53,6 +53,16 @@ class IndexState:
     definition: str
     marker: dict | None
     size_bytes: int
+    # Structure, so an ownership proof compares what the index IS, not only what it is called.
+    oid: int | None = None
+    method: str | None = None
+    columns: tuple[str, ...] = ()
+    is_unique: bool = False
+    has_expressions: bool = False
+    is_partial: bool = False
+
+    def describe(self) -> dict:
+        return {**self.__dict__, "columns": list(self.columns)}
 
 
 @dataclass
