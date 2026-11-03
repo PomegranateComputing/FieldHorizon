@@ -9,7 +9,8 @@ import type { SupportedLanguage } from "../i18n";
 import { useEventStreamContext } from "./EventStreamContext";
 
 function basename(path: string): string {
-  const parts = path.split("/");
+  // Windows paths come back with backslashes: split on both separators.
+  const parts = path.split(/[\\/]/);
   return parts[parts.length - 1] || path;
 }
 

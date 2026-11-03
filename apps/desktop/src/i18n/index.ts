@@ -3,6 +3,8 @@ import { initReactI18next } from "react-i18next";
 
 import en from "./locales/en.json";
 import fr from "./locales/fr.json";
+import opsEn from "./locales/ops.en.json";
+import opsFr from "./locales/ops.fr.json";
 
 const LANGUAGE_STORAGE_KEY = "field-horizon-language";
 
@@ -26,8 +28,9 @@ function initialLanguage(): SupportedLanguage {
 
 void i18n.use(initReactI18next).init({
   resources: {
-    fr: { translation: fr },
-    en: { translation: en },
+    // The DB operations workstation (DB-02) keeps its strings in its own files, merged under "ops".
+    fr: { translation: { ...fr, ops: opsFr } },
+    en: { translation: { ...en, ops: opsEn } },
   },
   lng: initialLanguage(),
   fallbackLng: "en",

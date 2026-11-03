@@ -23,6 +23,9 @@ export interface EventStreamState {
  * the last frame's real `id:` line as `since_id` on the next attempt --
  * genuine resumption from the append-only, gap-free event log, not a
  * from-scratch replay that would duplicate everything already shown. Kept
+ * De-duplicated twice over: frames whose id is not above the last applied
+ * one are skipped, and event ids already applied are skipped -- a reconnect
+ * never shows the same event twice. Kept
  * independent from ConnectionContext's own health-based reconnect loop: a
  * dropped stream and a failing health check are related but distinct real
  * failure modes (e.g. a hiccup on just this long-lived connection), each
@@ -37,6 +40,7 @@ export function useEventStream(): EventStreamState {
     const controller = new AbortController();
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let lastEventId: number | null = null;
+    const seenEventIds = new Set<string>();
 
     function scheduleReconnect(attempt: number) {
       if (cancelled) return;
@@ -83,12 +87,23 @@ export function useEventStream(): EventStreamState {
             const idLine = lines.find((line) => line.startsWith("id: "));
             if (idLine) {
               const id = Number(idLine.slice("id: ".length));
-              if (!Number.isNaN(id)) lastEventId = id;
+              if (!Number.isNaN(id)) {
+                // Ids are the append-only log's sequence: anything at or below the last applied id is a replay.
+                if (lastEventId !== null && id <= lastEventId) continue;
+                lastEventId = id;
+              }
             }
             const dataLine = lines.find((line) => line.startsWith("data: "));
             if (!dataLine) continue;
             try {
               const parsed = JSON.parse(dataLine.slice("data: ".length)) as EventEnvelope;
+              if (typeof parsed.event_id === "string" && parsed.event_id) {
+                if (seenEventIds.has(parsed.event_id)) continue;
+                seenEventIds.add(parsed.event_id);
+                if (seenEventIds.size > MAX_BUFFERED_EVENTS * 4) {
+                  seenEventIds.delete(seenEventIds.values().next().value as string);
+                }
+              }
               setEvents((prev) => {
                 const next = [...prev, parsed];
                 return next.length > MAX_BUFFERED_EVENTS ? next.slice(next.length - MAX_BUFFERED_EVENTS) : next;

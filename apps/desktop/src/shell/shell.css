@@ -61,11 +61,64 @@
 .top-bar-language-active {
   color: var(--text-primary);
 }
+button.top-bar-metric {
+  font: inherit;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+}
+button.top-bar-metric:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-cold);
+}
+.side-nav-item {
+  text-decoration: none;
+}
 
 .app-shell-body {
   display: grid;
-  grid-template-columns: 200px minmax(0, 1fr) 260px;
+  grid-template-columns: 12.5rem minmax(0, 1fr) 16.25rem;
   min-height: 0;
+}
+.app-shell-body--workstation {
+  grid-template-columns: 13.5rem minmax(0, 1fr);
+}
+.app-shell-center--workstation {
+  padding: 0;
+}
+@media (max-width: 62rem) {
+  .app-shell-body,
+  .app-shell-body--workstation {
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+  }
+  .app-shell-body > .inspector {
+    display: none;
+  }
+}
+.side-nav-group-title {
+  padding: 0.7rem 0.9rem 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-meta);
+  cursor: default;
+}
+summary.side-nav-group-title {
+  cursor: pointer;
+  border-top: 1px solid var(--border-default);
+  margin-top: 0.4rem;
+}
+.side-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.side-nav-item--ops {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
 }
 
 .side-nav {
@@ -89,7 +142,7 @@
 }
 .side-nav-item--active {
   color: var(--text-primary);
-  border-left-color: var(--accent-identity);
+  border-left-color: var(--accent-cold);
   background: rgba(255, 255, 255, 0.03);
 }
 .side-nav-experimental-badge {
@@ -219,4 +272,20 @@
 }
 .console-empty {
   color: var(--text-meta);
+}
+
+/* DB-02: the console's own buttons in the graphite palette (they kept the browser default). */
+.console-toolbar button {
+  font: inherit;
+  font-size: 0.78rem;
+  background: var(--surface-control);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 0.15rem 0.55rem;
+  cursor: pointer;
+}
+.console-toolbar button:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-cold);
 }

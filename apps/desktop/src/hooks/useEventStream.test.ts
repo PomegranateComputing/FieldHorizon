@@ -68,3 +68,26 @@ describe("useEventStream reconnect + resume (Phase UI-6 item 4: backend killed m
     expect(eventIds).toEqual(["a", "b", "c"]);
   });
 });
+
+describe("useEventStream de-duplication (DB-02)", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("never applies the same event twice, by id or by event_id", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch");
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      body: makeStreamBody([
+        sseFrame(1, { event_id: "e1", event: "a" }),
+        sseFrame(1, { event_id: "e1", event: "a" }),
+        sseFrame(2, { event_id: "e1", event: "a-again" }),
+        sseFrame(3, { event_id: "e3", event: "c" }),
+      ]),
+    } as unknown as Response);
+    fetchMock.mockImplementation(() => new Promise(() => undefined));
+    const { result } = renderHook(() => useEventStream());
+    await waitFor(() => expect(result.current.events).toHaveLength(2));
+    expect(result.current.events.map((e) => (e as unknown as { event: string }).event)).toEqual(["a", "c"]);
+  });
+});

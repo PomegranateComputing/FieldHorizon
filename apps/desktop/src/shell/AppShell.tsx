@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import { ConnectionBanner } from "../connection/ConnectionBanner";
 import { CommandPalette } from "./CommandPalette";
@@ -17,6 +17,8 @@ import { TopBar } from "./TopBar";
 export function AppShell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  // The DB operations workstation needs the width: its own context bar replaces the corpus inspector.
+  const workstation = useLocation().pathname.startsWith("/db");
 
   // FABLE Sec.11/12: Ctrl/Cmd+K for the command palette, Ctrl/Cmd+Shift+K for
   // global search -- global, not gated on focus, matching every app that
@@ -44,12 +46,12 @@ export function AppShell() {
           <div className="app-shell">
             <TopBar onOpenPalette={() => setPaletteOpen(true)} onOpenSearch={() => setSearchOpen(true)} />
             <ConnectionBanner />
-            <div className="app-shell-body">
+            <div className={`app-shell-body${workstation ? " app-shell-body--workstation" : ""}`}>
               <SideNav />
-              <main className="app-shell-center panel">
+              <main className={`app-shell-center panel${workstation ? " app-shell-center--workstation" : ""}`}>
                 <Outlet />
               </main>
-              <Inspector />
+              {!workstation && <Inspector />}
             </div>
             <Console />
           </div>

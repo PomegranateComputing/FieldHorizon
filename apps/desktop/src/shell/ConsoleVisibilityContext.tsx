@@ -8,10 +8,21 @@ interface ConsoleVisibilityContextValue {
 
 const ConsoleVisibilityContext = createContext<ConsoleVisibilityContextValue | null>(null);
 
+const CONSOLE_VISIBLE_KEY = "field-horizon-console-visible";
+
+/**
+ * Folded by default since DB-02 (the operations workstation needs the height at
+ * 1366x768); the operator's own choice is remembered across sessions.
+ */
 export function ConsoleVisibilityProvider({ children }: { children: React.ReactNode }) {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(() => window.localStorage.getItem(CONSOLE_VISIBLE_KEY) === "true");
+  const toggle = () =>
+    setVisible((v) => {
+      window.localStorage.setItem(CONSOLE_VISIBLE_KEY, String(!v));
+      return !v;
+    });
   return (
-    <ConsoleVisibilityContext.Provider value={{ visible, toggle: () => setVisible((v) => !v) }}>
+    <ConsoleVisibilityContext.Provider value={{ visible, toggle }}>
       {children}
     </ConsoleVisibilityContext.Provider>
   );

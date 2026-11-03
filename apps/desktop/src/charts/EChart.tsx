@@ -20,18 +20,19 @@ echarts.use([LineChart, RadarChart, GridComponent, LegendComponent, RadarCompone
  * these can't just reference var(--pomegranate) the way component CSS does.
  */
 export const CHART_COLORS = {
-  ink: "#070706",
-  bone: "#e8e1d2",
-  boneDim: "#bcb4a6",
-  ash: "#77716a",
+  ink: "#0f1114",
+  bone: "#e6e8eb",
+  boneDim: "#b3b9c1",
+  ash: "#949ca6",
   pomegranate: "#8f0d2f",
-  pomegranateBright: "#c31e4e",
-  terminal: "#91f5a8",
-  gold: "#b6955b",
-  line: "rgba(232, 225, 210, 0.13)",
+  pomegranateBright: "#ec7385",
+  terminal: "#5cbf86",
+  gold: "#d8a03a",
+  cold: "#69b3d6",
+  line: "rgba(214, 222, 232, 0.10)",
 } as const;
 
-export const CHART_PALETTE: string[] = [CHART_COLORS.terminal, CHART_COLORS.pomegranateBright, CHART_COLORS.gold, CHART_COLORS.boneDim];
+export const CHART_PALETTE: string[] = [CHART_COLORS.cold, CHART_COLORS.gold, CHART_COLORS.terminal, CHART_COLORS.boneDim];
 
 /**
  * exportFilename is opt-in per chart (FABLE Sec.18's per-content-type PNG

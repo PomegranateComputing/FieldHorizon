@@ -3,7 +3,7 @@ import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import App from "./App";
-import { makeCapabilitiesResponse, makeHealthResponse, makeSystemInfoResponse } from "./test/fixtures";
+import { makeCapabilitiesResponse, makeDbOverview, makeHealthResponse, makeSystemInfoResponse } from "./test/fixtures";
 
 const {
   getHealthMock,
@@ -16,6 +16,7 @@ const {
   getContradictionsMock,
   getWeatherMock,
   getSchoolsMock,
+  apiFetchMock,
 } = vi.hoisted(() => ({
   getHealthMock: vi.fn(),
   getCapabilitiesMock: vi.fn(),
@@ -27,6 +28,7 @@ const {
   getContradictionsMock: vi.fn(),
   getWeatherMock: vi.fn(),
   getSchoolsMock: vi.fn(),
+  apiFetchMock: vi.fn(),
 }));
 vi.mock("./api/client", () => ({
   getHealth: getHealthMock,
@@ -40,6 +42,10 @@ vi.mock("./api/client", () => ({
   getWeather: getWeatherMock,
   getSchools: getSchoolsMock,
   apiUrl: (path: string) => path,
+  // The DB operations workstation (the home screen since DB-02) reads through the generic client.
+  apiFetch: apiFetchMock,
+  apiFetchResponse: vi.fn(),
+  ApiError: class ApiError extends Error {},
 }));
 
 vi.mock("./platform", () => ({
@@ -93,6 +99,11 @@ describe("App shell against a mocked backend (Phase UI-3 item 6)", () => {
     getContradictionsMock.mockResolvedValue({ schema_version: 1, contradictions: [] });
     getWeatherMock.mockResolvedValue({ schema_version: 1, canon: {}, surface: {}, surface_history: {} });
     getSchoolsMock.mockResolvedValue({ schema_version: 1, schools: [] });
+    apiFetchMock.mockImplementation((path: string) => {
+      if (path === "/db/overview") return Promise.resolve(makeDbOverview());
+      if (path === "/db/workloads") return Promise.resolve({ workloads: [] });
+      return Promise.reject(new Error(`unexpected ${path}`));
+    });
   });
 
   afterEach(() => {
@@ -110,11 +121,14 @@ describe("App shell against a mocked backend (Phase UI-3 item 6)", () => {
     // The shell's nav landmark never appears before the connection is up.
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
 
-    // <Navigate> (the index route's redirect to /command) commits its own
-    // location update in an effect, one render after the nav landmark first
+    // <Navigate> (the index route's redirect to /db, the operations workstation since DB-02)
+    // commits its own location update in an effect, one render after the nav landmark first
     // appears -- both need waitFor, not just the first.
     await waitFor(() => expect(screen.getByRole("navigation")).toBeInTheDocument());
-    await waitFor(() => expect(screen.getByRole("heading", { name: "COMMAND" })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("heading", { level: 1, name: "Exploitation" })).toBeInTheDocument());
+    // Real data from the (mocked) overview, not placeholders: the target and its verified identity.
+    await waitFor(() => expect(screen.getAllByText("bench_local").length).toBeGreaterThan(0));
+    expect(screen.getAllByText("vérifiée").length).toBeGreaterThan(0);
   });
 
   it("gates nav sections on the real /capabilities response: absent hidden, partial marked experimental", async () => {

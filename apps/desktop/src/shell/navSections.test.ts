@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { resolveNavVisibility } from "./navSections";
 import type { NavSection } from "./navSections";
 
-const gatedSection: NavSection = { id: "contradictions", label: "CONTRADICTIONS", path: "/contradictions", capabilityKey: "contradictions" };
-const ungatedSection: NavSection = { id: "command", label: "COMMAND", path: "/command" };
+const gatedSection: NavSection = { id: "contradictions", label: "CONTRADICTIONS", path: "/contradictions", capabilityKey: "contradictions", group: "advanced" };
+const ungatedSection: NavSection = { id: "command", label: "COMMAND", path: "/command", group: "advanced" as const };
 
 describe("resolveNavVisibility", () => {
   it("is visible when the section has no capabilityKey at all", () => {

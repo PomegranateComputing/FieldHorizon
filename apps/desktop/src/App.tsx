@@ -7,7 +7,6 @@ import { StartupScreen } from "./connection/StartupScreen";
 import { CommandPage } from "./pages/CommandPage";
 import { CorpusPage } from "./pages/CorpusPage";
 import { CyclesPage } from "./pages/CyclesPage";
-import { DatabasePage } from "./pages/DatabasePage";
 import { ContradictionsPage } from "./pages/ContradictionsPage";
 import { CouncilsPage } from "./pages/CouncilsPage";
 import { DreamsPage } from "./pages/DreamsPage";
@@ -20,6 +19,14 @@ import { SchoolsPage } from "./pages/SchoolsPage";
 import { SectionPage } from "./pages/SectionPage";
 import { SettingsPage } from "./pages/SettingsPage";
 import { SystemPage } from "./pages/SystemPage";
+import { DbLayout } from "./db/DbLayout";
+import { DbSettingsPage } from "./db/DbSettingsPage";
+import { EvidencePage } from "./db/EvidencePage";
+import { ExploitationPage } from "./db/ExploitationPage";
+import { OperationSheet } from "./db/OperationSheet";
+import { OperationsPage } from "./db/OperationsPage";
+import { TargetDetailPage, TargetsPage } from "./db/TargetsPage";
+import { WorkloadsPage } from "./db/WorkloadsPage";
 import { AppShell } from "./shell/AppShell";
 import { NAV_SECTIONS } from "./shell/navSections";
 
@@ -63,7 +70,6 @@ const SCREEN_COMPONENTS: Partial<Record<string, React.ComponentType>> = {
   semantics: SemanticsPage,
   settings: SettingsPage,
   system: SystemPage,
-  database: DatabasePage,
   weather: WeatherPage,
 };
 
@@ -82,7 +88,19 @@ function Gate() {
     <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/" element={<AppShell />}>
-          <Route index element={<Navigate to="/command" replace />} />
+          {/* DB-02: the DB operations workstation is the primary surface; the corpus engine stays under "advanced". */}
+          <Route index element={<Navigate to="/db" replace />} />
+          <Route path="db" element={<DbLayout />}>
+            <Route index element={<ExploitationPage />} />
+            <Route path="targets" element={<TargetsPage />} />
+            <Route path="targets/:name" element={<TargetDetailPage />} />
+            <Route path="operations" element={<OperationsPage />} />
+            <Route path="operations/:operationId" element={<OperationSheet />} />
+            <Route path="workloads" element={<WorkloadsPage />} />
+            <Route path="evidence" element={<EvidencePage />} />
+            <Route path="settings" element={<DbSettingsPage />} />
+          </Route>
+          <Route path="database" element={<Navigate to="/db" replace />} />
           {NAV_SECTIONS.map((section) => {
             const Screen = SCREEN_COMPONENTS[section.id];
             return (

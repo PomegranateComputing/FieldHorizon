@@ -1,5 +1,25 @@
 import type { CapabilitiesResponse, HealthResponse, SystemInfoResponse } from "../api/types";
 
+/** A minimal real-shaped /db/overview: one isolated, verified, idle target. */
+export function makeDbOverview() {
+  return {
+    generated_at: "2026-11-03T20:00:00+00:00",
+    policy: { version: 2, sha256: "a".repeat(64), source: "dbeng_policy.yaml", recovery_automatic: true, max_authorization_age_seconds: 300, orphan_wait_seconds: 60 },
+    targets: [{
+      name: "bench_local", engine: "postgresql", host: "127.0.0.1", port: 55432, dbname: "fh_bench", environment: "isolated_test", writable: true,
+      data_classification: "synthetic", identities: { observer: "fh_observer", measure: "fh_measure", operator: "fh_operator", owner_role: "fh_bench_owner" },
+      pinned: { instance_marker: "m-1", system_identifier: "42" }, fingerprint: "f".repeat(16), running_operation: null, reconciling: false, startup: null,
+      live: { checked_at: "2026-11-03T20:00:00+00:00", reachable: true, identity_verified: true, server_version_num: 180006, server_version: "PostgreSQL 18.6",
+              detection: { incidents: [], blocking: 0, lease: { lock_held: false, row: { fencing_token: 3 } } }, fieldhorizon_indexes: [], ledger: [], build_progress: [] },
+    }],
+    running: [],
+    recent: [],
+    recoveries: [],
+    counts: {},
+    startup: {},
+  };
+}
+
 export function makeHealthResponse(overrides: Partial<HealthResponse> = {}): HealthResponse {
   return {
     schema_version: 1,

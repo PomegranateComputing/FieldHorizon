@@ -10,7 +10,7 @@ import type { SupportedLanguage } from "../i18n";
 import { getPlatform } from "../platform";
 import { useConsoleVisibility } from "./ConsoleVisibilityContext";
 import { trapTabKey } from "./focusTrap";
-import { NAV_SECTIONS, resolveNavVisibility } from "./navSections";
+import { ALL_SECTIONS, resolveNavVisibility } from "./navSections";
 import "./CommandPalette.css";
 
 interface Command {
@@ -43,9 +43,10 @@ export function CommandPalette({ open, onClose, onOpenSearch }: { open: boolean;
   const commands = useMemo((): Command[] => {
     const list: Command[] = [];
 
-    for (const section of NAV_SECTIONS) {
+    for (const section of ALL_SECTIONS) {
       if (resolveNavVisibility(section, capabilityMap) === "hidden") continue;
-      list.push({ id: `nav-${section.id}`, label: t("commandPalette.open", { section: section.label }), run: () => navigate(section.path) });
+      const label = section.labelKey ? t(section.labelKey) : section.label;
+      list.push({ id: `nav-${section.id}`, label: t("commandPalette.open", { section: label }), run: () => navigate(section.path) });
     }
 
     for (const lang of SUPPORTED_LANGUAGES as readonly SupportedLanguage[]) {
