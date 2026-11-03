@@ -27,10 +27,13 @@ refused.
 from __future__ import annotations
 
 import contextlib
+import ctypes
 import errno
 import json
 import logging
 import os
+import platform
+import sys
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -214,7 +217,7 @@ class RunLock:
     def acquire(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         payload = json.dumps(
-            {"pid": os.getpid(), "started_at": datetime.now(UTC).isoformat(), "host": os.uname().nodename}
+            {"pid": os.getpid(), "started_at": datetime.now(UTC).isoformat(), "host": platform.node()}
         )
 
         try:
@@ -275,6 +278,26 @@ class RunLock:
 def _process_alive(pid: int) -> bool:
     if pid <= 0:
         return False
+    if sys.platform == "win32":
+        # os.kill(pid, 0) is no probe on Windows: 0 is CTRL_C_EVENT, so it
+        # would interrupt a console process group instead of testing the PID.
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        kernel32.OpenProcess.argtypes = [ctypes.c_ulong, ctypes.c_int, ctypes.c_ulong]
+        kernel32.OpenProcess.restype = ctypes.c_void_p
+        kernel32.GetExitCodeProcess.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_ulong)]
+        kernel32.CloseHandle.argtypes = [ctypes.c_void_p]
+        process_query_limited_information, still_active, error_access_denied = 0x1000, 259, 5
+
+        handle = kernel32.OpenProcess(process_query_limited_information, False, pid)
+        if not handle:
+            # Exists but belongs to another user.
+            return ctypes.get_last_error() == error_access_denied
+        try:
+            exit_code = ctypes.c_ulong()
+            kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code))
+            return exit_code.value == still_active
+        finally:
+            kernel32.CloseHandle(handle)
     try:
         os.kill(pid, 0)
     except ProcessLookupError:
