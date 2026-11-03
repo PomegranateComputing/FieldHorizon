@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 from pathlib import Path
 
+from fieldhorizon import rustcore
 from fieldhorizon.config import AppConfig
 from fieldhorizon.db import CURRENT_SCHEMA_VERSION, init_db
 from fieldhorizon.manifests import (
@@ -108,9 +109,24 @@ def test_rust_binary_fingerprint_reports_version_even_without_a_built_binary(tmp
     assert result == "version=0.1.0"
 
 
-def test_rust_binary_fingerprint_is_none_with_no_cargo_toml_and_no_binary(tmp_path):
+def test_rust_binary_fingerprint_is_none_with_no_cargo_toml_and_no_binary(tmp_path, monkeypatch):
+    # Neither a crate next to the config nor a package crate: nothing to fingerprint.
+    monkeypatch.setattr(rustcore, "PACKAGE_RUST_CRATE_DIR", tmp_path / "no_package_crate")
+    monkeypatch.delenv(rustcore.RUST_CORE_ENV_VAR, raising=False)
     cfg = make_config(tmp_path)
     assert rust_binary_fingerprint(cfg) is None
+
+
+def test_rust_binary_fingerprint_falls_back_to_the_package_crate(tmp_path, monkeypatch):
+    # A config with no crate of its own fingerprints the package's Rust core,
+    # the one a multi-cycle would actually run.
+    package_crate = tmp_path / "pkg" / "fieldhorizon-rust"
+    package_crate.mkdir(parents=True)
+    (package_crate / "Cargo.toml").write_text('[package]\nname = "fh-core"\nversion = "2.0.0"\n', encoding="utf-8")
+    monkeypatch.setattr(rustcore, "PACKAGE_RUST_CRATE_DIR", package_crate)
+    monkeypatch.delenv(rustcore.RUST_CORE_ENV_VAR, raising=False)
+    cfg = make_config(tmp_path / "cfg")
+    assert rust_binary_fingerprint(cfg) == "version=2.0.0"
 
 
 def test_code_commit_never_raises_and_returns_unknown_outside_a_repo(tmp_path):

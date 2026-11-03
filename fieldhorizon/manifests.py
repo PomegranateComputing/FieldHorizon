@@ -11,10 +11,9 @@ from .db import connect
 from .manifest import load_manifest
 from .ontology_spec import DEFAULT_ONTOLOGY_PATH
 from .registries import get_or_register_model
-from .rustcore import rust_binary_path
+from .rustcore import locate_rust_core
 
 _PYPROJECT_PATH = Path(__file__).resolve().parent.parent / "pyproject.toml"
-_RUST_CARGO_TOML = "fieldhorizon-rust/Cargo.toml"
 
 
 def _path_fingerprint(paths: list[Path]) -> str | None:
@@ -74,18 +73,19 @@ def dependency_fingerprint() -> str | None:
 
 
 def rust_binary_fingerprint(cfg: AppConfig) -> str | None:
-    """Cargo.toml's version string + mtime/size of whichever binary rust_binary_path resolves to, if any."""
-    cargo_toml = cfg.root / _RUST_CARGO_TOML
+    """Cargo.toml's version string + mtime/size of whichever binary locate_rust_core resolves to, if any."""
+    location = locate_rust_core(cfg)
+    cargo_toml = location.crate_dir / "Cargo.toml" if location.crate_dir else None
     version = None
-    if cargo_toml.exists():
+    if cargo_toml is not None and cargo_toml.exists():
         for line in cargo_toml.read_text(encoding="utf-8").splitlines():
             stripped = line.strip()
             if stripped.startswith("version"):
                 version = stripped.split("=", 1)[1].strip().strip('"')
                 break
 
-    binary_path = rust_binary_path(cfg)
-    if not binary_path.exists():
+    binary_path = location.binary
+    if not binary_path.is_file():
         return f"version={version}" if version else None
 
     stat = binary_path.stat()

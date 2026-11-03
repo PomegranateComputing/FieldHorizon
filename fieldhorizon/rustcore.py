@@ -3,8 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from .config import AppConfig
@@ -12,14 +14,82 @@ from .ontology_spec import DEFAULT_ONTOLOGY_PATH
 
 logger = logging.getLogger(__name__)
 
+# The Rust pressure core is code shipped with this package, exactly like
+# ontology.yaml (ontology_spec.DEFAULT_ONTOLOGY_PATH): it must be found no
+# matter where the runtime config.yaml lives. Resolving it under cfg.root
+# alone meant any config kept outside the repo root (an isolated test
+# config, a per-user config) silently lost the Rust core and every
+# multi-cycle synthesis degraded.
+PACKAGE_RUST_CRATE_DIR = Path(__file__).resolve().parent.parent / "fieldhorizon-rust"
+
+# Explicit binary override, for an installation where fh-core lives
+# outside any crate directory.
+RUST_CORE_ENV_VAR = "FIELDHORIZON_FH_CORE"
+
+SOURCE_ENV = "env"
+SOURCE_CONFIG_ROOT = "config_root"
+SOURCE_PACKAGE = "package"
+
+
+@dataclass(frozen=True)
+class RustCoreLocation:
+    binary: Path
+    crate_dir: Path | None
+    source: str
+
+    @property
+    def exists(self) -> bool:
+        return self.binary.is_file()
+
+
+def _binary_name() -> str:
+    return "fh-core.exe" if sys.platform == "win32" else "fh-core"
+
+
+def _same_dir(a: Path, b: Path) -> bool:
+    return os.path.normcase(str(a.resolve())) == os.path.normcase(str(b.resolve()))
+
+
+def locate_rust_core(cfg: AppConfig) -> RustCoreLocation:
+    """
+    Resolution order, first match wins:
+
+    1. FIELDHORIZON_FH_CORE -- an explicit binary path.
+    2. A crate vendored next to the config (cfg.root/fieldhorizon-rust with
+       its own Cargo.toml) -- an explicit, deliberate co-location.
+    3. The crate shipped with this package -- the normal case, independent
+       of where the config file lives.
+
+    Within the chosen crate, a release build is preferred over a debug one.
+    When neither is built, the release path is returned so the caller's
+    error message names the build that is actually expected.
+    """
+    override = os.environ.get(RUST_CORE_ENV_VAR, "").strip()
+    if override:
+        return RustCoreLocation(binary=Path(override), crate_dir=None, source=SOURCE_ENV)
+
+    colocated = cfg.root / "fieldhorizon-rust"
+    if (colocated / "Cargo.toml").is_file() and not _same_dir(colocated, PACKAGE_RUST_CRATE_DIR):
+        crate, source = colocated, SOURCE_CONFIG_ROOT
+    else:
+        crate, source = PACKAGE_RUST_CRATE_DIR, SOURCE_PACKAGE
+
+    release = crate / "target" / "release" / _binary_name()
+    debug = crate / "target" / "debug" / _binary_name()
+    binary = debug if not release.is_file() and debug.is_file() else release
+    return RustCoreLocation(binary=binary, crate_dir=crate, source=source)
+
 
 def rust_binary_path(cfg: AppConfig) -> Path:
-    rust_dir = cfg.root / "fieldhorizon-rust"
-    binary = "fh-core.exe" if sys.platform == "win32" else "fh-core"
-    release = rust_dir / "target" / "release" / binary
-    if release.exists():
-        return release
-    return rust_dir / "target" / "debug" / binary
+    return locate_rust_core(cfg).binary
+
+
+def file_sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def run_rust_pressure_core(
@@ -27,12 +97,14 @@ def run_rust_pressure_core(
     input_path: Path,
     limit: int = 50,
 ) -> dict:
-    binary = rust_binary_path(cfg)
+    location = locate_rust_core(cfg)
+    binary = location.binary
 
-    if not binary.exists():
+    if not location.exists:
         raise FileNotFoundError(
-            f"Rust core binary not found: {binary}. "
-            "Run: cd fieldhorizon-rust && cargo build --release"
+            f"Rust core binary not found: {binary} (resolved via {location.source}). "
+            f"Run: cd {location.crate_dir or 'fieldhorizon-rust'} && cargo build --release, "
+            f"or set {RUST_CORE_ENV_VAR}"
         )
 
     cmd = [

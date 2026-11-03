@@ -42,6 +42,9 @@ EVT_EVALUATION_COMPLETED = "EvaluationCompleted"
 EVT_FRAGMENT_PROMOTED = "FragmentPromoted"
 EVT_CYCLE_COMPLETED = "CycleCompleted"
 EVT_CYCLE_FAILED = "CycleFailed"
+# Multi-cycle only: which Rust pressure core binary (if any) fed the
+# synthesis prompt, resolved how, and whether the cycle degraded without it.
+EVT_RUST_PRESSURE_COMPUTED = "RustPressureComputed"
 
 # Council chain (fieldhorizon.council). The last four mirror
 # genealogy.py's canon_events vocabulary exactly -- see

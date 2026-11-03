@@ -22,6 +22,7 @@ from .events import (
     EVT_CYCLE_STARTED,
     EVT_EVALUATION_COMPLETED,
     EVT_RETRIEVAL_COMPLETED,
+    EVT_RUST_PRESSURE_COMPUTED,
     OperationEmitter,
 )
 from .fragments import extract_field_fragment
@@ -35,7 +36,9 @@ from .retrieval import search_books, search_json
 from .rewrite import rewrite_response
 from .rustcore import (
     export_rust_pressure_report_all,
+    file_sha256,
     filter_rust_report_by_refs,
+    locate_rust_core,
     rust_report_to_prompt,
 )
 from .synthesis import (
@@ -141,16 +144,30 @@ def _run_multi_cycle_body(
     ]
 
     rust_pressure_failure: str | None = None
+    rust_location = locate_rust_core(cfg)
+    rust_payload: dict = {
+        "binary": str(rust_location.binary),
+        "resolved_via": rust_location.source,
+        "binary_sha256": file_sha256(rust_location.binary) if rust_location.exists else None,
+    }
 
     try:
         rust_report_path = export_rust_pressure_report_all(cfg, limit=25)
         rust_report = json.loads(rust_report_path.read_text(encoding="utf-8"))
+        rust_payload["edge_count_total"] = rust_report.get("edge_count", 0)
         rust_report = filter_rust_report_by_refs(rust_report, json_refs)
+        rust_payload["edge_count_for_retrieved_axioms"] = rust_report.get("edge_count", 0)
         rust_pressure_text = rust_report_to_prompt(rust_report, limit=12)
+        rust_payload["status"] = "ok"
     except Exception as exc:
         rust_pressure_text = f"[rust pressure unavailable: {exc}]"
         rust_pressure_failure = f"{type(exc).__name__}: {exc}"
+        rust_payload.update(status="degraded", error=rust_pressure_failure)
         logger.warning("Rust pressure core unavailable, degrading synthesis: %s", rust_pressure_failure)
+
+    # The proof of which execution path fed the synthesis: the resolved
+    # binary and its hash when the Rust core ran, the failure when it didn't.
+    emitter.emit(EVT_RUST_PRESSURE_COMPUTED, payload=rust_payload)
 
     if dry_run:
         agent_outputs: list[AgentOutput] = []
@@ -291,6 +308,13 @@ def _run_multi_cycle_body(
         full_log += (
             f"## Rust Pressure\n**DEGRADED: rust pressure core unavailable.** "
             f"{rust_pressure_failure}\n\n"
+        )
+    else:
+        full_log += (
+            f"## Rust Pressure\nRust core `{rust_payload['binary']}` (resolved via "
+            f"{rust_payload['resolved_via']}, sha256 {rust_payload['binary_sha256']}): "
+            f"{rust_payload['edge_count_for_retrieved_axioms']} of {rust_payload['edge_count_total']} "
+            "pressure edges touch the retrieved axioms.\n\n"
         )
 
     full_log += f"## Base Prompt\n```text\n{base_prompt}\n```\n\n"
