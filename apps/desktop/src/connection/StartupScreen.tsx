@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { backendPort } from "../api/origin";
 import { useConnection } from "./ConnectionContext";
 import type { StartupStep } from "./types";
 import "./startup.css";
@@ -61,7 +62,9 @@ function ManagedBackendLaunchForm() {
     void launchManagedBackend({
       repoRoot: String(form.get("repoRoot") ?? ""),
       pythonBin: String(form.get("pythonBin") ?? ""),
-      port: 8777,
+      // The port the API client will address (api/origin.ts) -- a managed
+      // backend on any other port would be unreachable.
+      port: backendPort(),
       tokenFile: ".fh_token",
     });
   };

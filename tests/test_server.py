@@ -707,6 +707,41 @@ def test_cors_middleware_allows_only_localhost_origins(tmp_path):
     assert "access-control-allow-origin" not in response.headers
 
 
+def test_cors_allows_exactly_the_tauri_webview_origins(tmp_path):
+    client = make_client(tmp_path)
+    for origin in ("http://tauri.localhost", "tauri://localhost"):
+        response = client.get("/status", headers={**auth_headers(), "Origin": origin})
+        assert response.headers.get("access-control-allow-origin") == origin
+
+        # The desktop app's Authorization header triggers a preflight.
+        preflight = client.options(
+            "/status",
+            headers={
+                "Origin": origin,
+                "Access-Control-Request-Method": "GET",
+                "Access-Control-Request-Headers": "authorization",
+            },
+        )
+        assert preflight.status_code == 200
+        assert preflight.headers.get("access-control-allow-origin") == origin
+
+    for lookalike in (
+        "https://tauri.localhost",
+        "http://tauri.localhost.evil.example.com",
+        "http://evil.tauri.localhost",
+        "http://tauri.localhost:8080",
+        "tauri://localhost.evil",
+    ):
+        response = client.get("/status", headers={**auth_headers(), "Origin": lookalike})
+        assert "access-control-allow-origin" not in response.headers, lookalike
+
+
+def test_a_tauri_origin_still_needs_the_token(tmp_path):
+    client = make_client(tmp_path)
+    response = client.get("/status", headers={"Origin": "http://tauri.localhost"})
+    assert response.status_code in (401, 403)
+
+
 def test_metrics_endpoint_tracks_request_count(tmp_path):
     client = make_client(tmp_path)
     client.get("/status", headers=auth_headers())

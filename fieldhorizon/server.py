@@ -126,6 +126,13 @@ HOST = "127.0.0.1"
 
 _LOCALHOST_ORIGIN_REGEX = r"http://(localhost|127\.0\.0\.1)(:\d+)?"
 
+# The packaged Tauri webview's own origin: http://tauri.localhost on Windows
+# (WebView2), tauri://localhost on macOS/Linux. The desktop app calls this
+# loopback API cross-origin from there, so exactly these two strings are
+# allowed -- no wildcard, no https variant, nothing a remote page can claim.
+# The bearer token is still required on every route.
+TAURI_ORIGINS = ("http://tauri.localhost", "tauri://localhost")
+
 # Implementation Brief IV, Phase UI-3 item 2: the web target is `vite build`
 # output from apps/desktop, served by this same server at /ui -- not a second
 # app, not a separate origin. Same-origin means the browser build never needs
@@ -323,6 +330,7 @@ def create_app(cfg: AppConfig, token: str) -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
+        allow_origins=list(TAURI_ORIGINS),
         allow_origin_regex=_LOCALHOST_ORIGIN_REGEX,
         allow_methods=["GET", "POST"],
         allow_headers=["Authorization", "Content-Type"],

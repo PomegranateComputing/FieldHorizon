@@ -1,4 +1,5 @@
 import { getStoredToken } from "../auth/tokenStorage";
+import { apiBaseUrl } from "./origin";
 import type {
   CanonResponse,
   CapabilitiesResponse,
@@ -49,14 +50,11 @@ import type {
 } from "./types";
 
 /**
- * Always relative: same-origin once served at /ui in production (the whole
- * point of that static mount, Phase UI-3 item 2). During `npm run dev` the
- * frontend runs on its own Vite port (1420), separate from the backend --
- * vite.config.ts's server.proxy forwards these same relative paths to
- * localhost:8777 so the code here never needs to know which mode it's in.
+ * Resolved per request (see ./origin): relative in the browser build --
+ * same-origin at /ui, or proxied by Vite's dev server -- and the explicit
+ * loopback backend inside the Tauri webview, whose own origin is not the
+ * backend.
  */
-const BASE_URL = "";
-
 export class ApiError extends Error {
   constructor(
     public status: number,
@@ -75,7 +73,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
     headers.set("Authorization", `Bearer ${token}`);
   }
 
-  const response = await fetch(`${BASE_URL}${path}`, { ...init, headers });
+  const response = await fetch(apiUrl(path), { ...init, headers });
   if (!response.ok) {
     const body: Partial<ErrorResponse> | null = await response.json().catch(() => null);
     throw new ApiError(
@@ -332,5 +330,5 @@ export function postIngestManifest(correlationId: string): Promise<IngestManifes
 }
 
 export function apiUrl(path: string): string {
-  return `${BASE_URL}${path}`;
+  return `${apiBaseUrl()}${path}`;
 }
