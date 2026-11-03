@@ -10,6 +10,8 @@ snapshot, or in an evidence bundle by way of this file.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import os
 import re
 from dataclasses import asdict, dataclass
@@ -46,6 +48,12 @@ class TargetConfig:
     system_identifier: str | None = None
     data_directory: str | None = None
     sslmode: str = "prefer"
+    # DB-02: workload measurement runs under its own identity (no owner rights), and the operator
+    # reaches the table owner's privileges only through an explicit SET ROLE to owner_role.
+    measure_user: str | None = None
+    owner_role: str | None = None
+    # What the lab holds: "synthetic" for the generated bench; anything else is treated as sensitive.
+    data_classification: str = "unspecified"
 
     @property
     def writable_environment(self) -> bool:
@@ -54,6 +62,10 @@ class TargetConfig:
     def describe(self) -> dict:
         """Everything about the target that is safe to put in evidence: no secret is ever held here."""
         return asdict(self)
+
+    def fingerprint(self) -> str:
+        """Hash of the whole declared configuration: an operation refuses to act if it changes mid-flight."""
+        return hashlib.sha256(json.dumps(self.describe(), sort_keys=True).encode("utf-8")).hexdigest()
 
 
 def redact(text: str) -> str:
@@ -99,6 +111,9 @@ def _target(name: str, raw: object, where: str) -> TargetConfig:
             system_identifier=str(sysid) if sysid is not None else None,
             data_directory=str(raw["data_directory"]) if raw.get("data_directory") else None,
             sslmode=str(raw.get("sslmode", "prefer")),
+            measure_user=str(raw["measure_user"]) if raw.get("measure_user") else None,
+            owner_role=str(raw["owner_role"]) if raw.get("owner_role") else None,
+            data_classification=str(raw.get("data_classification", "unspecified")),
         )
     except KeyError as exc:
         raise TargetConfigError(f"{where}: target {name!r} is missing required key {exc.args[0]!r}") from exc

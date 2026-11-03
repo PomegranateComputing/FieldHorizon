@@ -22,9 +22,18 @@
   whose client was killed may still finish (a valid index nobody decided on) or leave an invalid
   one. `field-horizon db recover` handles both.
 
+  -CpuMask (start/restart, optional) pins THIS instance's server processes -- the postmaster named
+  in -DataDir\postmaster.pid, running -PgBin's postgres.exe, and its children; new backends inherit
+  it -- to the logical processors of the mask. On a two-CCD processor (this PC's Ryzen 9 7900),
+  backends migrating between CCDs lose their L3 cache and run ~1.7x slower in bursts, which a
+  measurement then has to absorb as noise (DB-02 runs D01, E01-E02). 0xFFF = logical processors
+  0-11 = one CCD. Setting the affinity of one's own processes needs no administrator rights;
+  nothing else on the machine is touched.
+
 .EXAMPLE
   .\scripts\dbeng\pg-test-instance.ps1 -Action init  -PgBin C:\pg\pgsql\bin -DataDir C:\pg\cluster
   .\scripts\dbeng\pg-test-instance.ps1 -Action start -PgBin C:\pg\pgsql\bin -DataDir C:\pg\cluster
+  .\scripts\dbeng\pg-test-instance.ps1 -Action start -PgBin C:\pg\pgsql\bin -DataDir C:\pg\cluster -CpuMask 0xFFF
 #>
 param(
     [Parameter(Mandatory)] [ValidateSet("init", "start", "stop", "restart", "status", "destroy")] [string] $Action,
@@ -32,7 +41,8 @@ param(
     [Parameter(Mandatory)] [string] $DataDir,
     [int] $Port = 55432,
     [string] $Superuser = "fh_admin",
-    [string] $SecretsDir = (Join-Path $env:LOCALAPPDATA "FieldHorizon\dbeng")
+    [string] $SecretsDir = (Join-Path $env:LOCALAPPDATA "FieldHorizon\dbeng"),
+    [string] $CpuMask = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -53,6 +63,21 @@ function Invoke-PgCtl([string[]] $Arguments) {
     $process = Start-Process -FilePath $PgCtl -ArgumentList $Arguments -WindowStyle Hidden -PassThru
     $process.WaitForExit()
     return $process.ExitCode
+}
+
+function Set-InstanceAffinity {
+    if (-not $CpuMask) { return }
+    $mask = [IntPtr][Convert]::ToInt64($CpuMask.Replace("0x", ""), 16)
+    $server = (Resolve-Path (Join-Path $PgBin "postgres.exe")).Path
+    $postmasterId = [int](Get-Content (Join-Path $DataDir "postmaster.pid") -TotalCount 1)
+    $postmaster = Get-Process -Id $postmasterId
+    # Only the server this script just started: the PID comes from this cluster's postmaster.pid and
+    # the image must be this binaries directory's postgres.exe.
+    if ($postmaster.Path -ne $server) { throw "PID $postmasterId is not $server; affinity left unchanged." }
+    $postmaster.ProcessorAffinity = $mask
+    $children = @(Get-CimInstance Win32_Process -Filter "ParentProcessId=$postmasterId" | Where-Object { $_.ExecutablePath -eq $server })
+    foreach ($child in $children) { (Get-Process -Id $child.ProcessId).ProcessorAffinity = $mask }
+    Write-Host ("Server processes pinned to CPU mask {0} (postmaster {1} + {2} children)." -f $CpuMask, $postmasterId, $children.Count)
 }
 
 function Show-Status {
@@ -138,6 +163,7 @@ host    all       all   ::1/128        scram-sha-256
     "start" {
         $rc = Invoke-PgCtl @("-D", "`"$DataDir`"", "-l", "`"$LogFile`"", "-w", "-t", "60", "start")
         if ($rc -ne 0) { throw "pg_ctl start failed with exit code $rc (see $LogFile)" }
+        Set-InstanceAffinity
         Show-Status
     }
     "stop" {
@@ -148,6 +174,7 @@ host    all       all   ::1/128        scram-sha-256
     "restart" {
         $rc = Invoke-PgCtl @("-D", "`"$DataDir`"", "-l", "`"$LogFile`"", "-m", "fast", "-w", "-t", "60", "restart")
         if ($rc -ne 0) { throw "pg_ctl restart failed with exit code $rc (see $LogFile)" }
+        Set-InstanceAffinity
         Show-Status
     }
     "status" {
