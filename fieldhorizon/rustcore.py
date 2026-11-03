@@ -4,6 +4,7 @@ import hashlib
 import json
 import logging
 import subprocess
+import sys
 from pathlib import Path
 
 from .config import AppConfig
@@ -14,10 +15,11 @@ logger = logging.getLogger(__name__)
 
 def rust_binary_path(cfg: AppConfig) -> Path:
     rust_dir = cfg.root / "fieldhorizon-rust"
-    release = rust_dir / "target" / "release" / "fh-core"
+    binary = "fh-core.exe" if sys.platform == "win32" else "fh-core"
+    release = rust_dir / "target" / "release" / binary
     if release.exists():
         return release
-    return rust_dir / "target" / "debug" / "fh-core"
+    return rust_dir / "target" / "debug" / binary
 
 
 def run_rust_pressure_core(
