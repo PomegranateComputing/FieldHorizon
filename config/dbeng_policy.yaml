@@ -3,7 +3,9 @@
 # This file is the whole of the system's authority. An LLM agent can propose
 # a candidate or object to one; it cannot grant, deny, or declare success.
 # Every operation records the sha256 of this file in its journal.
-policy_version: 1
+# v2 (DB-02) adds coordination, recovery and measurement sections and the measurement_stable
+# criterion. Every v1 threshold below is unchanged; v1 is in Git history (commit 7a4fd60..4242f6d).
+policy_version: 2
 
 authority:
   # Writes are permitted only against targets declared in these environments,
@@ -12,7 +14,7 @@ authority:
   write_environments: [isolated_test]
   require_instance_marker: true
   require_system_identifier: true
-  allowed_operations: [create_index_concurrently, drop_own_index_concurrently, analyze_table]
+  allowed_operations: [create_index_concurrently, drop_own_index_concurrently, analyze_table, vacuum_table]
 
 index_candidates:
   methods: [btree]
@@ -37,6 +39,23 @@ execution:
   lock_timeout_ms: 5000
   statement_timeout_ms: 600000
 
+coordination:
+  # One operation per target at a time, across every Field Horizon process: a session-level
+  # advisory lock plus a fenced lease row in fieldhorizon_meta (see executor.py).
+  lease_scope: index_optimization
+  # The executor refuses an authorization older than this; the operation re-verifies identity,
+  # policy, target and eligibility right before each change, so a long baseline or a pause never
+  # turns into a stale right.
+  max_authorization_age_seconds: 300
+
+recovery:
+  # Unfinished changes found at service start or at the start of a new operation are brought back
+  # automatically when ownership is proven; anything unproven blocks with a diagnostic.
+  automatic: true
+  # After a client loss the server may still be finishing a statement (Windows cannot detect a dead
+  # client mid-statement): wait this long for orphaned Field Horizon activity before blocking.
+  orphan_wait_seconds: 60
+
 benchmark:
   warmup_runs: 2
   # Baseline rounds are split in two halves to measure the noise floor
@@ -54,3 +73,18 @@ acceptance:
   max_write_regression: 0.30
   min_weighted_improvement: 0.05       # weighted workload at least 5% faster overall
   min_index_usage: 0.9                 # target-query plans after the change must use the new index
+
+measurement:
+  # Client-side latency of the plain statements is measured and reported beside the server time;
+  # the decision itself stays on server execution time.
+  client_timing: true
+  # Control queries (marked in the workload) cannot be served by the candidate index. If their
+  # median moves by more than this between baseline and after, the environment drifted and no
+  # difference is credited to the change (criterion measurement_stable).
+  max_control_drift: 0.20
+  # Measurement writes are rolled back but leave dead tuples (and consume identity values). Left
+  # alone they accumulate across phases, so the "after" phase scans a more bloated table than the
+  # baseline -- a bias against every change, measured at 22 % dead rows per phase on a 300k-row
+  # table (DB-02 run E01). With this on, the executor VACUUMs the lab tables that hold dead tuples
+  # before each measurement phase (typed command vacuum_table; never VACUUM FULL).
+  vacuum_before_phase: true

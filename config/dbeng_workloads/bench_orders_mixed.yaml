@@ -1,0 +1,43 @@
+# Mixed read/write workload (DB-02): the bench_orders lookup at a lower weight, beside frequent
+# batch inserts. Neither side dominates by construction: the deterministic acceptance weighs the
+# read gain against the write cost of maintaining one more b-tree.
+# Parameters are generated from fixed seeds, so before and after run identical statements.
+# Literal percent signs in SQL must be doubled (%%): statements are bound by psycopg.
+workload_version: 1
+name: bench_orders_mixed
+
+queries:
+  - id: orders_by_customer
+    kind: read
+    weight: 10
+    sql: SELECT id, status, amount FROM bench.orders WHERE customer_id = %(customer_id)s
+    params:
+      customer_id: {int_range: [1, 200000], count: 8, seed: 31}
+
+  - id: orders_status_summary
+    kind: read
+    weight: 1
+    repeat: 3
+    sql: SELECT status, count(*), sum(amount) FROM bench.orders GROUP BY status
+
+  # Writes pay for every index; measured inside a rolled-back transaction.
+  - id: order_insert_batch
+    kind: write
+    weight: 30
+    repeat: 8
+    sql: >-
+      INSERT INTO bench.orders (customer_id, status, amount, created_at, note)
+      SELECT 1 + (g %% 200000), 'new', 10.00, now(), md5(g::text || 'm') FROM generate_series(1, 1000) g
+
+  # Control (DB-02): served by the customers primary key, so no candidate on bench.orders can help
+  # or hurt it, and control queries are never diagnosed for candidates. If its timing moves between
+  # baseline and after, the environment moved (policy measurement.max_control_drift). Weight 0: it
+  # does not count in the weighted workload.
+  - id: control_customers_pk_range
+    kind: read
+    weight: 0
+    control: true
+    repeat: 4
+    sql: SELECT count(*), max(region) FROM bench.customers WHERE id BETWEEN %(lo)s AND %(lo)s + 50000
+    params:
+      lo: {int_range: [1, 150000], count: 2, seed: 41}

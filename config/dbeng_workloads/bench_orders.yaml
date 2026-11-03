@@ -4,7 +4,8 @@
 # Literal percent signs in SQL must be doubled (%%): statements are bound by psycopg.
 # `repeat` runs each parameter set several times per round, so every query has enough samples
 # for the rank test to have power.
-workload_version: 1
+# v2 (DB-02): adds a control query; the measured queries are unchanged from v1.
+workload_version: 2
 name: bench_orders
 
 queries:
@@ -41,3 +42,16 @@ queries:
     sql: >-
       INSERT INTO bench.orders (customer_id, status, amount, created_at, note)
       SELECT 1 + (g %% 200000), 'new', 10.00, now(), md5(g::text || 'w') FROM generate_series(1, 1000) g
+
+  # Control (DB-02): served by the customers primary key, so no candidate on bench.orders can help
+  # or hurt it, and control queries are never diagnosed for candidates. If its timing moves between
+  # baseline and after, the environment moved (policy measurement.max_control_drift). Weight 0: it
+  # does not count in the weighted workload.
+  - id: control_customers_pk_range
+    kind: read
+    weight: 0
+    control: true
+    repeat: 4
+    sql: SELECT count(*), max(region) FROM bench.customers WHERE id BETWEEN %(lo)s AND %(lo)s + 50000
+    params:
+      lo: {int_range: [1, 150000], count: 2, seed: 41}

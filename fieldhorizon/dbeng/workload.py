@@ -12,7 +12,16 @@ Measurement discipline (anti-"lucky run"):
 * every query runs once per parameter set per round, rounds rotate the
   query order, and all samples are kept in round order;
 * the server's own "Execution Time" from EXPLAIN ANALYZE is used, free of
-  client and network jitter, together with the plan that produced it.
+  client and network jitter, together with the plan that produced it;
+* optionally (policy measurement.client_timing) the plain statement is also
+  executed and timed client-side, reported beside -- never instead of -- the
+  server time;
+* control queries (`control: true`) are ones the candidate index cannot
+  serve: if they move, the environment drifted (policy max_control_drift).
+
+Side effects, stated rather than hidden: write queries are rolled back, yet
+each execution still leaves dead tuples and consumes identity values; the
+operation records state snapshots around every measurement to show them.
 """
 from __future__ import annotations
 
@@ -38,6 +47,7 @@ class WorkloadQuery:
     sql: str
     params: tuple[dict, ...]
     repeat: int = 1
+    control: bool = False
 
 
 @dataclass(frozen=True)
@@ -53,6 +63,9 @@ class Workload:
 
     def weights(self) -> dict[str, float]:
         return {q.query_id: q.weight for q in self.queries}
+
+    def controls(self) -> list[str]:
+        return [q.query_id for q in self.queries if q.control]
 
 
 def _expand_params(spec: object, query_id: str) -> tuple[dict, ...]:
@@ -89,7 +102,7 @@ def load_workload(path: Path) -> Workload:
         queries.append(WorkloadQuery(
             query_id=str(q["id"]), kind=kind, weight=float(q.get("weight", 1.0)),
             sql=str(q["sql"]).strip(), params=_expand_params(q.get("params"), str(q["id"])),
-            repeat=max(1, int(q.get("repeat", 1))),
+            repeat=max(1, int(q.get("repeat", 1))), control=bool(q.get("control", False)),
         ))
     if not queries:
         raise ValueError(f"{path}: no queries")
@@ -108,6 +121,7 @@ class Sample:
     planning_ms: float
     indexes_used: list[str]
     seq_scan_relations: list[str]
+    client_ms: float | None = None
 
 
 @dataclass
@@ -121,6 +135,13 @@ class Measurement:
         out: dict[str, list[float]] = {}
         for s in self.samples:
             out.setdefault(s.query_id, []).append(s.execution_ms)
+        return out
+
+    def client_series(self) -> dict[str, list[float]]:
+        out: dict[str, list[float]] = {}
+        for s in self.samples:
+            if s.client_ms is not None:
+                out.setdefault(s.query_id, []).append(s.client_ms)
         return out
 
     def index_usage(self, index_name: str) -> dict[str, float]:
@@ -146,7 +167,9 @@ def run_workload(
     warmup_runs: int,
     label: str,
     on_round: Callable[[int], None] | None = None,
+    client_timing: bool = False,
 ) -> Measurement:
+    """``on_round``, called before every round, is the operation's safe point: it may pause, or raise to stop."""
     measurement = Measurement(label=label, rounds=rounds)
     for query in workload.queries:
         for _ in range(warmup_runs):
@@ -154,10 +177,13 @@ def run_workload(
                 adapter.explain(query.sql, params, write=query.kind == KIND_WRITE)
     queries = list(workload.queries)
     for r in range(rounds):
+        if on_round:
+            on_round(r)
         order = queries[r % len(queries):] + queries[: r % len(queries)]
         for query in order:
             for i, params in [(i, p) for i, p in enumerate(query.params) for _ in range(query.repeat)]:
                 result = adapter.explain(query.sql, params, write=query.kind == KIND_WRITE)
+                client_ms = adapter.execute_timed(query.sql, params, write=query.kind == KIND_WRITE) if client_timing else None
                 if query.query_id not in measurement.first_plans:
                     measurement.first_plans[query.query_id] = result
                 measurement.samples.append(Sample(
@@ -165,7 +191,6 @@ def run_workload(
                     execution_ms=result.execution_ms, planning_ms=result.planning_ms,
                     indexes_used=list(result.indexes_used),
                     seq_scan_relations=[s["relation"] for s in result.seq_scans],
+                    client_ms=round(client_ms, 4) if client_ms is not None else None,
                 ))
-        if on_round:
-            on_round(r)
     return measurement

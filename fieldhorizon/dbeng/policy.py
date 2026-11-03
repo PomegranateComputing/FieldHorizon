@@ -66,22 +66,30 @@ class Policy:
     max_write_regression: float
     min_weighted_improvement: float
     min_index_usage: float
+    # --- policy v2 (absent from v1 files: v1 defaults keep v1 behaviour) ------------
+    lease_scope: str = "index_optimization"
+    max_authorization_age_seconds: float = 300.0
+    recovery_automatic: bool = False
+    orphan_wait_seconds: float = 60.0
+    client_timing: bool = False
+    max_control_drift: float | None = None
+    vacuum_before_phase: bool = False
 
     def describe(self) -> dict:
         return asdict(self)
 
 
-def load_policy(path: Path | None = None) -> Policy:
-    path = path or DEFAULT_POLICY_PATH
-    data = path.read_bytes()
+def policy_from_bytes(data: bytes, source: str) -> Policy:
     raw = yaml.safe_load(data) or {}
     a, c, e, b, acc = (raw.get(k, {}) for k in ("authority", "index_candidates", "execution", "benchmark", "acceptance"))
+    co, rec, me = (raw.get(k) or {} for k in ("coordination", "recovery", "measurement"))
     if b.get("baseline_rounds", 0) < 2 or b["baseline_rounds"] % 2:
         raise ValueError("benchmark.baseline_rounds must be an even number >= 2 (it is split for the A/A noise check)")
+    drift = me.get("max_control_drift")
     return Policy(
         version=int(raw["policy_version"]),
         sha256=hashlib.sha256(data).hexdigest(),
-        source=str(path),
+        source=source,
         write_environments=tuple(a["write_environments"]),
         require_instance_marker=bool(a["require_instance_marker"]),
         require_system_identifier=bool(a["require_system_identifier"]),
@@ -109,7 +117,19 @@ def load_policy(path: Path | None = None) -> Policy:
         max_write_regression=float(acc["max_write_regression"]),
         min_weighted_improvement=float(acc["min_weighted_improvement"]),
         min_index_usage=float(acc["min_index_usage"]),
+        lease_scope=str(co.get("lease_scope", "index_optimization")),
+        max_authorization_age_seconds=float(co.get("max_authorization_age_seconds", 300)),
+        recovery_automatic=bool(rec.get("automatic", False)),
+        orphan_wait_seconds=float(rec.get("orphan_wait_seconds", 60)),
+        client_timing=bool(me.get("client_timing", False)),
+        max_control_drift=float(drift) if drift is not None else None,
+        vacuum_before_phase=bool(me.get("vacuum_before_phase", False)),
     )
+
+
+def load_policy(path: Path | None = None) -> Policy:
+    path = path or DEFAULT_POLICY_PATH
+    return policy_from_bytes(path.read_bytes(), str(path))
 
 
 @dataclass
@@ -290,7 +310,7 @@ def evaluate_candidate(
         ev,
     ))
     checks.append(Check("operator_privilege", PASS if facts.get("operator_can_create_index") else FAIL,
-                        "operator is a member of the table owner role" if facts.get("operator_can_create_index")
+                        "operator can SET ROLE to the declared table owner" if facts.get("operator_can_create_index")
                         else f"operator cannot create indexes on {qualified} (owner {facts.get('owner')})", ev))
     longest = max((t.get("xact_seconds") or 0.0 for t in running_transactions), default=0.0)
     checks.append(Check("no_long_transactions", PASS if longest <= policy.max_transaction_seconds else FAIL,
@@ -329,6 +349,10 @@ def decide(
     target_queries: list[str],
     index_usage: dict[str, float],
     policy: Policy,
+    *,
+    controls: list[str] | None = None,
+    client_baseline: dict[str, list[float]] | None = None,
+    client_after: dict[str, list[float]] | None = None,
 ) -> Decision:
     """
     RETAIN only if every criterion passes; anything else REVERTs.
@@ -358,9 +382,16 @@ def decide(
             "p_faster": mann_whitney_less(now, before),
             "p_slower": mann_whitney_less(before, now),
             "index_usage": index_usage.get(qid),
+            "control": qid in (controls or []),
         }
+        cb, ca = (client_baseline or {}).get(qid), (client_after or {}).get(qid)
+        if cb and ca:
+            scb, sca = summarize(cb), summarize(ca)
+            # Reported beside the server time, never instead of it: it includes network and driver costs.
+            queries[qid]["client"] = {"baseline": asdict(scb), "after": asdict(sca),
+                                      "median_ratio": sca.median / scb.median if scb.median else float("inf")}
 
-    noisy = {q: round(v["aa_noise"], 4) for q, v in queries.items() if q in target_queries and v["aa_noise"] > policy.max_noise}
+    noisy ={q: round(v["aa_noise"], 4) for q, v in queries.items() if q in target_queries and v["aa_noise"] > policy.max_noise}
     criteria.append(Check(
         "baseline_noise_bounded", FAIL if noisy else PASS,
         f"A/A noise above {policy.max_noise:.0%}: {noisy}" if noisy
@@ -408,6 +439,21 @@ def decide(
         f"weighted workload {total_before:.3f} -> {total_after:.3f} ms-units (ratio {weighted_ratio:.3f}); "
         f"required <= {1 - policy.min_weighted_improvement:.2f}",
     ))
+    if policy.max_control_drift is not None:
+        # Control queries cannot be served by the new index: if THEY moved, the environment moved,
+        # and no before/after difference can be credited to the change.
+        drift = policy.max_control_drift
+        present = [q for q in (controls or []) if q in queries]
+        if not present:
+            criteria.append(Check("measurement_stable", FAIL, "the workload has no control query: drift cannot be bounded"))
+        else:
+            moved = {q: round(queries[q]["median_ratio"], 4) for q in present if abs(queries[q]["median_ratio"] - 1.0) > drift}
+            touched = [q for q in present if (queries[q]["index_usage"] or 0.0) > 0.0]
+            status = FAIL if moved or touched else PASS
+            detail = (f"control queries moved beyond {drift:.0%}: {moved}" if moved
+                      else f"control queries used the new index (not valid controls): {touched}" if touched
+                      else f"control queries {present} within {drift:.0%} of baseline")
+            criteria.append(Check("measurement_stable", status, detail))
     outcome = RETAIN if all(c.status == PASS for c in criteria) else REVERT
     return Decision(
         outcome=outcome, criteria=criteria, queries=queries,

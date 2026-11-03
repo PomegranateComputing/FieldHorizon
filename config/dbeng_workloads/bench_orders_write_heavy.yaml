@@ -2,7 +2,8 @@
 # A rare exact lookup by `note` (an md5 string) makes an index on note look attractive to the
 # advisor; but the workload is dominated by batch inserts, and every insert now has to maintain
 # a b-tree over random 32-character keys. The deterministic acceptance must catch that and revert.
-workload_version: 1
+# v2 (DB-02): adds a control query; the measured queries are unchanged from v1.
+workload_version: 2
 name: bench_orders_write_heavy
 
 queries:
@@ -26,3 +27,16 @@ queries:
     weight: 1
     repeat: 3
     sql: SELECT status, count(*), sum(amount) FROM bench.orders GROUP BY status
+
+  # Control (DB-02): served by the customers primary key, so no candidate on bench.orders can help
+  # or hurt it, and control queries are never diagnosed for candidates. If its timing moves between
+  # baseline and after, the environment moved (policy measurement.max_control_drift). Weight 0: it
+  # does not count in the weighted workload.
+  - id: control_customers_pk_range
+    kind: read
+    weight: 0
+    control: true
+    repeat: 4
+    sql: SELECT count(*), max(region) FROM bench.customers WHERE id BETWEEN %(lo)s AND %(lo)s + 50000
+    params:
+      lo: {int_range: [1, 150000], count: 2, seed: 41}
