@@ -142,13 +142,32 @@ def test_equality_selectivity_reads_pg_stats_conventions():
 
 
 # --- acceptance ---------------------------------------------------------------------------
-def _decide(baseline, after, roles=None, weights=None, usage=None):
-    roles = roles or {q: "read" for q in baseline}
-    weights = weights or {q: 1.0 for q in baseline}
-    return decide(baseline, after, roles, weights, ["target"], usage if usage is not None else {"target": 1.0}, POLICY)
-
-
 STABLE = [10.0 + 0.1 * (i % 5) for i in range(32)]
+CONTROL = [4.0 + 0.01 * (i % 3) for i in range(32)]
+
+
+def _decide(baseline, after, roles=None, weights=None, usage=None, control_after=None):
+    baseline = {**baseline, "control": CONTROL}
+    after = {**after, "control": control_after or CONTROL}
+    roles = roles or {q: "read" for q in baseline}
+    roles = {**roles, "control": "read"}
+    weights = weights or {q: 1.0 for q in baseline}
+    weights = {**weights, "control": 0.0}
+    usage = usage if usage is not None else {"target": 1.0}
+    return decide(baseline, after, roles, weights, ["target"], usage, POLICY, controls=["control"])
+
+
+def test_a_drifting_environment_is_not_credited():
+    d = _decide({"target": STABLE}, {"target": [1.0 + 0.01 * (i % 5) for i in range(32)]},
+                control_after=[6.0 + 0.01 * (i % 3) for i in range(32)])
+    assert d.outcome == REVERT
+    assert [c.status for c in d.criteria if c.name == "measurement_stable"] == [FAIL]
+
+
+def test_without_a_control_query_drift_cannot_be_bounded():
+    d = decide({"target": STABLE}, {"target": [1.0] * 32}, {"target": "read"}, {"target": 1.0}, ["target"], {"target": 1.0}, POLICY)
+    assert d.outcome == REVERT
+    assert [c.detail for c in d.criteria if c.name == "measurement_stable"] == ["the workload has no control query: drift cannot be bounded"]
 
 
 def test_a_large_consistent_improvement_is_retained():

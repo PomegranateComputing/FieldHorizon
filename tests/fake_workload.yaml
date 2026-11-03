@@ -1,0 +1,9 @@
+# The workload of tests/dbeng_fakes.make_workload(), as the file an operation archives with its evidence
+# (recomputation reads query ids, kinds, weights and controls from it).
+workload_version: 2
+name: fake
+queries:
+  - {id: lookup, kind: read, weight: 50, sql: "SELECT id FROM bench.orders WHERE customer_id = %(c)s"}
+  - {id: summary, kind: read, weight: 1, repeat: 2, sql: "SELECT status, count(*) FROM bench.orders GROUP BY status"}
+  - {id: insert, kind: write, weight: 1, repeat: 8, sql: "INSERT INTO bench.orders SELECT ..."}
+  - {id: control, kind: read, weight: 0, repeat: 2, control: true, sql: "SELECT count(*) FROM bench.customers WHERE id BETWEEN %(lo)s AND %(lo)s + 50000"}
