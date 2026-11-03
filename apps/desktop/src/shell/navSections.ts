@@ -26,6 +26,7 @@ export const NAV_SECTIONS: NavSection[] = [
   { id: "contradictions", label: "CONTRADICTIONS", path: "/contradictions", capabilityKey: "contradictions" },
   { id: "evaluation", label: "EVALUATION", path: "/evaluation" },
   { id: "models", label: "MODELS", path: "/models", capabilityKey: "registries" },
+  { id: "database", label: "DATABASE", path: "/database" },
   { id: "system", label: "SYSTEM", path: "/system" },
   { id: "settings", label: "SETTINGS", path: "/settings" },
 ];

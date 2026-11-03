@@ -302,8 +302,11 @@ def _error_response(status_code: int, code: str, title: str, detail: str, remedi
     )
 
 
-def create_app(cfg: AppConfig, token: str) -> FastAPI:
+def create_app(cfg: AppConfig, token: str, db_adapter_factory=None) -> FastAPI:
     """
+    ``db_adapter_factory`` (TargetConfig -> adapter) replaces the real
+    database adapter for the /db routes; tests inject an in-memory one.
+
     Local-only platform API (Civilization Engine phase): read-mostly,
     binds to 127.0.0.1 only (enforced by the caller, run_server, which
     hardcodes HOST -- never a request parameter), bearer-token authenticated
@@ -1021,6 +1024,11 @@ def create_app(cfg: AppConfig, token: str) -> FastAPI:
             retrieval_latency_p50_ms=metrics.percentile(0.50),
             retrieval_latency_p95_ms=metrics.percentile(0.95),
         )
+
+    # DB engineering (fieldhorizon.dbeng): its own routes under /db, same token.
+    from .dbeng.api import register_db_routes
+
+    register_db_routes(app, cfg, require_token, open_adapter=db_adapter_factory)
 
     if UI_DIST_DIR.is_dir():
         app.mount("/ui", _SPAStaticFiles(directory=UI_DIST_DIR, html=True), name="ui")

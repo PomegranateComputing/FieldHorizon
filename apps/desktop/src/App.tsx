@@ -7,6 +7,7 @@ import { StartupScreen } from "./connection/StartupScreen";
 import { CommandPage } from "./pages/CommandPage";
 import { CorpusPage } from "./pages/CorpusPage";
 import { CyclesPage } from "./pages/CyclesPage";
+import { DatabasePage } from "./pages/DatabasePage";
 import { ContradictionsPage } from "./pages/ContradictionsPage";
 import { CouncilsPage } from "./pages/CouncilsPage";
 import { DreamsPage } from "./pages/DreamsPage";
@@ -62,6 +63,7 @@ const SCREEN_COMPONENTS: Partial<Record<string, React.ComponentType>> = {
   semantics: SemanticsPage,
   settings: SettingsPage,
   system: SystemPage,
+  database: DatabasePage,
   weather: WeatherPage,
 };
 

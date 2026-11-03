@@ -11,6 +11,15 @@ import type {
   CycleDetailResponse,
   CycleEvaluationResponse,
   CycleEvidenceResponse,
+  DbOperationDetailResponse,
+  DbOperationsResponse,
+  DbOptimizeRequest,
+  DbOptimizeResponse,
+  DbRecoverResponse,
+  DbSnapshotModel,
+  DbSnapshotsResponse,
+  DbTargetsResponse,
+  DbWorkloadsResponse,
   DreamRunEventsResponse,
   DreamRunsResponse,
   ErrorResponse,
@@ -66,7 +75,8 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+/** Authenticated request with the shared error handling; the body is left to the caller (JSON, text or a download). */
+export async function apiFetchResponse(path: string, init?: RequestInit): Promise<Response> {
   const token = getStoredToken();
   const headers = new Headers(init?.headers);
   if (token) {
@@ -83,7 +93,65 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
       body?.detail ?? "",
     );
   }
-  return (await response.json()) as T;
+  return response;
+}
+
+export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+  return (await (await apiFetchResponse(path, init)).json()) as T;
+}
+
+// --- DB engineering (/db) ----------------------------------------------------------
+
+export function getDbTargets(check = false): Promise<DbTargetsResponse> {
+  return apiFetch<DbTargetsResponse>(`/db/targets?check=${check}`);
+}
+
+export function getDbWorkloads(): Promise<DbWorkloadsResponse> {
+  return apiFetch<DbWorkloadsResponse>("/db/workloads");
+}
+
+export function getDbSnapshots(target: string): Promise<DbSnapshotsResponse> {
+  return apiFetch<DbSnapshotsResponse>(`/db/snapshots?target=${encodeURIComponent(target)}&limit=5`);
+}
+
+export function postDbDiscover(target: string): Promise<DbSnapshotModel> {
+  return apiFetch<DbSnapshotModel>("/db/discover", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ target }),
+  });
+}
+
+export function getDbOperations(): Promise<DbOperationsResponse> {
+  return apiFetch<DbOperationsResponse>("/db/operations?limit=20");
+}
+
+export function getDbOperation(operationId: string): Promise<DbOperationDetailResponse> {
+  return apiFetch<DbOperationDetailResponse>(`/db/operations/${encodeURIComponent(operationId)}`);
+}
+
+export function postDbOperation(body: DbOptimizeRequest): Promise<DbOptimizeResponse> {
+  return apiFetch<DbOptimizeResponse>("/db/operations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
+
+export function postDbRecover(target: string): Promise<DbRecoverResponse> {
+  return apiFetch<DbRecoverResponse>("/db/recover", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ target }),
+  });
+}
+
+export async function getDbOperationReport(operationId: string): Promise<string> {
+  return (await apiFetchResponse(`/db/operations/${encodeURIComponent(operationId)}/report`)).text();
+}
+
+export async function getDbOperationEvidence(operationId: string): Promise<Blob> {
+  return (await apiFetchResponse(`/db/operations/${encodeURIComponent(operationId)}/evidence`)).blob();
 }
 
 export function getHealth(): Promise<HealthResponse> {

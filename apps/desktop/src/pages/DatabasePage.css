@@ -1,0 +1,88 @@
+.db-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 1100px;
+}
+
+.db-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  margin-top: 0.5rem;
+}
+.db-table th,
+.db-table td {
+  text-align: left;
+  padding: 0.2rem 0.5rem;
+  border-bottom: 1px solid var(--border-subtle, #2a2a2a);
+  vertical-align: top;
+}
+.db-table th {
+  color: var(--text-meta);
+  font-weight: normal;
+}
+.db-table tbody tr {
+  cursor: default;
+}
+.database-page .db-panel:nth-of-type(4) tbody tr {
+  cursor: pointer;
+}
+.db-row--selected td {
+  background: var(--surface-raised, #1c1c1c);
+}
+.db-cell-wrap {
+  word-break: break-word;
+  color: var(--text-secondary);
+}
+
+.db-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.78rem;
+}
+
+.db-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.db-candidates {
+  width: 100%;
+  min-height: 3rem;
+  font-size: 0.78rem;
+}
+
+.db-note {
+  font-size: 0.75rem;
+  color: var(--text-meta);
+}
+
+.db-subtitle {
+  margin-top: 1rem;
+}
+
+.db-status {
+  font-weight: bold;
+}
+.db-status--ok {
+  color: var(--status-ok, #6fcf97);
+}
+.db-status--warning {
+  color: var(--status-warning, #f2c94c);
+}
+.db-status--danger {
+  color: var(--status-danger, #eb5757);
+}
+.db-status--running {
+  color: var(--status-running, #56ccf2);
+}
+.db-status--dim {
+  color: var(--text-meta);
+}

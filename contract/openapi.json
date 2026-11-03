@@ -841,6 +841,513 @@
         "title": "CycleSourceModel",
         "type": "object"
       },
+      "DbDiscoverRequest": {
+        "properties": {
+          "target": {
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target"
+        ],
+        "title": "DbDiscoverRequest",
+        "type": "object"
+      },
+      "DbOperationDetailResponse": {
+        "properties": {
+          "artifacts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Artifacts",
+            "type": "array"
+          },
+          "candidates": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "changes": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Changes",
+            "type": "array"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "operation": {
+            "$ref": "#/components/schemas/DbOperationModel"
+          },
+          "request": {
+            "additionalProperties": true,
+            "title": "Request",
+            "type": "object"
+          },
+          "steps": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Steps",
+            "type": "array"
+          },
+          "verdicts": {
+            "additionalProperties": true,
+            "title": "Verdicts",
+            "type": "object"
+          }
+        },
+        "required": [
+          "operation",
+          "request",
+          "decision",
+          "steps",
+          "changes",
+          "artifacts",
+          "candidates",
+          "verdicts"
+        ],
+        "title": "DbOperationDetailResponse",
+        "type": "object"
+      },
+      "DbOperationModel": {
+        "properties": {
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "started_at": {
+            "title": "Started At",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation_id",
+          "kind",
+          "target",
+          "status",
+          "state",
+          "message",
+          "started_at",
+          "finished_at"
+        ],
+        "title": "DbOperationModel",
+        "type": "object"
+      },
+      "DbOperationsResponse": {
+        "properties": {
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/DbOperationModel"
+            },
+            "title": "Operations",
+            "type": "array"
+          },
+          "running": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Running"
+          }
+        },
+        "required": [
+          "operations",
+          "running"
+        ],
+        "title": "DbOperationsResponse",
+        "type": "object"
+      },
+      "DbOptimizeRequest": {
+        "properties": {
+          "candidates": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Candidates",
+            "type": "array"
+          },
+          "llm_model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Model"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          },
+          "use_llm": {
+            "default": false,
+            "title": "Use Llm",
+            "type": "boolean"
+          },
+          "workload": {
+            "default": "bench_orders.yaml",
+            "title": "Workload",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target"
+        ],
+        "title": "DbOptimizeRequest",
+        "type": "object"
+      },
+      "DbOptimizeResponse": {
+        "properties": {
+          "operation_id": {
+            "title": "Operation Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation_id",
+          "status"
+        ],
+        "title": "DbOptimizeResponse",
+        "type": "object"
+      },
+      "DbRecoverRequest": {
+        "properties": {
+          "target": {
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target"
+        ],
+        "title": "DbRecoverRequest",
+        "type": "object"
+      },
+      "DbRecoverResponse": {
+        "properties": {
+          "actions": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "target",
+          "actions"
+        ],
+        "title": "DbRecoverResponse",
+        "type": "object"
+      },
+      "DbSnapshotModel": {
+        "properties": {
+          "captured_at": {
+            "title": "Captured At",
+            "type": "string"
+          },
+          "server_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Server Version"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "summary": {
+            "additionalProperties": true,
+            "title": "Summary",
+            "type": "object"
+          },
+          "system_identifier": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "System Identifier"
+          },
+          "target": {
+            "title": "Target",
+            "type": "string"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "target",
+          "captured_at",
+          "server_version",
+          "system_identifier",
+          "sha256",
+          "summary"
+        ],
+        "title": "DbSnapshotModel",
+        "type": "object"
+      },
+      "DbSnapshotsResponse": {
+        "properties": {
+          "snapshots": {
+            "items": {
+              "$ref": "#/components/schemas/DbSnapshotModel"
+            },
+            "title": "Snapshots",
+            "type": "array"
+          }
+        },
+        "required": [
+          "snapshots"
+        ],
+        "title": "DbSnapshotsResponse",
+        "type": "object"
+      },
+      "DbTargetModel": {
+        "properties": {
+          "dbname": {
+            "title": "Dbname",
+            "type": "string"
+          },
+          "detail": {
+            "default": "",
+            "title": "Detail",
+            "type": "string"
+          },
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "host": {
+            "title": "Host",
+            "type": "string"
+          },
+          "identity_matches": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Identity Matches"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "observer_user": {
+            "title": "Observer User",
+            "type": "string"
+          },
+          "operator_user": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operator User"
+          },
+          "port": {
+            "title": "Port",
+            "type": "integer"
+          },
+          "reachable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reachable"
+          },
+          "server_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Server Version"
+          },
+          "writable": {
+            "title": "Writable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "engine",
+          "host",
+          "port",
+          "dbname",
+          "environment",
+          "observer_user",
+          "operator_user",
+          "writable"
+        ],
+        "title": "DbTargetModel",
+        "type": "object"
+      },
+      "DbTargetsResponse": {
+        "properties": {
+          "targets": {
+            "items": {
+              "$ref": "#/components/schemas/DbTargetModel"
+            },
+            "title": "Targets",
+            "type": "array"
+          },
+          "targets_file": {
+            "title": "Targets File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "targets",
+          "targets_file"
+        ],
+        "title": "DbTargetsResponse",
+        "type": "object"
+      },
+      "DbWorkloadModel": {
+        "properties": {
+          "file": {
+            "title": "File",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "queries": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Queries",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "file",
+          "queries"
+        ],
+        "title": "DbWorkloadModel",
+        "type": "object"
+      },
+      "DbWorkloadsResponse": {
+        "properties": {
+          "workloads": {
+            "items": {
+              "$ref": "#/components/schemas/DbWorkloadModel"
+            },
+            "title": "Workloads",
+            "type": "array"
+          }
+        },
+        "required": [
+          "workloads"
+        ],
+        "title": "DbWorkloadsResponse",
+        "type": "object"
+      },
       "DoctrineModel": {
         "properties": {
           "fragment": {
@@ -3853,6 +4360,437 @@
           }
         ],
         "summary": "Get Cycle Evidence"
+      }
+    },
+    "/db/discover": {
+      "post": {
+        "operationId": "post_db_discover_db_discover_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DbDiscoverRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbSnapshotModel"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Post Db Discover"
+      }
+    },
+    "/db/operations": {
+      "get": {
+        "operationId": "get_db_operations_db_operations_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbOperationsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operations"
+      },
+      "post": {
+        "operationId": "post_db_operation_db_operations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DbOptimizeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbOptimizeResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Post Db Operation"
+      }
+    },
+    "/db/operations/{operation_id}": {
+      "get": {
+        "operationId": "get_db_operation_db_operations__operation_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbOperationDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation"
+      }
+    },
+    "/db/operations/{operation_id}/evidence": {
+      "get": {
+        "operationId": "get_db_operation_evidence_db_operations__operation_id__evidence_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation Evidence"
+      }
+    },
+    "/db/operations/{operation_id}/report": {
+      "get": {
+        "operationId": "get_db_operation_report_db_operations__operation_id__report_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "operation_id",
+            "required": true,
+            "schema": {
+              "title": "Operation Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Operation Report"
+      }
+    },
+    "/db/recover": {
+      "post": {
+        "operationId": "post_db_recover_db_recover_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DbRecoverRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbRecoverResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Post Db Recover"
+      }
+    },
+    "/db/snapshots": {
+      "get": {
+        "operationId": "get_db_snapshots_db_snapshots_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "target",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbSnapshotsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Snapshots"
+      }
+    },
+    "/db/targets": {
+      "get": {
+        "operationId": "get_db_targets_db_targets_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "check",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Check",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbTargetsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Targets"
+      }
+    },
+    "/db/workloads": {
+      "get": {
+        "operationId": "get_db_workloads_db_workloads_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DbWorkloadsResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "Get Db Workloads"
       }
     },
     "/dreams": {
