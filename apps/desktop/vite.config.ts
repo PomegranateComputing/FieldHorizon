@@ -51,6 +51,11 @@ const apiProxy: Record<string, ProxyOptions> = Object.fromEntries(
 export default defineConfig(async () => ({
   plugins: [react()],
 
+  // Relative asset URLs: one dist/ is served both at the root (Tauri) and
+  // under /ui (fieldhorizon/server.py's static mount). The default "/" base
+  // emitted /assets/... URLs, which 404 under /ui and left a blank page.
+  base: "./",
+
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent Vite from obscuring rust errors
