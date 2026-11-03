@@ -70,4 +70,4 @@ sources:
     path: data/manifestos/test_manifesto.txt
     domain_hints: []
     weight: 0.1
-    notes: "Single-sentence test fixture, not real corpus content -- low weight reflects that.
+    notes: "Single-sentence test fixture, not real corpus content -- low weight reflects that."
