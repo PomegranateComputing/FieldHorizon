@@ -1,0 +1,28 @@
+# Write-dominated workload for the regression scenario.
+# A rare exact lookup by `note` (an md5 string) makes an index on note look attractive to the
+# advisor; but the workload is dominated by batch inserts, and every insert now has to maintain
+# a b-tree over random 32-character keys. The deterministic acceptance must catch that and revert.
+workload_version: 1
+name: bench_orders_write_heavy
+
+queries:
+  - id: order_by_note
+    kind: read
+    weight: 1
+    sql: SELECT id, status FROM bench.orders WHERE note = md5(%(n)s::text)
+    params:
+      n: {int_range: [1, 2000000], count: 6, seed: 23}
+
+  - id: order_insert_batch
+    kind: write
+    weight: 400
+    repeat: 8
+    sql: >-
+      INSERT INTO bench.orders (customer_id, status, amount, created_at, note)
+      SELECT 1 + (g %% 200000), 'new', 10.00, now(), md5(random()::text) FROM generate_series(1, 4000) g
+
+  - id: orders_status_summary
+    kind: read
+    weight: 1
+    repeat: 3
+    sql: SELECT status, count(*), sum(amount) FROM bench.orders GROUP BY status

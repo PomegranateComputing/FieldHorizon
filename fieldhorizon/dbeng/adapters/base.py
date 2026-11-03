@@ -1,0 +1,39 @@
+"""
+The engine-neutral contract every database adapter implements.
+
+Read methods use the target's *observer* identity (read-only by role
+default and by session setting). Write methods use the *operator* identity
+and are only ever reached after policy.authorize_write has passed. A SQL
+Server adapter would implement exactly this protocol; nothing above the
+adapter layer knows which engine it is talking to.
+"""
+from __future__ import annotations
+
+from typing import Protocol
+
+from ..model import ExplainResult, IndexSpec, IndexState
+from ..targets import TargetConfig
+
+
+class DatabaseAdapter(Protocol):
+    engine: str
+    target: TargetConfig
+
+    # --- observation (observer identity) ---------------------------------
+    def identity(self) -> dict: ...
+    def discover(self) -> dict: ...
+    def explain(self, sql: str, params: dict | None = None, *, write: bool = False) -> ExplainResult: ...
+    def table_facts(self, schema: str, table: str) -> dict: ...
+    def column_statistics(self, schema: str, table: str, columns: list[str]) -> dict[str, dict]: ...
+    def running_transactions(self) -> list[dict]: ...
+    def index_state(self, schema: str, name: str) -> IndexState | None: ...
+    def fieldhorizon_indexes(self) -> list[IndexState]: ...
+
+    # --- change (operator identity) --------------------------------------
+    def create_index_concurrently(
+        self, spec: IndexSpec, marker: dict, *, lock_timeout_ms: int, statement_timeout_ms: int
+    ) -> IndexState: ...
+    def drop_index_concurrently(self, schema: str, name: str, *, lock_timeout_ms: int) -> bool: ...
+    def analyze_table(self, schema: str, table: str) -> None: ...
+
+    def close(self) -> None: ...

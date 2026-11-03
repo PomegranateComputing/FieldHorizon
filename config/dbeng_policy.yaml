@@ -1,0 +1,56 @@
+# Field Horizon DB engineering -- deterministic policy (fieldhorizon/dbeng/policy.py).
+#
+# This file is the whole of the system's authority. An LLM agent can propose
+# a candidate or object to one; it cannot grant, deny, or declare success.
+# Every operation records the sha256 of this file in its journal.
+policy_version: 1
+
+authority:
+  # Writes are permitted only against targets declared in these environments,
+  # and only when the live server proves it is that target (instance marker
+  # written by the bench setup, and pg_control_system().system_identifier).
+  write_environments: [isolated_test]
+  require_instance_marker: true
+  require_system_identifier: true
+  allowed_operations: [create_index_concurrently, drop_own_index_concurrently, analyze_table]
+
+index_candidates:
+  methods: [btree]
+  max_columns: 3
+  forbidden_schemas: [pg_catalog, information_schema, pg_toast, fieldhorizon_meta]
+  # Tables no autonomous operation may index, whatever the benefit.
+  protected_tables: [bench.audit_log]
+  max_indexes_per_table: 8
+  min_table_rows: 10000
+  # An equality key matching more than this fraction of rows is a poor
+  # b-tree key: the planner will (rightly) prefer a sequential scan.
+  max_equality_selectivity: 0.05
+  max_index_bytes: 1073741824          # 1 GiB
+  min_free_disk_multiple: 3.0          # free space >= 3 x estimated index size
+  # CREATE INDEX CONCURRENTLY waits for every older transaction; a long one
+  # stalls it while holding a lock queue position.
+  max_transaction_seconds: 60
+  # Anything the checks cannot verify blocks execution.
+  block_on_unverified: true
+
+execution:
+  lock_timeout_ms: 5000
+  statement_timeout_ms: 600000
+
+benchmark:
+  warmup_runs: 2
+  # Baseline rounds are split in two halves to measure the noise floor
+  # (an A/A comparison) before any change is judged against it.
+  baseline_rounds: 4
+  after_rounds: 4
+
+acceptance:
+  min_target_improvement: 0.30         # target queries' median at least 30% faster
+  alpha: 0.01                          # one-sided Mann-Whitney U
+  max_noise: 0.15                      # A/A baseline halves must agree within 15%
+  max_query_regression: 0.10           # no other read query significantly slower by more than 10%
+  # Writes pay for every index by construction (each insert maintains it). That cost is bounded
+  # here, and the weighted-workload criterion decides whether the read gain is worth it.
+  max_write_regression: 0.30
+  min_weighted_improvement: 0.05       # weighted workload at least 5% faster overall
+  min_index_usage: 0.9                 # target-query plans after the change must use the new index

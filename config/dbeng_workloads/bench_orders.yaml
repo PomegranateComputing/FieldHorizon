@@ -1,0 +1,43 @@
+# Read-dominated order-lookup workload for the bench scenario (fieldhorizon/dbeng/bench.py).
+# The weight is the relative execution frequency used for the weighted-workload criterion.
+# Parameters are generated from fixed seeds, so before and after run identical statements.
+# Literal percent signs in SQL must be doubled (%%): statements are bound by psycopg.
+# `repeat` runs each parameter set several times per round, so every query has enough samples
+# for the rank test to have power.
+workload_version: 1
+name: bench_orders
+
+queries:
+  # The deliberately inefficient pattern: orders for one customer, with no index on customer_id.
+  - id: orders_by_customer
+    kind: read
+    weight: 50
+    sql: SELECT id, status, amount FROM bench.orders WHERE customer_id = %(customer_id)s
+    params:
+      customer_id: {int_range: [1, 200000], count: 8, seed: 11}
+
+  # Low-selectivity filter (8 regions, ~12.5% each): a sequential scan is the right plan.
+  - id: customers_by_region
+    kind: read
+    weight: 5
+    repeat: 4
+    sql: SELECT count(*) FROM bench.customers WHERE region = %(region)s
+    params:
+      - {region: north}
+      - {region: islands}
+
+  # Whole-table aggregate: must not regress.
+  - id: orders_status_summary
+    kind: read
+    weight: 1
+    repeat: 3
+    sql: SELECT status, count(*), sum(amount) FROM bench.orders GROUP BY status
+
+  # Writes pay for every index; measured inside a rolled-back transaction.
+  - id: order_insert_batch
+    kind: write
+    weight: 2
+    repeat: 8
+    sql: >-
+      INSERT INTO bench.orders (customer_id, status, amount, created_at, note)
+      SELECT 1 + (g %% 200000), 'new', 10.00, now(), md5(g::text || 'w') FROM generate_series(1, 1000) g

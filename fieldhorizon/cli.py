@@ -1411,6 +1411,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     s.set_defaults(func=cmd_council)
 
+    # DB engineering (fieldhorizon.dbeng). Imported here so the doctrine
+    # commands never pay for, or depend on, the database tooling.
+    from .dbeng.cli import register as register_dbeng
+
+    register_dbeng(sub)
+
     return p
 
 
