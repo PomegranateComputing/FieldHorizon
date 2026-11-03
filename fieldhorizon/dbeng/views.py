@@ -13,6 +13,7 @@ from typing import Any
 from ..config import AppConfig
 from . import status as st
 from .journal import Journal
+from .procs import pid_alive
 
 CONTROLS_BY_STATUS = {
     st.RUNNING: ["pause", "cancel"],
@@ -31,8 +32,18 @@ def _artifact_json(journal: Journal, operation_id: str, name: str) -> Any:
     return None
 
 
+def is_interrupted(record, runtime: dict) -> bool:
+    """
+    Unfinished in the journal, but the process that ran it is gone (crash, kill, power loss): it will
+    never finish by itself, so it is shown as interrupted -- never as running -- until recovery
+    closes it. A process on another host cannot be checked and is not called interrupted.
+    """
+    return record.finished_at is None and pid_alive(runtime.get("holder_pid"), runtime.get("holder_host")) is False
+
+
 def operation_summary(journal: Journal, record) -> dict:
     runtime = journal.runtime(record.operation_id) or {}
+    interrupted = is_interrupted(record, runtime)
     decision = record.decision or {}
     candidate = decision.get("candidate") or (record.request or {}).get("candidate")
     return {
@@ -45,7 +56,8 @@ def operation_summary(journal: Journal, record) -> dict:
         "message": record.message,
         "started_at": record.started_at,
         "finished_at": record.finished_at,
-        "live": record.finished_at is None,
+        "live": record.finished_at is None and not interrupted,
+        "interrupted": interrupted,
         "workload": Path(str((record.request or {}).get("workload_path", ""))).stem or None,
         "candidate": candidate.get("key") if isinstance(candidate, dict) else None,
         "outcome": decision.get("outcome"),
@@ -91,14 +103,14 @@ def overview(service) -> dict:
     _, recent = journal.query(kind="index_optimization", limit=12)
     _, recoveries = journal.query(kind="recovery", limit=6)
     _, last50 = journal.query(limit=50)
-    live_ops = [r for r in last50 if r.finished_at is None]
+    summaries = [operation_summary(journal, r) for r in last50]
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "policy": {"version": policy.version, "sha256": policy.sha256, "source": Path(policy.source).name,
                    "recovery_automatic": policy.recovery_automatic, "max_authorization_age_seconds": policy.max_authorization_age_seconds,
                    "orphan_wait_seconds": policy.orphan_wait_seconds},
         "targets": [target_card(service, t) for t in targets.values()],
-        "running": [operation_summary(journal, r) for r in live_ops],
+        "running": [s for s in summaries if s["live"]],
         "recent": [operation_summary(journal, r) for r in recent],
         "recoveries": [operation_summary(journal, r) for r in recoveries],
         "counts": dict(Counter(r.status for r in last50 if r.kind == "index_optimization")),
@@ -122,7 +134,7 @@ def operation_view(cfg: AppConfig, operation_id: str) -> dict | None:
         "operation": summary,
         "request": {k: v for k, v in (record.request or {}).items() if k not in ("fault_after",)},
         "runtime": journal.runtime(operation_id),
-        "controls_available": CONTROLS_BY_STATUS.get(record.status, []) if record.finished_at is None and record.kind == "index_optimization" else [],
+        "controls_available": CONTROLS_BY_STATUS.get(record.status, []) if summary["live"] and record.kind == "index_optimization" else [],
         "timeline": journal.steps(operation_id),
         "controls": journal.controls(operation_id),
         "changes": journal.changes(operation_id),

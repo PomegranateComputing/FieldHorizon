@@ -1752,6 +1752,11 @@ export interface components {
             cause: string | null;
             /** Finished At */
             finished_at: string | null;
+            /**
+             * Interrupted
+             * @default false
+             */
+            interrupted: boolean;
             /** Kind */
             kind: string;
             /** Lease Token */

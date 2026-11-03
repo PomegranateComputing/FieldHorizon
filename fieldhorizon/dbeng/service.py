@@ -195,6 +195,12 @@ class DbService:
             raise ServiceError(409, "operation_finished", f"{operation_id} already ended with {record.status}; nothing to {action}")
         if record.kind != "index_optimization":
             raise ServiceError(409, "not_controllable", f"{operation_id} is a {record.kind}; only optimizations can be paused or cancelled")
+        from .views import is_interrupted
+
+        if is_interrupted(record, self.journal.runtime(operation_id) or {}):
+            # Nobody would ever read the request: the process that ran it is gone.
+            raise ServiceError(409, "operation_interrupted",
+                               f"{operation_id} was interrupted (its process is gone); recovery closes it, not a control")
         if action == "pause" and record.status == st.PAUSED:
             raise ServiceError(409, "already_paused", f"{operation_id} is already paused")
         if action == "resume" and record.status != st.PAUSED:

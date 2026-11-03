@@ -221,3 +221,21 @@ def test_shutdown_is_refused_while_an_operation_runs_unless_forced(env):
     assert forced["cancel_requested"] == [op]
     gate.open()
     assert wait_finished(c, op)["operation"]["status"] == "CANCELLED"
+
+
+def test_an_operation_whose_process_died_is_interrupted_not_running_and_cannot_be_controlled(env):
+    import socket
+
+    from fieldhorizon.dbeng.journal import Journal
+
+    c, adapter, gate, cfg = env
+    journal = Journal(cfg)
+    journal.create("OP-dead", "index_optimization", "fake", {"workload_path": "x.yaml"}, "0" * 64, None)
+    # A PID that does not exist on this host: the process that ran it is gone.
+    journal.set_runtime("OP-dead", holder_host=socket.gethostname(), holder_pid=2_000_000_000)
+    view = c.get("/db/operations/OP-dead/view", headers=AUTH).json()
+    assert view["operation"]["interrupted"] is True and view["operation"]["live"] is False
+    assert view["controls_available"] == []
+    assert all(op["operation_id"] != "OP-dead" for op in c.get("/db/overview", headers=AUTH).json()["running"])
+    refused = c.post("/db/operations/OP-dead/control", json={"action": "cancel"}, headers=AUTH)
+    assert refused.status_code == 409 and refused.json()["code"] == "DB_OPERATION_INTERRUPTED"

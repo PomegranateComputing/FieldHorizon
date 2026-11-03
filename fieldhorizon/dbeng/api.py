@@ -151,6 +151,7 @@ class DbOperationSummary(BaseModel):
     started_at: str
     finished_at: str | None
     live: bool
+    interrupted: bool = False
     workload: str | None
     candidate: str | None
     outcome: str | None
@@ -322,6 +323,7 @@ SERVICE_ERRORS = {
     "already_paused": ("Already paused", "Resume or cancel it."),
     "not_paused": ("Not paused", "Only a paused operation can be resumed."),
     "already_cancelling": ("Already cancelling", "The cancel takes effect at the next safe point."),
+    "operation_interrupted": ("Operation interrupted", "Its process is gone: run a recovery (incident view, or `field-horizon db recover`)."),
 }
 
 

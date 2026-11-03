@@ -1297,6 +1297,11 @@
             ],
             "title": "Finished At"
           },
+          "interrupted": {
+            "default": false,
+            "title": "Interrupted",
+            "type": "boolean"
+          },
           "kind": {
             "title": "Kind",
             "type": "string"
