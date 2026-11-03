@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import sys
 import threading
 import time
 from pathlib import Path
 from unittest.mock import Mock, patch
 
+import pytest
 from fastapi.testclient import TestClient
 
 import fieldhorizon
@@ -672,6 +674,7 @@ def test_host_constant_is_loopback():
     assert HOST == "127.0.0.1"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="NTFS has no POSIX mode bits; chmod(0o600) cannot be observed")
 def test_load_or_create_token_writes_a_new_token_with_restrictive_permissions(tmp_path):
     token_file = tmp_path / ".fh_token"
     token = load_or_create_token(token_file)

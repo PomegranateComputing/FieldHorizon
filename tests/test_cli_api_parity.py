@@ -49,12 +49,12 @@ def _write_config_yaml(tmp_path: Path) -> Path:
     config_path.write_text(
         f"""
 paths:
-  database: "{tmp_path / 'data.sqlite3'}"
-  books: "{tmp_path / 'books'}"
-  json_corpus: "{tmp_path / 'json_corpus'}"
-  outputs: "{tmp_path / 'outputs'}"
-  logs: "{tmp_path / 'logs'}"
-  manifestos: "{tmp_path / 'manifestos'}"
+  database: "{(tmp_path / 'data.sqlite3').as_posix()}"
+  books: "{(tmp_path / 'books').as_posix()}"
+  json_corpus: "{(tmp_path / 'json_corpus').as_posix()}"
+  outputs: "{(tmp_path / 'outputs').as_posix()}"
+  logs: "{(tmp_path / 'logs').as_posix()}"
+  manifestos: "{(tmp_path / 'manifestos').as_posix()}"
 """,
         encoding="utf-8",
     )
