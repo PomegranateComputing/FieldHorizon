@@ -7,9 +7,10 @@ sous `_qualification/db02/` ; ce qui n'est pas démontré est dit tel quel.
 > **Statut : version expérimentale.** DB-02 n'a été validé que sur une instance PostgreSQL 18.6
 > isolée, avec un laboratoire de données synthétiques, sur un seul poste Windows. Ce n'est **pas** un
 > outil prêt pour une exploitation autonome en production, et il ne doit pas être pointé sur une base
-> de production. Limites ouvertes (§3, §6 à §8) : pas d'identité Windows distincte pour l'exécuteur ;
-> résolutions et mises à l'échelle validées seulement par émulation dans le navigateur ; 124 erreurs
-> mypy historiques dans les tests hors DB-02 ; pas d'installeur Windows.
+> de production. Limites ouvertes (§3, §5.1, §6 à §8) : pas d'identité Windows distincte pour
+> l'exécuteur ; résolutions et mises à l'échelle validées seulement par émulation dans le navigateur ;
+> erreurs mypy historiques dans des tests hors DB-02 (annoncées « 124 », recomptées à 118 : §5.1) ;
+> pas d'installeur Windows.
 
 Branche `db02-autonomous-operations` (depuis `windows-baseline-db01` @ `4242f6d`), publiée sur
 `origin` le 3 novembre 2026 avec l'autorisation explicite du propriétaire ; aucune fusion dans `main`,
@@ -96,18 +97,26 @@ morts, valeurs d'identité consommées), maintenance observée.
 
 | Suite | Résultat | Preuve |
 |---|---|---|
-| Python complète (unitaires, API, CLI) | **1 398 réussis, 16 ignorés** (les tests PostgreSQL sans variables), 1 min 32 s | `logs/E07_pytest_full_suite_final.log` |
-| PostgreSQL réel (15 tests, instance épinglée) | **15/15**, deux fois (avant et après les dernières corrections) | `logs/E04_pytest_postgres_full.log`, `logs/E08_pytest_postgres_final.log` |
+| Python complète (unitaires, API, CLI) | **1 398 réussis, 16 ignorés** (les 15 tests PostgreSQL sans variables, et un test POSIX `chmod` sans objet sur NTFS), 1 min 32 s ; **1 399** après le test ajouté au §5.4, avec la commande de la CI (`pytest -q`) | `logs/E07_pytest_full_suite_final.log` ; CI (§5.4) |
+| PostgreSQL réel (15 tests) | **15/15** sur ce poste (instance épinglée), deux fois ; **15/15 sous Linux** à chaque exécution de la CI (PostgreSQL 18 en conteneur) | `logs/E04_pytest_postgres_full.log`, `logs/E08_pytest_postgres_final.log` ; CI (§5.4) |
 | dbeng en mémoire (opération, API, unités) | 91 réussis | même suite |
 | Interface (Vitest) | **59/59** (15 fichiers) | `npx vitest run` |
-| Types (mypy paquet, tsc), lint (ruff) | propres | — |
+| Types (mypy : paquet et tests dbeng, pour Windows et pour Linux ; tsc), lint (ruff) | propres après les corrections du §5.4 ; avant publication, « propre » ne valait que pour le paquet sous Windows | CI (§5.4) |
 | Contrat OpenAPI / types TS | régénérés, sans dérive | `tests/test_openapi_contract.py` |
 | Fumée de l'exécuteur sur le labo | 14/14 | `logs/C02_executor_smoke.log` |
 
 Un test historique a révélé une régression de ma part pendant le lot (`run_server` ne passait plus par
 `uvicorn.run` : le test démarrait un vrai serveur et la suite se figeait) ; corrigée, la suite
-complète passe. Les 124 erreurs mypy des *autres* fichiers de tests sont antérieures à DB-02 (aucune
-dans les tests dbeng) et restent hors de ce lot.
+complète passe.
+
+**Erreurs mypy des autres tests, recomptées.** La version précédente de ce rapport annonçait « 124
+erreurs mypy dans les *autres* fichiers de tests, aucune dans les tests dbeng ». C'était faux : la
+première exécution distante en a trouvé 6 dans les tests dbeng (corrigées, §5.4). Recompté après
+correction : **118 erreurs**, toutes dans des fichiers que la CI ne vérifie pas. 92 existaient déjà sur
+`main` (`7a4fd60`) ; 26 ont été ajoutées pendant DB-01 par `3293154`, dans
+`tests/test_evaluation_record.py` (accès à un résultat optionnel sans vérification préalable). Il n'y
+en a aucune dans le paquet ni dans les tests dbeng, sous Windows comme sous Linux. Ces 118 erreurs
+restent hors de ce lot.
 
 ### 5.2 Opérations réelles (labo `fh_bench`, 2 000 000 commandes)
 
@@ -140,6 +149,42 @@ archivées (`_qualification/db02/logs/D03_claims_recheck.json`, le `claims.json`
 inchangé) : 4 vérifiées / 1 contredite / 1 non vérifiable → **2 vérifiées / 3 contredites / 1 non
 vérifiable**. Aucune de ces vérifications n'entre dans une décision.
 
+### 5.4 Intégration continue observée sur GitHub Actions
+
+Depuis la publication, chaque poussée lance `.github/workflows/ci.yml`, qui comporte quatre jobs :
+`python` (Ubuntu et Windows : ruff, mypy, pytest), `postgres` (la suite réelle contre PostgreSQL 18 en
+conteneur), `frontend` et `contract`. Les premières exécutions réelles ont trouvé ce que l'exécution
+locale ne pouvait pas voir : elle tournait sous Windows seulement, avec `python -m pytest` et des fins
+de ligne LF. Tout a été corrigé sur la branche, sans assouplir la CI, un test ou un seuil.
+
+| Exécution | Commit | En échec | Cause | Correction |
+|---|---|---|---|---|
+| `41749578278` | `cead596` | python Ubuntu et Windows (mypy) | 2 API Windows de `procs.py` inconnues sous Linux ; 6 assertions des tests dbeng sur un résultat optionnel | `7b02854` |
+| `41750147792` | `7b02854` | python Ubuntu et Windows (collecte) | les tests `test_corpus_*`, antérieurs à DB-02, importent `tests.…` : seul `python -m pytest` rendait la racine du dépôt importable | `f2e9cbc` |
+| `41750688893` | `f2e9cbc` | python Ubuntu (7 tests) et Windows (8 tests) | course au lancement ; politique archivée relue avec `read_text` ; extra `vec` absent de la CI | `4a31e85` |
+| `41753814441` | `4a31e85` | python Windows (1 test) | test de concurrence qui pariait sur `sleep(0.1)`, perdu sur un runner 14 fois plus lent | `6ccb615` |
+| `41756540040` | `6ccb615` | **aucun** : les 5 jobs réussissent (Python : Ubuntu 1 398 réussis / 17 ignorés, Windows 1 397 / 18 ; PostgreSQL 15/15) | — | — |
+
+Dans ces cinq exécutions, les jobs `postgres`, `frontend` et `contract` ont toujours réussi ; la suite
+PostgreSQL réelle passe 15/15 sous Linux.
+
+Deux de ces défauts touchaient le produit, pas seulement les tests :
+
+- **Course au lancement.** `POST /db/operations` rendait l'identifiant avant que l'opération existe
+  dans le journal : une pause ou une lecture envoyée aussitôt recevait une 404. Le service journalise
+  désormais l'opération avant de rendre l'identifiant. Reproduit localement en retardant d'une seconde
+  le démarrage du worker : l'ancien code échoue comme en CI, le nouveau passe.
+- **Recalcul impossible sur un poste Windows aux réglages Git par défaut** (`core.autocrlf=true`). La
+  politique, extraite en CRLF, était archivée telle quelle mais relue avec `read_text`, qui convertit
+  CRLF en LF : elle ne correspondait plus à l'empreinte enregistrée. Les preuves sont désormais relues
+  octet pour octet, et un test exécute une opération sous une copie CRLF de la politique ; il échoue
+  avec l'ancienne lecture. `.gitattributes` fixe la politique et les charges en LF : leur empreinte
+  est la même sur toute extraction.
+
+Sur les runners, la suite Python ignore 17 tests sous Ubuntu et 18 sous Windows (16 sur ce poste),
+dont les 15 tests PostgreSQL, que le job `postgres` exécute. La CI affiche désormais la raison de
+chaque test ignoré (`pytest -rs`).
+
 ## 6. Les dix critères
 
 Statuts : **testé en réel** (sur l'instance, mesuré) · **testé auto.** (en mémoire seulement) ·
@@ -155,7 +200,7 @@ Statuts : **testé en réel** (sur l'instance, mesuré) · **testé auto.** (en 
 | 6 | Décisions liées aux mesures d'origine, exports intacts | **testé en réel** | vérification depuis l'interface (intégrité « intacts », recalcul identique, attestation « aucune ») ; export expurgé ; altération détectée (`test_evidence_integrity…`) |
 | 7 | Quatre parcours UI, navigateur et Tauri | **testé en réel** | Edge et application Tauri native : premier lancement, optimisation (avec pause/reprise), régression, incident — opérations réelles, 0 erreur console ; `docs/gui/DB02_UI_ACCEPTANCE.md` |
 | 8 | Présentation propre aux résolutions et échelles | **testé en réel (émulé)** | 36 captures, 0 débordement mesuré ; mise à l'échelle Windows émulée par le facteur de pixel, l'affichage système n'a pas été modifié |
-| 9 | Pas de régression des fonctions historiques | **testé en réel** | suite complète 1 398 ; écrans corpus sous « Avancé » ; `/database` redirige vers `/db` |
+| 9 | Pas de régression des fonctions historiques | **testé en réel** | suite complète 1 398 (1 399 depuis le §5.4), verte en CI sous Ubuntu et Windows ; écrans corpus sous « Avancé » ; `/database` redirige vers `/db` |
 | 10 | Lancement Windows documenté et rejoué | **testé en réel** | `logs/G01…G06` (doublon refusé, démarrage, statut sous PowerShell 5.1 et 7, arrêt gracieux, redémarrage) ; RUNBOOK §8 |
 
 ## 7. Capacités
@@ -178,7 +223,7 @@ Statuts : **testé en réel** (sur l'instance, mesuré) · **testé auto.** (en 
 | Lanceur Windows | implémenté, testé en réel |
 | Identité Windows séparée pour l'exécuteur | **bloqué** (droits administrateur) |
 | Installeur Windows (optionnel) | **non couvert** : cibles de paquet configurées Linux uniquement ; un installeur NSIS imposerait le téléchargement d'un nouvel outil |
-| CI distante | **définie et exécutée localement job par job, non observée** sur GitHub Actions (rien n'est poussé) |
+| CI distante | **observée sur GitHub Actions** : verte sur les 5 jobs depuis `6ccb615`, après quatre exécutions en échec et leurs corrections (§5.4) |
 
 ## 8. Notes honnêtes et limites
 
@@ -207,4 +252,6 @@ et les messages de commit. Ont été recherchés : les valeurs exactes des jeton
 les clés. Deux documents nommaient le compte Windows et deux captures montraient le nom de
 l'ordinateur, tous introduits par le dernier commit (documentation). Seul ce commit a été réécrit,
 avant la première publication ; les 28 commits précédents sont inchangés. Les références d'origine
-sont conservées localement, hors publication.
+sont conservées localement, hors publication. Après la publication, les corrections issues de la CI
+(§5.4) sont des commits ordinaires, poussés en avance rapide : l'historique publié n'a jamais été
+réécrit.

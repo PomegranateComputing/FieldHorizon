@@ -1,7 +1,7 @@
 name: CI
 
-# DB-02: written and run locally job by job (docs/dbeng/REPORT_DB02.md); NOT yet observed on GitHub
-# Actions -- nothing has been pushed. Jobs:
+# DB-02: observed on GitHub Actions since the branch was published; what the first runs found and how
+# it was fixed: docs/dbeng/REPORT_DB02.md, section 5.4. Jobs:
 #   python     unit + API tests on Linux and Windows (PostgreSQL tests skip without an instance)
 #   postgres   the real-PostgreSQL acceptance suite against PostgreSQL 18 with pg_stat_statements
 #   frontend   type check, component tests and production build of the desktop UI
@@ -33,10 +33,11 @@ jobs:
       - name: mypy (package)
         run: mypy fieldhorizon
       - name: mypy (DB engineering tests)
-        # The other test modules carry 124 pre-existing mypy errors (none from DB-02); tracked separately.
+        # The other test modules carry 118 mypy errors (92 from main, 26 from DB-01: REPORT_DB02 section 5.1),
+        # tracked separately.
         run: mypy tests/dbeng_fakes.py tests/test_dbeng_operation.py tests/test_dbeng_api.py tests/test_dbeng_units.py tests/test_dbeng_postgres.py
       - name: pytest
-        run: pytest -q
+        run: pytest -q -rs  # -rs prints the reason of every skipped test
 
   postgres:
     runs-on: ubuntu-latest

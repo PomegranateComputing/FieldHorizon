@@ -8,8 +8,8 @@ by the server, enforced by code with a named test, or explicitly marked as *not*
 > instance holding a synthetic lab, on a single Windows workstation. It is **not** ready for
 > autonomous operation in production and must not be pointed at a production database. Open limits:
 > no separate Windows identity for the executor (§5), display scaling validated only by browser
-> emulation, 124 pre-existing mypy errors in tests outside DB-02, no Windows installer
-> (`REPORT_DB02.md`).
+> emulation, pre-existing mypy errors in test files outside DB-02 (stated as 124, recounted as 118:
+> 92 inherited from `main`, 26 from DB-01), no Windows installer (`REPORT_DB02.md`).
 
 ## 1. Who can do what
 
