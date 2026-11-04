@@ -147,7 +147,10 @@ def write_cli_config(root: Path) -> Path:
 
 
 def start_cli(config: Path, targets: Path, *args: str) -> subprocess.Popen:
-    creation = subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
+    if sys.platform == "win32":  # a statement, not a conditional expression: type checkers on Linux skip it
+        creation = subprocess.CREATE_NEW_PROCESS_GROUP
+    else:
+        creation = 0
     return subprocess.Popen([sys.executable, "-m", "fieldhorizon.cli", "--config", str(config), "db", *args, "--targets", str(targets)],
                             cwd=REPO, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=creation, text=True,
                             encoding="utf-8", errors="replace")
@@ -412,7 +415,8 @@ def test_10_a_crash_after_the_build_is_recovered_at_start_up_and_recovery_is_ide
     assert set(catalog_indexes(env)) == retained(env)
     crashed = [r for r in Journal(child_cfg).recent() if r.kind == "index_optimization"][0]
     assert crashed.status == "RECOVERED_REVERTED"
-    assert Journal(child_cfg).runtime(crashed.operation_id)["recovery_mode"] == "automatic_startup"
+    runtime = Journal(child_cfg).runtime(crashed.operation_id)
+    assert runtime is not None and runtime["recovery_mode"] == "automatic_startup"
     service.startup_reconcile(background=False)
     assert service.startup[target.name]["status"] == "RECOVERY_NOTHING_TO_DO"
 
@@ -437,7 +441,8 @@ def test_11_a_long_transaction_opened_after_the_precheck_times_the_build_out_and
         holder["conn"].close()
     report = recovery.recover(cfg, target, PostgresAdapter(target), POLICY, executor_factory(env), mode=recovery.MODE_MANUAL)
     assert report["status"] == "RECOVERY_DONE", report
-    assert Journal(cfg).get(outcome.operation_id).status == "FAILED_RECOVERED"
+    record = Journal(cfg).get(outcome.operation_id)
+    assert record is not None and record.status == "FAILED_RECOVERED"
     assert set(catalog_indexes(env)) == retained(env)
 
 
@@ -505,4 +510,4 @@ def test_15_concurrent_launches_in_one_service_never_start_two_changes(env, tmp_
     assert not errors and len({x.operation_id for x in launches}) == 1
     assert sum(1 for x in launches if x.created) == 1
     op = launches[0].operation_id
-    assert wait_for(lambda: (Journal(service.cfg).get(op) or None) and Journal(service.cfg).get(op).finished_at, timeout=600, interval=0.5)
+    assert wait_for(lambda: getattr(Journal(service.cfg).get(op), "finished_at", None), timeout=600, interval=0.5)

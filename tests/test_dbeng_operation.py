@@ -181,7 +181,8 @@ def test_a_build_left_invalid_and_not_cleaned_needs_recovery_then_is_recovered(c
                               mode=recovery.MODE_MANUAL, sleep=lambda s: None)
     assert report["status"] == "RECOVERY_DONE"
     assert adapter.indexes == {}
-    assert Journal(cfg).get(outcome.operation_id).status == "FAILED_RECOVERED"
+    record = Journal(cfg).get(outcome.operation_id)
+    assert record is not None and record.status == "FAILED_RECOVERED"
 
 
 def test_a_crash_after_apply_is_recovered_automatically_before_the_next_change(cfg):
@@ -204,7 +205,8 @@ def test_a_crash_after_apply_is_recovered_automatically_before_the_next_change(c
 
     outcome = run(cfg, adapter)  # policy v2: recovery.automatic = true
     assert outcome.status == "RETAINED"
-    assert journal.get(interrupted.operation_id).status == "RECOVERED_REVERTED"
+    recovered = journal.get(interrupted.operation_id)
+    assert recovered is not None and recovered.status == "RECOVERED_REVERTED"
     assert (journal.runtime(interrupted.operation_id) or {})["recovery_mode"] == "automatic_preflight"
     _, runs = journal.query(kind="recovery")
     assert runs[0].status == "RECOVERY_DONE"
@@ -321,7 +323,8 @@ def test_pause_holds_the_lease_and_resume_continues(cfg):
     def sleep(seconds):
         sleeps.append(seconds)
         if len(sleeps) == 3:
-            assert journal.get(op).status == "PAUSED"
+            record = journal.get(op)
+            assert record is not None and record.status == "PAUSED"
             assert adapter.server.lock_owner is not None, "a paused operation keeps the target reserved"
             journal.request_control(op, "resume", "test")
 
