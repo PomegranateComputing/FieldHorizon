@@ -6,6 +6,9 @@ sont des captures **réelles** : service réel, base PostgreSQL 18.6 réelle (la
 n'apparaît dans aucune capture (champ masqué, jamais saisi visiblement), ni le chemin du fichier de
 secrets.
 
+Statut de DB-02 : version expérimentale, validée seulement sur une instance PostgreSQL isolée ; pas
+prête pour une exploitation autonome en production (`docs/dbeng/REPORT_DB02.md`).
+
 Une seule retouche avant publication : dans `08_incident_detected.png` et
 `12_tauri_incident_recovered.png`, le nom de l'ordinateur, que l'interface affiche dans le texte de
 l'incident (« left in state 'applied' by … »), est recouvert d'un rectangle gris. Aucun autre pixel

@@ -4,6 +4,13 @@ Written for: whoever has to decide whether to trust an autonomous change on a Po
 operator, a DBA reviewing the lab, or a security reviewer. Every statement below is either enforced
 by the server, enforced by code with a named test, or explicitly marked as *not* enforced.
 
+> **Status: experimental.** DB-02 has been validated only against an isolated PostgreSQL 18.6 test
+> instance holding a synthetic lab, on a single Windows workstation. It is **not** ready for
+> autonomous operation in production and must not be pointed at a production database. Open limits:
+> no separate Windows identity for the executor (§5), display scaling validated only by browser
+> emulation, 124 pre-existing mypy errors in tests outside DB-02, no Windows installer
+> (`REPORT_DB02.md`).
+
 ## 1. Who can do what
 
 | Identity | Connects as | Can | Cannot | Enforced by |

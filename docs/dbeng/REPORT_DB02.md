@@ -4,8 +4,16 @@
 autonome sur une cible PostgreSQL. Chaque affirmation renvoie à un test, un journal ou une capture
 sous `_qualification/db02/` ; ce qui n'est pas démontré est dit tel quel.
 
-Branche `db02-autonomous-operations` (depuis `windows-baseline-db01` @ `4242f6d`), **non poussée** :
-aucune autorisation de publication n'a été donnée dans la session.
+> **Statut : version expérimentale.** DB-02 n'a été validé que sur une instance PostgreSQL 18.6
+> isolée, avec un laboratoire de données synthétiques, sur un seul poste Windows. Ce n'est **pas** un
+> outil prêt pour une exploitation autonome en production, et il ne doit pas être pointé sur une base
+> de production. Limites ouvertes (§3, §6 à §8) : pas d'identité Windows distincte pour l'exécuteur ;
+> résolutions et mises à l'échelle validées seulement par émulation dans le navigateur ; 124 erreurs
+> mypy historiques dans les tests hors DB-02 ; pas d'installeur Windows.
+
+Branche `db02-autonomous-operations` (depuis `windows-baseline-db01` @ `4242f6d`), publiée sur
+`origin` le 3 novembre 2026 avec l'autorisation explicite du propriétaire ; aucune fusion dans `main`,
+aucune release (§9).
 
 ## 1. Point de départ vérifié
 
@@ -186,7 +194,17 @@ Statuts : **testé en réel** (sur l'instance, mesuré) · **testé auto.** (en 
 - La reconnaissance des affirmations des agents reste littérale : ce qu'elle ne sait pas tester est
   « non vérifiable », jamais deviné.
 
-## 9. Commits (non poussés)
+## 9. Commits et publication
 
-Voir `git log windows-baseline-db01..db02-autonomous-operations`. Aucune fusion dans `main`, aucun
-force-push, aucune publication.
+Voir `git log windows-baseline-db01..db02-autonomous-operations`. Branche publiée sur `origin` le
+3 novembre 2026 avec l'autorisation explicite du propriétaire ; aucune fusion dans `main`, aucun
+force-push, aucune release.
+
+Avant publication, tout ce que la poussée rendait public a été vérifié, pas seulement l'état final :
+toutes les versions de tous les fichiers des commits situés au-dessus de `main`, les noms de fichiers
+et les messages de commit. Ont été recherchés : les valeurs exactes des jetons et mots de passe locaux
+(aucune trouvée), les noms du compte Windows et de l'ordinateur, les chemins de profil, les adresses et
+les clés. Deux documents nommaient le compte Windows et deux captures montraient le nom de
+l'ordinateur, tous introduits par le dernier commit (documentation). Seul ce commit a été réécrit,
+avant la première publication ; les 28 commits précédents sont inchangés. Les références d'origine
+sont conservées localement, hors publication.

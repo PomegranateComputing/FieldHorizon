@@ -7,6 +7,9 @@ from the repository root `C:\PROJECTS\FieldHorizon`.
 Nothing here touches a production or pre-existing database: the test instance is a separate
 cluster on `127.0.0.1:55432`, started as the current user, with no Windows service.
 
+DB-02 (sections 7–10) is an experimental version, validated only on this isolated instance with a
+synthetic lab; it is not ready for autonomous operation in production (`REPORT_DB02.md`).
+
 ```powershell
 $REPO = "C:\PROJECTS\FieldHorizon"
 $PY   = "$REPO\_qualification\windows\env\Scripts\python.exe"   # Python 3.12.10 venv: pip install -e ".[dev,vec,pg]"
