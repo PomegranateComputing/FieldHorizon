@@ -40,6 +40,9 @@ include = ["fieldhorizon*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# The corpus tests import their helpers as `tests.corpus_helpers`, so the repository root must be importable.
+# `python -m pytest` puts it on sys.path implicitly; the plain `pytest` command (used by CI) does not.
+pythonpath = ["."]
 
 [tool.ruff]
 target-version = "py311"
