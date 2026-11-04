@@ -125,7 +125,8 @@ class DbService:
     # --- launch ---------------------------------------------------------------------
     def start_optimization(self, *, target: str, workload: str, candidates: list[str], use_llm: bool, llm_model: str | None,
                            request_id: str | None, actor: str = ACTOR_SERVER) -> Launch:
-        from .operation import IndexOptimization, OptimizeRequest, new_operation_id
+        from .operation import KIND_INDEX_OPTIMIZATION, IndexOptimization, OptimizeRequest, new_operation_id
+        from .procs import current_process
         from .workload import load_workload
 
         body = {"target": target, "workload": workload, "candidates": sorted(candidates), "use_llm": use_llm, "llm_model": llm_model}
@@ -159,21 +160,25 @@ class DbService:
                 known = self.journal.request_operation(request_id)
                 assert known is not None
                 return Launch(known["operation_id"], False, st.RUNNING)
+            request = OptimizeRequest(target=tgt.name, workload_path=str(path), candidates=candidates, use_llm=use_llm,
+                                      llm_model=llm_model, actor=actor, request_id=request_id)
+            # Journaled before its id is returned: a control or a read sent right after the launch must find the
+            # operation, however late the worker thread starts (seen on a slower CI runner: pause -> 404).
+            self.journal.create(operation_id, KIND_INDEX_OPTIMIZATION, tgt.name, request.__dict__, policy.sha256, loaded.sha256)
+            proc = current_process()
+            self.journal.set_runtime(operation_id, holder_host=proc["host"], holder_pid=proc["pid"],
+                                     process_started_at=proc["started_at"])
             self._running[target] = operation_id
 
         def work() -> None:
             adapter = None
             try:
                 adapter = self.open_adapter(tgt)
-                request = OptimizeRequest(target=tgt.name, workload_path=str(path), candidates=candidates, use_llm=use_llm,
-                                          llm_model=llm_model, actor=actor, request_id=request_id)
                 IndexOptimization(self.cfg, tgt, adapter, policy, loaded, request, operation_id=operation_id,
                                   executor_factory=self.executor_factory(tgt, policy)).run()
             except Exception as exc:  # noqa: BLE001 - IndexOptimization.run journals its own failures; this is the adapter opening
                 record = self.journal.get(operation_id)
-                if record is None:
-                    self.journal.create(operation_id, "index_optimization", tgt.name, body, policy.sha256, loaded.sha256)
-                if record is None or record.finished_at is None:
+                if record is not None and record.finished_at is None:
                     self.journal.finish(operation_id, st.BLOCKED, redact(f"could not start: {type(exc).__name__}: {exc}"))
                     self.journal.set_runtime(operation_id, cause_code="target_unreachable")
             finally:

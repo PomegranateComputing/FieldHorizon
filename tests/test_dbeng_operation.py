@@ -422,6 +422,18 @@ def test_the_agents_evidence_pack_uses_only_its_own_ids(cfg):
     assert '"evidence_refs": ["E' in pack
 
 
+def test_a_policy_with_crlf_line_endings_is_recomputed_from_its_exact_bytes(cfg, tmp_path):
+    """A Windows checkout with core.autocrlf=true holds the policy with CRLF line endings. The archive and the
+    recomputation must use its exact bytes, never a newline-translated copy (found by the first Windows CI run)."""
+    crlf = tmp_path / "dbeng_policy_crlf.yaml"
+    crlf.write_bytes(Path(POLICY.source).read_bytes().replace(b"\r\n", b"\n").replace(b"\n", b"\r\n"))
+    policy = load_policy(crlf)
+    assert policy.sha256 != POLICY.sha256, "same rules, other bytes: the recorded hash follows the bytes"
+    outcome = run(cfg, FakeAdapter(make_target()), policy=policy)
+    recomputed = recompute_decision(cfg, outcome.operation_id)
+    assert recomputed["available"] and recomputed["matches"], recomputed
+
+
 def test_evidence_integrity_and_recomputation_are_reported_separately(cfg):
     adapter = FakeAdapter(make_target())
     outcome = run(cfg, adapter)

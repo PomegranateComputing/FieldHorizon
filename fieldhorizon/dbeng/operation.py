@@ -290,9 +290,10 @@ class IndexOptimization:
 
     # --- the operation ---------------------------------------------------------
     def run(self) -> OperationOutcome:
-        self.journal.create(
-            self.op, KIND_INDEX_OPTIMIZATION, self.target.name, self.request.__dict__, self.policy.sha256, self.workload.sha256
-        )
+        if self.journal.get(self.op) is None:  # the service journals a launch itself, before returning its id
+            self.journal.create(
+                self.op, KIND_INDEX_OPTIMIZATION, self.target.name, self.request.__dict__, self.policy.sha256, self.workload.sha256
+            )
         proc = current_process()
         self.journal.set_runtime(self.op, holder_host=proc["host"], holder_pid=proc["pid"], process_started_at=proc["started_at"])
         # The exact policy and workload in force, so the decision can be recomputed from this bundle alone.

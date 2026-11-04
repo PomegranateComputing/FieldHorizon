@@ -1,0 +1,4 @@
+# Inputs whose SHA-256 identifies them in DB engineering evidence (the versioned policy and the measured
+# workloads): the same bytes, hence the same hash, on every checkout, whatever core.autocrlf says.
+config/dbeng_policy.yaml text eol=lf
+config/dbeng_workloads/*.yaml text eol=lf

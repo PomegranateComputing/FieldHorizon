@@ -79,7 +79,9 @@ def verify_artifacts(journal: Journal, operation_id: str) -> list[dict]:
 def _artifact_text(journal: Journal, operation_id: str, name: str) -> str | None:
     for a in journal.artifacts(operation_id):
         if a["name"] == name and Path(a["path"]).exists():
-            return Path(a["path"]).read_text(encoding="utf-8")
+            # Bytes, then decode: read_text() turns CRLF into LF, and an archived policy written with CRLF
+            # (a Windows checkout with core.autocrlf=true) would no longer hash to the policy recorded.
+            return Path(a["path"]).read_bytes().decode("utf-8")
     return None
 
 

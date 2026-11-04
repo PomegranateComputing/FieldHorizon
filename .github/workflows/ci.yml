@@ -25,8 +25,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install package with dev and PostgreSQL dependencies
-        run: pip install -e ".[dev,pg]"
+      - name: Install package with dev, vector-store and PostgreSQL dependencies
+        # `vec` (sqlite-vec) is needed by tests/test_storage_vectors.py, as in the documented local environment.
+        run: pip install -e ".[dev,vec,pg]"
       - name: ruff
         run: ruff check fieldhorizon tests scripts
       - name: mypy (package)
