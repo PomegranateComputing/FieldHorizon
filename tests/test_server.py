@@ -4,7 +4,6 @@ import json
 import sqlite3
 import sys
 import threading
-import time
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -436,37 +435,41 @@ def test_multi_cycle_endpoint_mints_a_correlation_id_when_none_supplied(tmp_path
     assert body["correlation_id"]
 
 
-def test_multi_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
+def _two_concurrent_calls(tmp_path, path: str, body: dict, engine_method: str, result: object) -> dict[str, int]:
+    """
+    Status codes of two calls to an endpoint guarded by a non-blocking lock. The second call is sent only
+    once the first is inside the (patched) engine method, i.e. holds the lock: no sleep decides the order,
+    so a slow runner cannot swap the two calls (it did on GitHub's Windows runner).
+    """
     cfg = make_config(tmp_path)
     init_db(cfg.database)
     from fieldhorizon.server import create_app
 
-    app = create_app(cfg, TOKEN)
-    client = TestClient(app)
+    client = TestClient(create_app(cfg, TOKEN))
+    entered, release = threading.Event(), threading.Event()
 
-    release = threading.Event()
+    def slow(*args, **kwargs):
+        entered.set()
+        release.wait(timeout=60)
+        return result
 
-    def slow_multi_cycle(*args, **kwargs):
-        release.wait(timeout=2)
-        return 1
+    results: dict[str, int] = {}
 
-    results = {}
+    def call(name: str) -> None:
+        results[name] = client.post(path, json=body, headers=auth_headers()).status_code
 
-    def call(name):
-        response = client.post("/multi-cycle", json={"query": "q", "dry_run": True}, headers=auth_headers())
-        results[name] = response.status_code
-
-    with patch("fieldhorizon.server.FieldHorizonEngine.multi_cycle", side_effect=slow_multi_cycle):
-        t1 = threading.Thread(target=call, args=("first",))
-        t1.start()
-        time.sleep(0.1)
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
+    with patch(f"fieldhorizon.server.FieldHorizonEngine.{engine_method}", side_effect=slow):
+        first = threading.Thread(target=call, args=("first",))
+        first.start()
+        assert entered.wait(timeout=60), "the first call never reached the engine"
+        call("second")  # answered at once: the first call holds the lock
         release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
+        first.join(timeout=60)
+    return results
 
+
+def test_multi_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
+    results = _two_concurrent_calls(tmp_path, "/multi-cycle", {"query": "q", "dry_run": True}, "multi_cycle", 1)
     assert results["first"] == 200
     assert results["second"] == 429
 
@@ -487,71 +490,13 @@ def test_run_schools_endpoint_returns_the_correlation_id_supplied(tmp_path):
 
 
 def test_run_schools_endpoint_rejects_a_second_concurrent_call(tmp_path):
-    cfg = make_config(tmp_path)
-    init_db(cfg.database)
-    from fieldhorizon.server import create_app
-
-    app = create_app(cfg, TOKEN)
-    client = TestClient(app)
-
-    release = threading.Event()
-
-    def slow_run_schools(*args, **kwargs):
-        release.wait(timeout=2)
-        return []
-
-    results = {}
-
-    def call(name):
-        response = client.post("/schools/run", json={}, headers=auth_headers())
-        results[name] = response.status_code
-
-    with patch("fieldhorizon.server.FieldHorizonEngine.run_schools_clustering", side_effect=slow_run_schools):
-        t1 = threading.Thread(target=call, args=("first",))
-        t1.start()
-        time.sleep(0.1)
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
-
+    results = _two_concurrent_calls(tmp_path, "/schools/run", {}, "run_schools_clustering", [])
     assert results["first"] == 200
     assert results["second"] == 429
 
 
 def test_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
-    cfg = make_config(tmp_path)
-    init_db(cfg.database)
-    from fieldhorizon.server import create_app
-
-    app = create_app(cfg, TOKEN)
-    client = TestClient(app)
-
-    release = threading.Event()
-
-    def slow_cycle(*args, **kwargs):
-        release.wait(timeout=2)
-        return 1
-
-    results = {}
-
-    def call(name):
-        response = client.post("/cycle", json={"query": "q", "dry_run": True}, headers=auth_headers())
-        results[name] = response.status_code
-
-    with patch("fieldhorizon.server.FieldHorizonEngine.cycle", side_effect=slow_cycle):
-        t1 = threading.Thread(target=call, args=("first",))
-        t1.start()
-        time.sleep(0.1)  # let the first request acquire the lock
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
-
+    results = _two_concurrent_calls(tmp_path, "/cycle", {"query": "q", "dry_run": True}, "cycle", 1)
     assert results["first"] == 200
     assert results["second"] == 429
 
@@ -592,36 +537,7 @@ def test_ingest_manifest_mints_a_correlation_id_when_none_supplied(tmp_path):
 
 
 def test_ingest_manifest_endpoint_rejects_a_second_concurrent_call(tmp_path):
-    cfg = make_config(tmp_path)
-    init_db(cfg.database)
-    from fieldhorizon.server import create_app
-
-    app = create_app(cfg, TOKEN)
-    client = TestClient(app)
-
-    release = threading.Event()
-
-    def slow_ingest(*args, **kwargs):
-        release.wait(timeout=2)
-        return []
-
-    results = {}
-
-    def call(name):
-        response = client.post("/ingest/manifest", json={}, headers=auth_headers())
-        results[name] = response.status_code
-
-    with patch("fieldhorizon.server.FieldHorizonEngine.ingest_manifest", side_effect=slow_ingest):
-        t1 = threading.Thread(target=call, args=("first",))
-        t1.start()
-        time.sleep(0.1)
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
-
+    results = _two_concurrent_calls(tmp_path, "/ingest/manifest", {}, "ingest_manifest", [])
     assert results["first"] == 200
     assert results["second"] == 429
 
