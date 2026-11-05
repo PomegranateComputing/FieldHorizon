@@ -24,7 +24,7 @@ import { NAV_SECTIONS } from "./shell/navSections";
 
 // Chart/graph-heavy screens pull in echarts or React Flow -- lazy-loaded
 // so every other screen's first paint doesn't pay for a charting library
-// it never uses (FABLE Sec.15).
+// it never uses (UI specification Sec.15).
 const WeatherPage = lazy(() => import("./pages/WeatherPage").then((m) => ({ default: m.WeatherPage })));
 const CanonPage = lazy(() => import("./pages/CanonPage").then((m) => ({ default: m.CanonPage })));
 const SemanticsPage = lazy(() => import("./pages/SemanticsPage").then((m) => ({ default: m.SemanticsPage })));
@@ -69,9 +69,9 @@ function Gate() {
   const { phase } = useConnection();
 
   // Only the *first* connection attempt blocks with the full startup screen
-  // (FABLE Sec.10.1). Once connected at least once, a later drop shows the
+  // (UI specification Sec.10.1). Once connected at least once, a later drop shows the
   // shell with stale data plus ConnectionBanner (Phase UI-3 item 5) instead
-  // of taking the whole screen over again -- FABLE Sec.17's "no blank pages."
+  // of taking the whole screen over again -- UI specification Sec.17's "no blank pages."
   if (phase === "connecting") {
     return <StartupScreen />;
   }

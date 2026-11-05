@@ -60,6 +60,7 @@ def _insert_cycle(cfg: AppConfig) -> int:
             "VALUES ('q', 'm', 'p', 'r', 0, 'HERESY', 0.4, 'f', '2024-01-01 00:00:00')"
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -104,6 +105,7 @@ def test_canon_as_of_cycle_uses_that_cycles_own_created_at(tmp_path):
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment, created_at) "
             "VALUES ('q2', 'm', 'p', 'r', 0, 'CANON', 0.9, 'f', '2024-02-15 00:00:00')"
         )
+        assert cur.lastrowid is not None
         later_cycle = int(cur.lastrowid)
         conn.commit()
 
@@ -202,6 +204,7 @@ def _insert_canon_event(cfg: AppConfig, cycle_id: int, event: str, detail: dict,
             (cycle_id, event, _json.dumps(detail), created_at),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -216,6 +219,7 @@ def test_backfill_reconstructs_the_original_verdict_before_a_rehabilitation(tmp_
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment, created_at) "
             "VALUES ('q', 'm', 'p', 'r', 0, 'CANON', 0.9, 'f', '2024-01-01 00:00:00')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -246,6 +250,7 @@ def test_backfill_reconstructs_a_retired_cycle_with_no_rehabilitation(tmp_path):
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment, created_at, retired_at) "
             "VALUES ('q', 'm', 'p', 'r', 0, 'CANON', 0.9, 'f', '2024-01-01 00:00:00', '2024-03-01 00:00:00')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -267,6 +272,7 @@ def test_backfill_counts_unresolved_edges_when_none_exists(tmp_path):
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment, created_at) "
             "VALUES ('q', 'm', 'p', 'r', 0, 'CANON', 0.9, 'f', '2024-01-01 00:00:00')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -302,6 +308,7 @@ def test_backfill_skips_dry_run_cycles(tmp_path):
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment, created_at) "
             "VALUES ('q', 'm', 'p', 'r', 1, 'CANON', 0.9, 'f', '2024-01-01 00:00:00')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -318,6 +325,7 @@ def test_school_membership_as_of_returns_the_generation_active_at_that_time(tmp_
         cur = conn.execute(
             "INSERT INTO schools(name, summary, run_at) VALUES ('Gen 1', 's', '2024-01-01 00:00:00')"
         )
+        assert cur.lastrowid is not None
         gen1_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)", (gen1_id, cycle_id)
@@ -326,6 +334,7 @@ def test_school_membership_as_of_returns_the_generation_active_at_that_time(tmp_
             "INSERT INTO schools(name, summary, previous_school_id, run_at) VALUES ('Gen 2', 's', ?, '2024-02-01 00:00:00')",
             (gen1_id,),
         )
+        assert cur.lastrowid is not None
         gen2_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)", (gen2_id, cycle_id)

@@ -95,6 +95,7 @@ def _insert_chunk(cfg: AppConfig, content: str) -> int:
             (source_id, content),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

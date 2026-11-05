@@ -49,6 +49,7 @@ def insert_cycle(cfg: AppConfig, query: str, verdict: str, fragment: str, parent
             (query, verdict, fragment, json.dumps(parent_ids) if parent_ids else None),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

@@ -69,6 +69,7 @@ def insert_cycle(cfg, query, verdict, final_score, fragment, days_old=0):
             (query, response, verdict, final_score, fragment, f"-{days_old} days"),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

@@ -67,6 +67,7 @@ def _insert_source_and_chunk(cfg: AppConfig, canonical_ref: str, path: str = "/t
             "INSERT INTO sources(title, path, source_type) VALUES ('Test Source', ?, 'book')",
             (path,),
         )
+        assert cur.lastrowid is not None
         source_id = int(cur.lastrowid)
         cur = conn.execute(
             "INSERT INTO chunks(source_id, chunk_index, canonical_ref, content, token_estimate) "
@@ -74,6 +75,7 @@ def _insert_source_and_chunk(cfg: AppConfig, canonical_ref: str, path: str = "/t
             (source_id, canonical_ref),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -94,6 +96,7 @@ def _insert_parent_cycle(cfg: AppConfig) -> int:
             "VALUES ('parent query', 'm', 'p', 'r', 0, 'CANON', 0.9, 'parent fragment')"
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

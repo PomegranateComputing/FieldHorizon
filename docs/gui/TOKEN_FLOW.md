@@ -1,6 +1,6 @@
 # Local API token flow (Phase UI-3 item 2)
 
-FABLE §14 requires a local session token where necessary and forbids
+UI specification §14 requires a local session token where necessary and forbids
 bundling secrets into the build. The Field Horizon API already requires a
 bearer token on every route (`fieldhorizon/server.py`'s `require_token`); this
 doc covers how each delivery target actually gets one.

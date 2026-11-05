@@ -481,6 +481,7 @@ def test_wikisource_fetch_content_makes_no_second_request():
         fetcher,
     )
 
+    assert candidate is not None
     response = adapter.fetch_content(candidate)
     assert response.from_cache is True
     assert b"surr" in response.content

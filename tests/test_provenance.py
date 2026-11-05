@@ -71,6 +71,7 @@ def test_get_by_id_returns_the_stored_edge(tmp_path):
     init_db(cfg.database)
 
     edge = ProvenanceEdgeRepository(cfg).append(OBJECT_CYCLE, 1, OBJECT_CYCLE, 2, REL_SELECTED_BY)
+    assert edge.id is not None
     fetched = ProvenanceEdgeRepository(cfg).get_by_id(edge.id)
 
     assert fetched is not None

@@ -1,6 +1,6 @@
 # EMERGENCE MONITOR — specification only (Implementation Brief IV, Phase UI-5 item 10)
 
-FABLE §19 is explicit and conditional:
+UI specification §19 is explicit and conditional:
 
 > Si le dépôt contient réellement des notions comme : Basilisk; emergence;
 > anomaly; recursion; attractor; rupture sémantique; détection d'entité —
@@ -16,14 +16,14 @@ implemented.
 ## Audit method
 
 A repo-wide search (`grep -rin` across `fieldhorizon/*.py`) for each term
-FABLE §19 names, plus the three candidate signal families Implementation
+UI specification §19 names, plus the three candidate signal families Implementation
 Brief IV's own phase description paraphrases them as (motif-frequency
 spikes, pressure anomalies, weather discontinuities). Every hit was read
 in context, not just counted.
 
 ## Per-term findings
 
-| FABLE §19 term | Real referent in this codebase? | Detail |
+| UI specification §19 term | Real referent in this codebase? | Detail |
 |---|---|---|
 | Basilisk | No | Zero occurrences anywhere in `fieldhorizon/`. |
 | recursion | No | One occurrence, in `agents.py`'s persona prompt for one of the four adversaries ("Interpret through systems, automation, infrastructure, logs, databases, computation, recursion, feedback loops..."). This is stylistic instruction text handed to an LLM, not a computed signal about the corpus's own state. |
@@ -39,7 +39,7 @@ in context, not just counted.
 No candidate signal has a real, already-computed detector behind it. Every
 one of them would require inventing new detection logic (a baseline, a
 window, a threshold, a persistence layer for historical comparison) from
-nothing — exactly the situation FABLE §19 says should ship as a
+nothing — exactly the situation UI specification §19 says should ship as a
 specification, not as a screen presenting invented thresholds as if they
 were established science. Per that instruction: no EMERGENCE MONITOR route,
 engine method, or UI was built for this item.

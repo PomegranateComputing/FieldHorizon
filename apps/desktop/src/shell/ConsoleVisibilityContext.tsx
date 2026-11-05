@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-/** Lifted out of Console.tsx itself so the command palette's "Toggle console" (FABLE Sec.11) can reach the same state Console renders from, without a prop chain through AppShell. */
+/** Lifted out of Console.tsx itself so the command palette's "Toggle console" (UI specification Sec.11) can reach the same state Console renders from, without a prop chain through AppShell. */
 interface ConsoleVisibilityContextValue {
   visible: boolean;
   toggle: () => void;

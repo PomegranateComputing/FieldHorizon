@@ -201,6 +201,7 @@ def test_state_and_columns_change_in_one_transaction(tmp_path):
     repo.transition(document_id, State.RIGHTS_ACCEPTED, "", "run", updates={"normalized_license": "cc0-1.0"})
 
     item = repo.get_item(document_id)
+    assert item is not None
     assert item.state == State.RIGHTS_ACCEPTED
     assert item.normalized_license == "cc0-1.0"
 
@@ -239,6 +240,7 @@ def test_a_full_harvest_discovers_acquires_classifies_and_indexes(tmp_path):
 
     for item in indexed:
         decision = repo.latest_rights_decision(item.document_id)
+        assert decision is not None
         assert decision["decision"] == "accept"
         assert json.loads(decision["evidence_json"]), "no accept without recorded evidence"
 
@@ -450,6 +452,7 @@ def test_a_materialized_filename_carries_its_document_id(tmp_path):
 
     repo = CorpusRepository(cfg.database)
     item = repo.items_in_states([State.INDEXED])[0]
+    assert item.materialized_path is not None
     assert item.document_id in item.materialized_path
 
 
@@ -491,6 +494,7 @@ def test_materialization_refuses_a_document_without_an_accepted_decision(tmp_pat
     repo.update_item(document_id, normalized_sha256=digest, destination="books")
 
     item = repo.get_item(document_id)
+    assert item is not None
     with pytest.raises(ValueError, match="accepted rights decision"):
         materialize(cfg, repo, storage, item)
 
@@ -507,6 +511,8 @@ def test_the_raw_download_is_kept_immutable_alongside_the_normalized_text(tmp_pa
     assert "normalized" in kinds
 
     storage = CorpusStorage(cfg.root / "data" / "corpus")
+    assert item.raw_sha256 is not None
+    assert item.normalized_sha256 is not None
     assert storage.blob_path(item.raw_sha256).exists()
     assert storage.normalized_path(item.normalized_sha256).exists()
 
@@ -639,6 +645,7 @@ def test_a_rights_audit_removes_stale_documents_from_the_index(tmp_path):
 
     item = repo.items_in_states([State.INDEXED])[0]
     storage = CorpusStorage(cfg.root / "data" / "corpus")
+    assert item.normalized_sha256 is not None
     blob = storage.normalized_path(item.normalized_sha256)
     sidecar = storage.metadata_path(item.document_id)
     decisions_before = len(repo.rights_decisions(item.document_id))
@@ -651,6 +658,7 @@ def test_a_rights_audit_removes_stale_documents_from_the_index(tmp_path):
     assert item.document_id not in after
 
     refreshed = repo.get_item(item.document_id)
+    assert refreshed is not None
     assert refreshed.state == State.STALE
 
     # Nothing was destroyed.

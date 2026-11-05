@@ -1,6 +1,6 @@
 # Packaging Model (Phase UI-6 item 7)
 
-FABLE §22: Linux first (AppImage, .deb), document exactly what each
+UI specification §22: Linux first (AppImage, .deb), document exactly what each
 artifact contains, backend as managed sidecar or external, no models
 bundled. Windows next if the toolchain permits; document if not.
 
@@ -9,7 +9,7 @@ bundled. Windows next if the toolchain permits; document if not.
 Real Linux artifacts via the Tauri bundler (`npx tauri build`), not a dry
 run: `apps/desktop/src-tauri/tauri.conf.json`'s `bundle.targets` was
 narrowed from `"all"` to `["deb", "appimage"]` — this machine has no
-`rpmbuild`, and FABLE's own scope for this item is explicitly "Linux
+`rpmbuild`, and UI specification's own scope for this item is explicitly "Linux
 first: AppImage and .deb," not every bundle format Tauri happens to
 support.
 
@@ -43,7 +43,7 @@ it's the existing, deliberate architecture from Phase UI-6 item 1: the
 backend is managed as an **external** process (`backend.rs`'s
 `launch_backend` takes `python_bin`/`repo_root`/`port`/`token_file` and
 spawns whatever real Python installation and Field Horizon checkout the
-user already has), never a compiled-in sidecar binary. FABLE offers
+user already has), never a compiled-in sidecar binary. UI specification offers
 "sidecar or external" as an either/or choice; turning the Python backend
 (embeddings, sqlite-vec, the whole retrieval/synthesis pipeline) into an
 actual Tauri sidecar would mean freezing that entire dependency tree into
@@ -74,5 +74,5 @@ installed (`rustup target list --installed` shows none) and no
 MinGW/cross-compilation toolchain (`x86_64-w64-mingw32-gcc` absent) --
 producing an NSIS/WiX Windows bundle from here would not be a real build,
 just a config change with nothing to verify. Left for a Windows (or
-properly cross-compilation-equipped) environment, per FABLE's own
+properly cross-compilation-equipped) environment, per UI specification's own
 "document if not."

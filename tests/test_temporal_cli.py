@@ -59,6 +59,7 @@ def _insert_cycle_with_temporal_state(cfg: AppConfig, created_at: str, verdict: 
             "VALUES ('q', 'm', 'p', 'r', 0, ?, 0.9, 'f', ?)",
             (verdict, created_at),
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
     TemporalCanonRepository(cfg).append(cycle_id, verdict, 0.9, valid_from=created_at)
@@ -121,6 +122,7 @@ def test_why_changed_cli_reports_no_transitions_for_an_untouched_cycle(tmp_path,
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment) "
             "VALUES ('q', 'm', 'p', 'r', 0, 'CANON', 0.9, 'f')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -225,6 +227,7 @@ def test_replay_level6_cli_requires_as_of(tmp_path, capsys):
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment) "
             "VALUES ('q', 'm', 'p', 'r', 0, 'CANON', 0.9, 'f')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -252,6 +255,7 @@ def test_replay_level6_cli_diffs_canon_states(tmp_path, capsys):
             "INSERT INTO cycles(query, model, prompt, response, dry_run, verdict, final_score, fragment) "
             "VALUES ('the stored prompt', 'hermes3:8b', 'p', 'r', 0, 'CANON', 0.9, 'f')"
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 

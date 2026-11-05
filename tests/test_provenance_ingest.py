@@ -188,12 +188,14 @@ def test_ingest_writes_an_extracted_from_edge_when_raw_material_resolves_to_a_ch
         cur = conn.execute(
             "INSERT INTO sources(title, path, source_type) VALUES ('Test Source', '/tmp/test.txt', 'book')"
         )
+        assert cur.lastrowid is not None
         source_id = int(cur.lastrowid)
         cur = conn.execute(
             "INSERT INTO chunks(source_id, chunk_index, canonical_ref, content, token_estimate, char_start) "
             "VALUES (?, 0, 'ref-1', ?, 10, 100)",
             (source_id, f"Some preamble. {raw_sentence} Some epilogue."),
         )
+        assert cur.lastrowid is not None
         chunk_id = int(cur.lastrowid)
         conn.commit()
 

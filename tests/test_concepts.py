@@ -60,6 +60,7 @@ def insert_chunk(cfg: AppConfig, content: str) -> int:
             (source_id, f"ref{_source_counter}", content),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

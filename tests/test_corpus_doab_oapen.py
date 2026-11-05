@@ -21,6 +21,7 @@ the capability graph working, not failing.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import pytest
 
@@ -63,7 +64,7 @@ def source(**options):
 
 
 def build_fetcher(**extra):
-    mapping = {
+    mapping: dict[str, bytes | Path] = {
         OAI_URL: FIXTURES / "doab_oai_bridge.xml",
         OAPEN_SEARCH: FIXTURES / "oapen_rest_item.json",
     }
@@ -202,7 +203,9 @@ def test_the_larger_text_is_taken_when_a_chapter_and_a_book_are_both_attached():
     texts = [b for b in bitstreams if b.bundle == "TEXT"]
 
     assert len(texts) > 1, "the real item carries two text layers"
-    assert choose_bitstream(bitstreams).size == max(b.size for b in texts)
+    chosen = choose_bitstream(bitstreams)
+    assert chosen is not None
+    assert chosen.size == max(b.size for b in texts)
 
 
 def test_a_thumbnail_is_never_mistaken_for_the_book():
@@ -226,7 +229,9 @@ def test_an_epub_is_taken_over_a_pdf_when_no_text_layer_exists():
         Bitstream("b.pdf", "ORIGINAL", "application/pdf", 6139991, "/rest/bitstreams/p/retrieve"),
         Bitstream("b.epub", "ORIGINAL", "application/epub+zip", 2306017, "/rest/bitstreams/e/retrieve"),
     ]
-    assert choose_bitstream(originals).mime == "application/epub+zip"
+    chosen = choose_bitstream(originals)
+    assert chosen is not None
+    assert chosen.mime == "application/epub+zip"
 
 
 def test_a_zero_byte_bitstream_is_not_chosen():
@@ -276,7 +281,9 @@ def test_open_access_is_recorded_as_an_access_model_not_a_grant():
     """
     for value in ("open access", "info:eu-repo/semantics/openAccess", "Accesso aperto"):
         stack = rights_stack_for([value], {}, doab_url="https://d/1", oapen_url="https://o/1")
-        assert stack.get(RightsComponent.WORK).raw_license == "", value
+        work = stack.get(RightsComponent.WORK)
+        assert work is not None
+        assert work.raw_license == "", value
 
 
 def test_a_real_licence_is_taken_when_one_is_actually_published():
@@ -300,7 +307,9 @@ def test_the_absence_of_a_licence_is_recorded_as_evidence_not_as_silence():
     stack is indistinguishable from a parser that never ran.
     """
     stack = rights_stack_for([], {}, doab_url="https://d/1", oapen_url="https://o/1")
-    kinds = {e.kind for e in stack.get(RightsComponent.WORK).evidence}
+    work = stack.get(RightsComponent.WORK)
+    assert work is not None
+    kinds = {e.kind for e in work.evidence}
 
     assert "doab:dc:rights:absent" in kinds
     assert "oapen:dc.rights:absent" in kinds
@@ -311,7 +320,9 @@ def test_the_content_signal_travels_with_the_rights_record():
     stack = rights_stack_for(
         [], {}, doab_url="https://d/1", oapen_url="https://o/1", signal=signal
     )
-    evidence = stack.get(RightsComponent.WORK).evidence
+    work = stack.get(RightsComponent.WORK)
+    assert work is not None
+    evidence = work.evidence
 
     signal_evidence = next(e for e in evidence if e.kind == "doab:robots:content-signal")
     assert "ai-train=no" in signal_evidence.value

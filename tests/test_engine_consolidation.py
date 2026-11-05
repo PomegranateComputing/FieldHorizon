@@ -170,6 +170,7 @@ def _insert_source_and_chunks(cfg: AppConfig) -> int:
         cur = conn.execute(
             "INSERT INTO sources(title, path, source_type, language, weight) VALUES ('Title', '/p', 'book', 'en', 1.0)"
         )
+        assert cur.lastrowid is not None
         source_id = int(cur.lastrowid)
         for i in range(2):
             conn.execute(
@@ -260,6 +261,7 @@ def _insert_cycle_with_evidence(cfg: AppConfig) -> int:
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             ("a query", "hermes3:8b", "prompt text", "response text", 0, "CANON", 0.87, "the resulting fragment", "[1, 2]"),
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO cycle_sources(cycle_id, source_kind, ref, content) VALUES (?, ?, ?, ?)",

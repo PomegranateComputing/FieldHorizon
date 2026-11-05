@@ -61,3 +61,7 @@ data/corpus/
 # above; named explicitly so the intent is obvious.
 data/books/_auto/
 data/manifestos/_auto/
+
+# Reproducible source snapshots and editor backup configurations
+FieldHorizon_ARCHITECTURE_REVIEW_*.txt
+*.before-*

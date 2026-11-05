@@ -70,12 +70,14 @@ def _insert_cycle(cfg: AppConfig, cycle_id: int, parent_cycle_ids: list[int] | N
 def _insert_chunk(cfg: AppConfig, canonical_ref: str) -> int:
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO sources(title, path, source_type) VALUES ('S', '/tmp/s.txt', 'book')")
+        assert cur.lastrowid is not None
         source_id = int(cur.lastrowid)
         cur = conn.execute(
             "INSERT INTO chunks(source_id, chunk_index, canonical_ref, content, token_estimate) VALUES (?, 0, ?, 'c', 1)",
             (source_id, canonical_ref),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

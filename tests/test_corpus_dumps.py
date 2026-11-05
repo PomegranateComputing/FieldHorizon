@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import bz2
 import json
+from pathlib import Path
 
 import pytest
 
@@ -577,6 +578,7 @@ def test_a_public_domain_template_is_recorded_as_evidence_not_as_a_verdict():
     stack = rights_stack_for(page, page_url="https://fr.wikisource.org/wiki/x", language="fr")
     work = stack.get(RightsComponent.WORK)
 
+    assert work is not None
     assert "pd-old" in work.notes.lower()
     assert work.evidence, "no evidence, no accept -- even with a template"
     # CC BY-SA on the transcription still constrains the result.
@@ -616,7 +618,7 @@ def build_fetcher(**extra):
     """
     pages = split_mediawiki_pages(fixture_bytes("wikisource_stream_pages.xml"))
     data, index_text = build_multistream_dump([pages[:3], pages[3:]])
-    mapping = {
+    mapping: dict[str, bytes | Path] = {
         LISTING_URL: fixture_bytes("wikisource_dump_directory.html"),
         STATUS_URL: fixture_bytes("wikisource_dumpstatus.json"),
         INDEX_URL: bz2.compress(index_text.encode("utf-8")),

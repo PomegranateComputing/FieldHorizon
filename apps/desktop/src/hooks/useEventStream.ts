@@ -19,7 +19,7 @@ export interface EventStreamState {
  * "id: ...\ndata: ...\n\n" frames fieldhorizon/server.py's _sse_envelope
  * writes.
  *
- * Reconnects with backoff on drop (Phase UI-3 item 5, FABLE Sec.8.4), using
+ * Reconnects with backoff on drop (Phase UI-3 item 5, UI specification Sec.8.4), using
  * the last frame's real `id:` line as `since_id` on the next attempt --
  * genuine resumption from the append-only, gap-free event log, not a
  * from-scratch replay that would duplicate everything already shown. Kept

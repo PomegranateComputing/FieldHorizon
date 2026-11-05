@@ -209,7 +209,9 @@ def test_the_licence_file_is_recorded_as_corroborating_evidence():
         metadata, license_text=fixture_text("se_github_LICENSE.md"),
         repo_url=f"https://github.com/{REPO}",
     )
-    kinds = {e.kind for e in stack.get(RightsComponent.SOURCE_TEXT).evidence}
+    source_text = stack.get(RightsComponent.SOURCE_TEXT)
+    assert source_text is not None
+    kinds = {e.kind for e in source_text.evidence}
 
     assert "standard_ebooks:opf:dc:rights" in kinds
     assert "standard_ebooks:LICENSE.md" in kinds

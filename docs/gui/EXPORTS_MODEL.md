@@ -1,6 +1,6 @@
 # Exports Model (Phase UI-6 item 6)
 
-FABLE §18: JSON/Markdown/CSV/HTML/SVG/PNG depending on content, a
+UI specification §18: JSON/Markdown/CSV/HTML/SVG/PNG depending on content, a
 reproducible cycle bundle, and an attribution block on every export.
 
 ## What existed before this item

@@ -136,7 +136,7 @@ class EngineStats:
     json_entries_count: int
     # Chunks with at least one row in chunk_concepts/chunk_entities/chunk_motifs
     # (concepts.py's real tagging pipeline) -- Phase UI-4 item 1's honest referent
-    # for FABLE Sec.10.2's "semantic profiles" tile. "Semantic links" has no real
+    # for UI specification Sec.10.2's "semantic profiles" tile. "Semantic links" has no real
     # referent anywhere in this codebase (provenance_edges is lineage, not a
     # similarity graph) and is deliberately not represented here or in the UI.
     tagged_chunks_count: int
@@ -650,7 +650,7 @@ class FieldHorizonEngine:
         return load_manifest(manifest_path(self.cfg))
 
     def sources(self, limit: int = 200, offset: int = 0, q: str | None = None) -> list[SourceEntry]:
-        # FABLE Sec.15: "ne pas transférer l'intégralité de la base au
+        # UI specification Sec.15: "ne pas transférer l'intégralité de la base au
         # frontend pour afficher un tableau" -- a corpus of thousands of
         # sources must never come back in one unbounded response. limit is
         # clamped rather than trusted from the request: a caller asking for

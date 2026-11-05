@@ -228,7 +228,7 @@ def test_5_one_dead_provider_does_not_end_the_run():
                 exhausted=True,
             )
 
-    survivors = []
+    survivors: list[Candidate] = []
     for adapter in (DeadAdapter, LiveAdapter):
         try:
             survivors.extend(adapter(_stub_source(), _stub_fetcher()).discover())

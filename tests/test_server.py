@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
-import time
 from pathlib import Path
 from unittest.mock import Mock, patch
 
@@ -442,10 +441,12 @@ def test_multi_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
     app = create_app(cfg, TOKEN)
     client = TestClient(app)
 
+    entered = threading.Event()
     release = threading.Event()
 
     def slow_multi_cycle(*args, **kwargs):
-        release.wait(timeout=2)
+        entered.set()
+        assert release.wait(timeout=10), "test did not release the first request"
         return 1
 
     results = {}
@@ -457,13 +458,13 @@ def test_multi_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
     with patch("fieldhorizon.server.FieldHorizonEngine.multi_cycle", side_effect=slow_multi_cycle):
         t1 = threading.Thread(target=call, args=("first",))
         t1.start()
-        time.sleep(0.1)
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
+        try:
+            assert entered.wait(timeout=10), "first request did not acquire its lock"
+            call("second")
+        finally:
+            release.set()
+            t1.join(timeout=10)
+        assert not t1.is_alive(), "first request did not finish"
 
     assert results["first"] == 200
     assert results["second"] == 429
@@ -492,10 +493,12 @@ def test_run_schools_endpoint_rejects_a_second_concurrent_call(tmp_path):
     app = create_app(cfg, TOKEN)
     client = TestClient(app)
 
+    entered = threading.Event()
     release = threading.Event()
 
     def slow_run_schools(*args, **kwargs):
-        release.wait(timeout=2)
+        entered.set()
+        assert release.wait(timeout=10), "test did not release the first request"
         return []
 
     results = {}
@@ -507,13 +510,13 @@ def test_run_schools_endpoint_rejects_a_second_concurrent_call(tmp_path):
     with patch("fieldhorizon.server.FieldHorizonEngine.run_schools_clustering", side_effect=slow_run_schools):
         t1 = threading.Thread(target=call, args=("first",))
         t1.start()
-        time.sleep(0.1)
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
+        try:
+            assert entered.wait(timeout=10), "first request did not acquire its lock"
+            call("second")
+        finally:
+            release.set()
+            t1.join(timeout=10)
+        assert not t1.is_alive(), "first request did not finish"
 
     assert results["first"] == 200
     assert results["second"] == 429
@@ -527,10 +530,12 @@ def test_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
     app = create_app(cfg, TOKEN)
     client = TestClient(app)
 
+    entered = threading.Event()
     release = threading.Event()
 
     def slow_cycle(*args, **kwargs):
-        release.wait(timeout=2)
+        entered.set()
+        assert release.wait(timeout=10), "test did not release the first request"
         return 1
 
     results = {}
@@ -542,13 +547,13 @@ def test_cycle_endpoint_rejects_a_second_concurrent_call(tmp_path):
     with patch("fieldhorizon.server.FieldHorizonEngine.cycle", side_effect=slow_cycle):
         t1 = threading.Thread(target=call, args=("first",))
         t1.start()
-        time.sleep(0.1)  # let the first request acquire the lock
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
+        try:
+            assert entered.wait(timeout=10), "first request did not acquire its lock"
+            call("second")
+        finally:
+            release.set()
+            t1.join(timeout=10)
+        assert not t1.is_alive(), "first request did not finish"
 
     assert results["first"] == 200
     assert results["second"] == 429
@@ -597,10 +602,12 @@ def test_ingest_manifest_endpoint_rejects_a_second_concurrent_call(tmp_path):
     app = create_app(cfg, TOKEN)
     client = TestClient(app)
 
+    entered = threading.Event()
     release = threading.Event()
 
     def slow_ingest(*args, **kwargs):
-        release.wait(timeout=2)
+        entered.set()
+        assert release.wait(timeout=10), "test did not release the first request"
         return []
 
     results = {}
@@ -612,13 +619,13 @@ def test_ingest_manifest_endpoint_rejects_a_second_concurrent_call(tmp_path):
     with patch("fieldhorizon.server.FieldHorizonEngine.ingest_manifest", side_effect=slow_ingest):
         t1 = threading.Thread(target=call, args=("first",))
         t1.start()
-        time.sleep(0.1)
-        t2 = threading.Thread(target=call, args=("second",))
-        t2.start()
-        time.sleep(0.1)
-        release.set()
-        t1.join(timeout=3)
-        t2.join(timeout=3)
+        try:
+            assert entered.wait(timeout=10), "first request did not acquire its lock"
+            call("second")
+        finally:
+            release.set()
+            t1.join(timeout=10)
+        assert not t1.is_alive(), "first request did not finish"
 
     assert results["first"] == 200
     assert results["second"] == 429
@@ -713,7 +720,7 @@ def test_metrics_endpoint_tracks_request_count(tmp_path):
 
 
 def test_error_response_matches_structured_error_model(tmp_path):
-    """FABLE Sec.13: every error is {schema_version, code, title, detail, remediation, correlation_id} -- never a raw traceback."""
+    """UI specification Sec.13: every error is {schema_version, code, title, detail, remediation, correlation_id} -- never a raw traceback."""
     client = make_client(tmp_path)
     response = client.get("/fingerprint/999", headers=auth_headers())
     assert response.status_code == 404
@@ -743,7 +750,7 @@ def test_capabilities_endpoint_reflects_real_computed_state(tmp_path):
 
 
 def test_capabilities_rust_pressure_core_toggles_with_real_binary_presence(tmp_path):
-    """Confirms rust_pressure_core is introspected live, not a hand-maintained constant (FABLE Sec.3.2's 'no fake facade' guarantee)."""
+    """Confirms rust_pressure_core is introspected live, not a hand-maintained constant (UI specification Sec.3.2's 'no fake facade' guarantee)."""
     client = make_client(tmp_path)
 
     with patch("fieldhorizon.diagnostics.rust_binary_path") as mock_path:
@@ -841,6 +848,7 @@ def test_cycle_detail_and_evidence_endpoints_return_the_real_stored_row(tmp_path
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             ("a query", "hermes3:8b", "prompt text", "response text", 0, "CANON", 0.87, "the resulting fragment", "[1]"),
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO cycle_sources(cycle_id, source_kind, ref, content) VALUES (?, 'book', 'ref-1', 'verbatim evidence')",
@@ -1220,7 +1228,7 @@ def test_apply_proposal_endpoint_wiring_with_a_mocked_ontology_and_parity_check(
     Mirrors test_proposals.py's own apply-success test: DEFAULT_ONTOLOGY_PATH
     is a module-level constant, not derived from cfg, so an unpatched call
     here would merge into and git-commit the *real* repo's ontology.yaml --
-    exactly what FABLE Sec.10.6's "never auto-apply" is guarding against.
+    exactly what UI specification Sec.10.6's "never auto-apply" is guarding against.
     This test only proves the route itself is wired to engine.proposal_apply,
     not apply_proposal's own logic (already covered in test_proposals.py).
     """

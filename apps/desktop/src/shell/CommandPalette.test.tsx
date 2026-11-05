@@ -33,7 +33,7 @@ function renderPalette(onOpenSearch = vi.fn()) {
   );
 }
 
-describe("CommandPalette (FABLE Sec.11)", () => {
+describe("CommandPalette (UI specification Sec.11)", () => {
   beforeEach(async () => {
     await i18n.changeLanguage("en");
   });

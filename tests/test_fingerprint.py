@@ -58,6 +58,7 @@ def make_source_with_chunks(cfg: AppConfig, path: str, vectors: list[list[float]
                 "VALUES (?, ?, ?, 'content', 1)",
                 (source_id, i, f"{path}-{i}"),
             )
+            assert cur.lastrowid is not None
             chunk_ids.append(int(cur.lastrowid))
         conn.commit()
 
@@ -75,6 +76,7 @@ def make_source_with_chunks(cfg: AppConfig, path: str, vectors: list[list[float]
                 conn.execute("INSERT INTO chunk_motifs(chunk_id, motif) VALUES (?, ?)", (chunk_id, f"motif-{domain}"))
         conn.commit()
 
+    assert source_id is not None
     return int(source_id)
 
 
@@ -86,6 +88,7 @@ def test_compute_fingerprint_returns_none_for_source_with_no_embedded_chunks(tmp
         source_id = cur.lastrowid
         conn.commit()
 
+    assert source_id is not None
     with _fixed_version():
         assert compute_fingerprint(cfg, source_id) is None
 
@@ -185,5 +188,6 @@ def test_compare_fingerprints_raises_when_a_source_has_no_vectors(tmp_path):
         source_b = cur.lastrowid
         conn.commit()
 
+    assert source_b is not None
     with _fixed_version(), pytest.raises(ValueError):
         compare_fingerprints(cfg, source_a, source_b)

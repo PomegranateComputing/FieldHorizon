@@ -53,6 +53,7 @@ def insert_cycle(cfg: AppConfig, prompt: str, model: str, fragment: str) -> int:
             (model, prompt, fragment),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -72,6 +73,7 @@ def test_replay_raises_when_cycle_has_no_stored_prompt(tmp_path):
             "VALUES ('q', 'm', '', 'r', 0, 'CANON', 0.9, 'f')"
         )
         conn.commit()
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
 
     with pytest.raises(ReplayNotFoundError):
@@ -222,6 +224,7 @@ def insert_canon_cycle_with_embedding(cfg: AppConfig, query: str, fragment: str,
             (query, fragment),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
     store_cycle_embedding(cfg, cycle_id, vector, "nomic-embed-text", "nomic-embed-text")
     return cycle_id
@@ -315,6 +318,7 @@ def _insert_canon_cycle_with_temporal_state(cfg: AppConfig, fragment: str, valid
             "VALUES ('q', 'm', 'p', 'r', 0, 'CANON', 0.9, ?, ?)",
             (fragment, valid_from),
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 

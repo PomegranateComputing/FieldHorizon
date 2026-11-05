@@ -43,6 +43,7 @@ def insert_source_and_chunks(cfg: AppConfig, n: int) -> list[int]:
                 "VALUES (?, ?, ?, ?, 1)",
                 (source_id, i, f"ref-{i}", f"content {i}"),
             )
+            assert cur.lastrowid is not None
             ids.append(int(cur.lastrowid))
         conn.commit()
     return ids

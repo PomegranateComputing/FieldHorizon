@@ -4,7 +4,7 @@ import { useSystemInfo } from "../hooks/useSystemInfo";
 import "./SettingsPage.css";
 
 /**
- * FABLE Sec.10.15's "never silently overwrite config" is satisfied the
+ * UI specification Sec.10.15's "never silently overwrite config" is satisfied the
  * simplest honest way: there is no config-write path in this codebase at
  * all (config.yaml is hand-edited, same "curation as code" discipline as
  * sources.yaml/ontology.yaml). This is a read-only view of the real

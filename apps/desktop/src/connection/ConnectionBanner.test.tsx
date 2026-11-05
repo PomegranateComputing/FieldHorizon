@@ -7,7 +7,7 @@ import { ConnectionBanner } from "./ConnectionBanner";
 const { useConnectionMock } = vi.hoisted(() => ({ useConnectionMock: vi.fn() }));
 vi.mock("./ConnectionContext", () => ({ useConnection: useConnectionMock }));
 
-describe("ConnectionBanner (FABLE Sec.17: connection loss / reconnecting / degraded)", () => {
+describe("ConnectionBanner (UI specification Sec.17: connection loss / reconnecting / degraded)", () => {
   it("renders nothing while connected", () => {
     useConnectionMock.mockReturnValue({ phase: "connected", attempt: 0, retry: vi.fn() });
     const { container } = render(<ConnectionBanner />);

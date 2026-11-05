@@ -75,6 +75,7 @@ def insert_cycle(cfg: AppConfig, query: str, verdict: str, fragment: str, retire
             (query, verdict, fragment),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
 
     if retired:
@@ -218,6 +219,7 @@ def test_record_council_weather_writes_canon_scope_readings(tmp_path):
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO councils(started_at, examined, overturned) VALUES ('now', 0, 0)")
         conn.commit()
+        assert cur.lastrowid is not None
         council_id = int(cur.lastrowid)
 
     with _fixed_version(), patch("fieldhorizon.weather.embed_text", side_effect=_fake_embed):

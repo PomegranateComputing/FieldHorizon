@@ -4,7 +4,7 @@ import { useConnection } from "./ConnectionContext";
 import "./startup.css";
 
 /**
- * FABLE Sec.17: connection loss / reconnecting / degraded, shown as a slim
+ * UI specification Sec.17: connection loss / reconnecting / degraded, shown as a slim
  * strip over the still-visible shell (stale data stays on screen) -- not a
  * full-screen takeover. That's StartupScreen's job, and only before the
  * first successful connection.

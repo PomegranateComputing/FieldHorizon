@@ -105,6 +105,7 @@ def test_contradiction_does_not_activate_for_a_neutral_query(tmp_path):
 def _insert_chunk(cfg: AppConfig) -> int:
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO sources(title, path, source_type) VALUES ('S', '/tmp/s.txt', 'book')")
+        assert cur.lastrowid is not None
         source_id = int(cur.lastrowid)
         cur = conn.execute(
             "INSERT INTO chunks(source_id, chunk_index, canonical_ref, content, token_estimate) "
@@ -112,6 +113,7 @@ def _insert_chunk(cfg: AppConfig) -> int:
             (source_id,),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -153,6 +155,7 @@ def _insert_active_canon_cycle(cfg: AppConfig, fragment: str) -> int:
             (fragment,),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

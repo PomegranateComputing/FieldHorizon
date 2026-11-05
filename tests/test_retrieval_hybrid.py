@@ -56,6 +56,7 @@ def insert_chunk(cfg: AppConfig, path: str, content: str, source_weight: float =
             (source_id, f"{path} / chunk 00000", content),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         chunk_id = int(cur.lastrowid)
 
     with connect(cfg.database) as conn:

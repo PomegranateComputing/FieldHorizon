@@ -90,7 +90,7 @@ already read, now reachable from the API), and `GET /config` (exposing
 ## Pagination
 
 `GET /sources` is the one endpoint genuinely at risk of unbounded growth
-(FABLE §15's "thousands of sources") and takes real `limit`/`offset`/`q`
+(UI specification §15's "thousands of sources") and takes real `limit`/`offset`/`q`
 query params, server-clamped to `[1, 500]` regardless of what's requested,
 with a `total` field in the response. See `docs/gui/PERFORMANCE_MODEL.md`
 for why the other list endpoints were deliberately left unbounded (small,

@@ -87,7 +87,7 @@ test.describe("full workflow against the real backend", () => {
     await expect(page.locator(".cycles-live")).toBeVisible({ timeout: 15_000 });
     await expect(page.locator(".cycles-timeline li").first()).toBeVisible({ timeout: 15_000 });
 
-    // The four adversaries, genuinely arguing (FABLE Sec.10.7).
+    // The four adversaries, genuinely arguing (UI specification Sec.10.7).
     await expect(page.locator(".cycles-agent-card")).toHaveCount(4, { timeout: 2 * 60 * 1000 });
 
     // -- open result -------------------------------------------------------

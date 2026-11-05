@@ -534,7 +534,7 @@ def _cases_for(cfg: AppConfig, cycle_ids: list[int]) -> list[CouncilCase]:
 def council_detail(cfg: AppConfig, council_id: int) -> CouncilDetail:
     """
     Which specific cycles a council rehabilitated, retired, or promoted --
-    FABLE Sec.10.3's "rehabilitations and retirements", not just the
+    UI specification Sec.10.3's "rehabilitations and retirements", not just the
     councils table's own aggregate examined/overturned counts. Reads the
     real REHABILITATES/RETIRES/PROMOTED_BY provenance edges _record_council_edge
     wrote during the run; each case links out to that cycle's own

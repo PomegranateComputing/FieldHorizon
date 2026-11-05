@@ -44,6 +44,7 @@ def insert_cycle(cfg: AppConfig, query: str, verdict: str, fragment: str, score:
             (query, verdict, score, fragment, json.dumps(parent_ids) if parent_ids else None),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -268,6 +269,7 @@ def test_engine_weather_by_school_returns_one_reading_per_active_school(tmp_path
         cur = conn.execute(
             "INSERT INTO schools(name, summary, run_at) VALUES ('a school', 'a summary', '2020-01-01')"
         )
+        assert cur.lastrowid is not None
         school_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)", (school_id, cycle_id)
@@ -292,6 +294,7 @@ def _insert_cycle_with_temporal_state(cfg: AppConfig, created_at: str, verdict: 
             "VALUES ('q', 'm', 'p', 'r', 0, ?, 0.9, 'f', ?)",
             (verdict, created_at),
         )
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
         conn.commit()
 
@@ -339,6 +342,7 @@ def test_engine_school_membership_as_of_returns_the_active_generation(tmp_path):
     cycle_id = insert_cycle(cfg, "q", "CANON", "f")
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO schools(name, summary, run_at) VALUES ('S', 's', '2024-01-01 00:00:00')")
+        assert cur.lastrowid is not None
         school_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)", (school_id, cycle_id)

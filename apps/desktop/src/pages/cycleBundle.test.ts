@@ -52,7 +52,7 @@ const CYCLE = {
   created_at: "2026-07-01T00:00:00",
 };
 
-describe("fetchCycleBundle (FABLE Sec.18: reproducible cycle bundle -- real data only, mislabeled sections called out)", () => {
+describe("fetchCycleBundle (UI specification Sec.18: reproducible cycle bundle -- real data only, mislabeled sections called out)", () => {
   it("assembles every section from the real per-cycle data, gated on GET /cycles/{id}", async () => {
     getCycleDetailMock.mockResolvedValue({ schema_version: 1, cycle: CYCLE });
     getConfigMock.mockResolvedValue({ schema_version: 1, config: { field_horizon: { tone: "dark" } } });

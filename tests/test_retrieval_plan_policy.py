@@ -52,6 +52,7 @@ def insert_chunk(cfg: AppConfig, path: str, content: str) -> int:
             (source_id, f"{path} / chunk 00000", content),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         chunk_id = int(cur.lastrowid)
     with connect(cfg.database) as conn:
         conn.execute(
@@ -68,6 +69,7 @@ def test_max_per_source_excludes_and_records_why(tmp_path):
 
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO sources(title, path, source_type) VALUES ('same_source', '/p', 'book')")
+        assert cur.lastrowid is not None
         source_id = int(cur.lastrowid)
         for i in range(3):
             conn.execute(
@@ -87,7 +89,10 @@ def test_max_per_source_excludes_and_records_why(tmp_path):
     assert "max_per_source" in result.constraints_applied
     assert len(result.chunk_candidates) == 1
     assert len(result.excluded_chunk_candidates) == 2
-    assert all("max_per_source" in c.exclusion_reason for c in result.excluded_chunk_candidates)
+    assert all(
+        c.exclusion_reason is not None and "max_per_source" in c.exclusion_reason
+        for c in result.excluded_chunk_candidates
+    )
 
 
 def test_max_per_source_does_not_exclude_when_under_the_limit(tmp_path):
@@ -109,6 +114,7 @@ def _insert_active_canon_cycle(cfg: AppConfig, fragment: str) -> int:
             (fragment,),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -123,6 +129,7 @@ def test_min_direct_evidence_count_excludes_a_canon_candidate_with_no_supports_e
     excluded_ids = {c.cycle_id for c in result.excluded_canon_candidates}
     assert cycle_id in excluded_ids
     excluded = next(c for c in result.excluded_canon_candidates if c.cycle_id == cycle_id)
+    assert excluded.exclusion_reason is not None
     assert "min_direct_evidence_count" in excluded.exclusion_reason
     assert cycle_id not in {c.cycle_id for c in result.canon_candidates}
 

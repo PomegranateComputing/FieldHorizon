@@ -347,7 +347,7 @@ class SchoolDistance:
 
 def school_distances_for_run(cfg: AppConfig, run_at: str) -> list[SchoolDistance]:
     """
-    Inter-school distances (FABLE Sec.10.3's "inter-school distances"):
+    Inter-school distances (UI specification Sec.10.3's "inter-school distances"):
     cosine distance between each pair of schools' own centroids, recomputed
     from their real member embeddings -- centroids are never persisted
     (schools are descriptive labels only, see run_schools's own docstring),

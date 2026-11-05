@@ -114,7 +114,7 @@ function ApplyConfirmDialog({
   const [errorDetail, setErrorDetail] = useState<string>("");
   const dialogRef = useRef<HTMLDivElement>(null);
 
-  // FABLE Sec.16: real keyboard/focus behavior for the app's own hand-built
+  // UI specification Sec.16: real keyboard/focus behavior for the app's own hand-built
   // dialog (native platform.confirm() elsewhere already gets this for free
   // from the OS/browser).
   useEffect(() => {

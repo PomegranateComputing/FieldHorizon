@@ -39,7 +39,7 @@ function renderSearch() {
   );
 }
 
-describe("GlobalSearch (FABLE Sec.12: results grouped by type, real backend endpoints only)", () => {
+describe("GlobalSearch (UI specification Sec.12: results grouped by type, real backend endpoints only)", () => {
   beforeEach(async () => {
     await i18n.changeLanguage("en");
     getRegistryListMock.mockResolvedValue({ schema_version: 1, entries: [] });

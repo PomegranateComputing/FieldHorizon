@@ -64,6 +64,7 @@ def insert_chunk(cfg: AppConfig, path: str, content: str) -> int:
             (source_id, f"{path} / chunk 00000", content),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         chunk_id = int(cur.lastrowid)
 
     with connect(cfg.database) as conn:
@@ -160,6 +161,7 @@ def _insert_active_canon_cycle(cfg: AppConfig, fragment: str, parent_ids: list[i
             (fragment, json.dumps(parent_ids) if parent_ids else None),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -188,6 +190,7 @@ def test_school_strategy_surfaces_sibling_cycles(tmp_path):
 
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO schools(name, summary, run_at) VALUES ('S', 's', '2024-01-01 00:00:00')")
+        assert cur.lastrowid is not None
         school_id = int(cur.lastrowid)
         conn.execute("INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)", (school_id, matched_id))
         conn.execute("INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)", (school_id, sibling_id))

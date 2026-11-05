@@ -23,6 +23,7 @@ dev = [
     "ruff==0.15.20",
     "mypy==2.2.0",
     "httpx==0.28.1",
+    "sqlite-vec==0.1.9",
 ]
 vec = [
     "sqlite-vec==0.1.9",
@@ -36,6 +37,8 @@ include = ["fieldhorizon*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Keep test helper imports available for both pytest and python -m pytest.
+pythonpath = ["."]
 
 [tool.ruff]
 target-version = "py311"

@@ -441,8 +441,12 @@ def test_a_phase_one_rights_signal_still_evaluates():
     )
     s = stack_from_signal(signal)
 
-    assert s.get(RightsComponent.SOURCE_TEXT).normalized_license == LIC_CC_BY_SA
-    assert s.get(RightsComponent.METADATA).normalized_license == LIC_CC0
+    source_text = s.get(RightsComponent.SOURCE_TEXT)
+    metadata = s.get(RightsComponent.METADATA)
+    assert source_text is not None
+    assert metadata is not None
+    assert source_text.normalized_license == LIC_CC_BY_SA
+    assert metadata.normalized_license == LIC_CC0
 
     result = intersect(s)
     assert not result.blocked
@@ -589,5 +593,7 @@ def test_the_stored_licence_is_not_renormalized_on_read():
 
     restored = RightsStack.from_dict(payload)
 
-    assert restored.get(RightsComponent.SOURCE_TEXT).normalized_license == LIC_IN_COPYRIGHT
+    source_text = restored.get(RightsComponent.SOURCE_TEXT)
+    assert source_text is not None
+    assert source_text.normalized_license == LIC_IN_COPYRIGHT
     assert decide(restored, US)[0] != Decision.ACCEPT

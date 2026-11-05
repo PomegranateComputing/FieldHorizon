@@ -61,6 +61,7 @@ def insert_cycle(cfg: AppConfig, prompt: str, model: str, fragment: str) -> int:
             (model, prompt, fragment),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 

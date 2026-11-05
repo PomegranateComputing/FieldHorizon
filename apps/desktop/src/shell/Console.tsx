@@ -10,13 +10,13 @@ function exportEventsAsJson(events: unknown[]): void {
 }
 
 /**
- * FABLE Sec.9's bottom console: resizable (native CSS `resize: vertical` --
+ * UI specification Sec.9's bottom console: resizable (native CSS `resize: vertical` --
  * no custom drag handle needed for that), filterable, exportable, fed by the
  * SSE stream. "Cleared visually without deleting the logs" means exactly
  * this: Clear only resets locally-displayed state, never calls any delete
  * endpoint -- the real record stays in domain_events regardless.
  *
- * Not yet built: detaching into its own window (FABLE Sec.9 mentions it;
+ * Not yet built: detaching into its own window (UI specification Sec.9 mentions it;
  * deferred rather than faked with a non-functional button).
  */
 export function Console() {

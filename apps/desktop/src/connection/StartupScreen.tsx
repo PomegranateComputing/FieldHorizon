@@ -12,7 +12,7 @@ function StepMarker({ status }: { status: StartupStep["status"] }) {
 }
 
 /**
- * FABLE Sec.10.1: a brief, functional startup screen showing the real steps,
+ * UI specification Sec.10.1: a brief, functional startup screen showing the real steps,
  * with immediately actionable errors. Only shown before the first successful
  * connection -- once connected, a lost connection later shows a small banner
  * over the still-visible shell (ConnectionBanner), not this full screen again.

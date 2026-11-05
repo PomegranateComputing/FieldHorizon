@@ -8,7 +8,7 @@ from .config import AppConfig
 from .server import create_app
 
 # Implementation Brief IV, Phase UI-2 item 4: OpenAPI is the source of truth
-# for the API contract (FABLE Sec.8.3) -- this is the one place that builds
+# for the API contract (UI specification Sec.8.3) -- this is the one place that builds
 # the schema, used both by the freeze script below and by the CI no-diff
 # test (tests/test_openapi_contract.py) so the two can never drift apart.
 

@@ -287,8 +287,12 @@ def split_mediawiki_pages(xml: bytes) -> list[tuple[int, str, str]]:
     out: list[tuple[int, str, str]] = []
     for match in re.finditer(r"[ \t]*<page>.*?</page>\n?", text, re.S):
         page_xml = match.group(0)
-        title = re.search(r"<title>(.*?)</title>", page_xml, re.S).group(1)
-        page_id = int(re.search(r"</title>\s*<ns>\d+</ns>\s*<id>(\d+)</id>", page_xml, re.S).group(1))
+        title_match = re.search(r"<title>(.*?)</title>", page_xml, re.S)
+        id_match = re.search(r"</title>\s*<ns>\d+</ns>\s*<id>(\d+)</id>", page_xml, re.S)
+        assert title_match is not None, "fixture page has no title"
+        assert id_match is not None, "fixture page has no page ID"
+        title = title_match.group(1)
+        page_id = int(id_match.group(1))
         out.append((page_id, title, page_xml))
     return out
 

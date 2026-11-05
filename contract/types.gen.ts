@@ -539,7 +539,7 @@ export interface paths {
          * Post Apply Proposal
          * @description Merges the proposal into ontology.yaml, parity-checks, and
          *     git-commits (proposals.apply_proposal) -- never call this without
-         *     the frontend's own explicit confirmation step (FABLE Sec.10.6:
+         *     the frontend's own explicit confirmation step (UI specification Sec.10.6:
          *     "apply requires explicit confirmation and shows the parity-check
          *     result. Never auto-apply."). A parity failure's full pytest output
          *     is preserved in the error detail, not summarized away.
@@ -1503,7 +1503,7 @@ export interface components {
          * MultiCycleRequest
          * @description Only the parameters run_multi_cycle really accepts (Phase UI-4 item 4's
          *     CYCLES launcher: "expose only parameters the engine really accepts") --
-         *     FABLE Sec.10.6's fuller field list (workspace, planner mode, context
+         *     UI specification Sec.10.6's fuller field list (workspace, planner mode, context
          *     budget, seed, tags, notes, ...) has no real backing anywhere in this
          *     engine and is not represented here.
          */

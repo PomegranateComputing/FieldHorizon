@@ -199,7 +199,7 @@ class ServerMetrics:
 class FieldHorizonAPIError(HTTPException):
     """
     Raise this instead of a plain HTTPException wherever a specific error
-    code and remediation are known (FABLE Sec.13's structured error model).
+    code and remediation are known (UI specification Sec.13's structured error model).
     Plain HTTPException still works everywhere else -- both are converted to
     the same ErrorResponse shape by the handlers registered in create_app.
     """
@@ -221,7 +221,7 @@ _SSE_POLL_INTERVAL_SECONDS = 0.5
 
 def _sse_envelope(event: DomainEvent) -> dict:
     """
-    Maps the existing DomainEvent onto FABLE Sec.8.3's minimum envelope shape.
+    Maps the existing DomainEvent onto UI specification Sec.8.3's minimum envelope shape.
     "stage" and "severity" are always null: no such concepts exist anywhere
     in the domain-event fabric (Implementation Brief III) -- inventing values
     for them would be exactly the kind of fake facade Sec.3.2 forbids. Everything
@@ -366,7 +366,7 @@ def create_app(cfg: AppConfig, token: str) -> FastAPI:
 
     @app.exception_handler(Exception)
     async def handle_unexpected_error(request: Request, exc: Exception) -> JSONResponse:
-        # No raw traceback ever reaches the client (FABLE Sec.13) -- the real
+        # No raw traceback ever reaches the client (UI specification Sec.13) -- the real
         # exception is logged server-side, in full, for anyone reading logs.
         logger.exception("Unhandled error on %s %s", request.method, request.url.path)
         return _error_response(
@@ -706,7 +706,7 @@ def create_app(cfg: AppConfig, token: str) -> FastAPI:
         """
         Merges the proposal into ontology.yaml, parity-checks, and
         git-commits (proposals.apply_proposal) -- never call this without
-        the frontend's own explicit confirmation step (FABLE Sec.10.6:
+        the frontend's own explicit confirmation step (UI specification Sec.10.6:
         "apply requires explicit confirmation and shows the parity-check
         result. Never auto-apply."). A parity failure's full pytest output
         is preserved in the error detail, not summarized away.

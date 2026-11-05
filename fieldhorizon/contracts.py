@@ -322,7 +322,7 @@ class MultiCycleRequest(BaseModel):
     """
     Only the parameters run_multi_cycle really accepts (Phase UI-4 item 4's
     CYCLES launcher: "expose only parameters the engine really accepts") --
-    FABLE Sec.10.6's fuller field list (workspace, planner mode, context
+    UI specification Sec.10.6's fuller field list (workspace, planner mode, context
     budget, seed, tags, notes, ...) has no real backing anywhere in this
     engine and is not represented here.
     """
@@ -430,7 +430,7 @@ class SystemInfoResponse(BaseModel):
 
 
 class ErrorResponse(BaseModel):
-    """FABLE Sec.13's structured error model -- every error this API returns takes this shape, never a raw traceback."""
+    """UI specification Sec.13's structured error model -- every error this API returns takes this shape, never a raw traceback."""
     schema_version: int = SCHEMA_VERSION
     code: str
     title: str

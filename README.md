@@ -1,5 +1,28 @@
 # Field Horizon
 
+Field Horizon is a local data engineering and corpus exploration platform built
+with **Python, FastAPI, SQLite FTS5, an optional sqlite-vec index, Rust, and a
+Tauri/React client**. It brings document ingestion, hybrid retrieval, event
+streams, reproducible runs, and source-level evidence lineage into one system.
+
+## Engineering overview
+
+- **Data and retrieval:** normalized document ingestion, deduplication, full-text
+  search, versioned embeddings, hybrid ranking, and query planning.
+- **Traceability:** provenance links from results back to source text, persistent
+  domain events, configuration manifests, and replayable operation records.
+- **Service and clients:** a shared application layer for the CLI and FastAPI,
+  generated TypeScript API contracts, a browser interface, and a desktop shell.
+- **Cross-language verification:** a Rust pressure-graph implementation checked
+  against the Python reference, with explicit fallback when the binary is absent.
+- **Quality controls:** Python and frontend tests, static analysis, and a CI check
+  that detects generated-contract drift.
+
+The concrete application is a recursive canonical-synthesis engine for textual
+corpora. Its domain vocabulary and operating model are described below.
+
+## Project scope
+
 A local, closed, recursive canonical-synthesis engine. It ingests sacred
 texts, political manifestos, and structured doctrinal axioms; sets four
 adversarial personas against each other over the retrieved material;
@@ -99,11 +122,11 @@ Two more subsystems sit beside the per-cycle loop:
 
 ## Install
 
-Requires Python 3.11+, [Ollama](https://ollama.com) running locally, and
+Requires Python 3.12–3.14, [Ollama](https://ollama.com) running locally, and
 (optionally) a Rust toolchain for the pressure-core parity engine.
 
 ```bash
-git clone <this repo>
+git clone https://github.com/PomegranateComputing/FieldHorizon.git
 cd FieldHorizon
 
 python3 -m venv .venv

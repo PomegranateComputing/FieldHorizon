@@ -55,6 +55,7 @@ def _insert_cycle(cfg: AppConfig, parent_cycle_ids: list[int] | None = None) -> 
             (json.dumps(parent_cycle_ids) if parent_cycle_ids else None,),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         return int(cur.lastrowid)
 
 
@@ -96,11 +97,13 @@ def test_backfill_reconstructs_member_of_and_supersedes(tmp_path):
     cycle_id = _insert_cycle(cfg)
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO schools(name, summary, run_at) VALUES ('S1', 'sum', '2024-01-01')")
+        assert cur.lastrowid is not None
         first_school_id = int(cur.lastrowid)
         cur = conn.execute(
             "INSERT INTO schools(name, summary, previous_school_id, run_at) VALUES ('S2', 'sum', ?, '2024-01-02')",
             (first_school_id,),
         )
+        assert cur.lastrowid is not None
         second_school_id = int(cur.lastrowid)
         conn.execute(
             "INSERT INTO school_members(school_id, cycle_id, distance) VALUES (?, ?, 0.1)",
@@ -125,6 +128,7 @@ def test_backfill_reconstructs_rehabilitates_when_attributable_via_domain_events
 
     with connect(cfg.database) as conn:
         cur = conn.execute("INSERT INTO canon_events(cycle_id, event, detail) VALUES (?, 'REHABILITATED', '{}')", (cycle_id,))
+        assert cur.lastrowid is not None
         canon_event_id = int(cur.lastrowid)
         conn.commit()
 

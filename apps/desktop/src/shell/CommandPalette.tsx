@@ -21,9 +21,9 @@ interface Command {
 }
 
 /**
- * FABLE Sec.11: keyboard-accessible, searchable, consistent shortcuts,
+ * UI specification Sec.11: keyboard-accessible, searchable, consistent shortcuts,
  * confirmation on destructive ones. Every command here does something real
- * today -- "Export current view" (one of FABLE's own examples) is
+ * today -- "Export current view" (one of UI specification's own examples) is
  * deliberately absent until Phase UI-6 item 6 (Exports) actually exists;
  * adding it now would be a command that opens nothing.
  */

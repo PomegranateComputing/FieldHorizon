@@ -64,6 +64,7 @@ def insert_canon_cycle(cfg: AppConfig, query: str, fragment: str, vector: list[f
             (query, fragment),
         )
         conn.commit()
+        assert cur.lastrowid is not None
         cycle_id = int(cur.lastrowid)
 
     store_cycle_embedding(cfg, cycle_id, vector, "nomic-embed-text", "nomic-embed-text")
@@ -179,6 +180,7 @@ def test_run_schools_records_a_run_manifest_with_the_seed(tmp_path):
     manifests = RunManifestRepository(cfg).recent(operation="schools", limit=5)
     assert len(manifests) == 1
     assert manifests[0].random_seeds == {"seed": 7, "k": 2}
+    assert manifests[0].output_ids is not None
     assert set(manifests[0].output_ids) == {f"school:{r.school_id}" for r in results}
 
 

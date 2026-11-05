@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 # ACTUALLY present, computed by introspecting real state (a file exists, a
 # table is reachable) wherever that's possible, rather than a hand-maintained
 # dict that drifts from reality the moment a feature ships or regresses --
-# the whole "no fake facade" guarantee (FABLE Sec.3.2) depends on this endpoint
+# the whole "no fake facade" guarantee (UI specification Sec.3.2) depends on this endpoint
 # staying honest automatically. Statuses mirror docs/gui/REPOSITORY_REALITY_AUDIT.md
 # exactly; update both together if a capability's real status ever changes.
 

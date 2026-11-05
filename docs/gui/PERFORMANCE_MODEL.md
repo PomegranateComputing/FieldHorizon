@@ -1,6 +1,6 @@
 # Performance Model (Phase UI-6 item 2)
 
-FABLE §15's requirement, audited against what actually exists rather than
+UI specification §15's requirement, audited against what actually exists rather than
 applied as a blanket rewrite. The client must stay fluid with thousands of
 sources, tens of thousands of chunks, long timelines, many events, and large
 graphs — using server pagination, virtualization, progressive loading,
@@ -39,7 +39,7 @@ transferring the whole database to the frontend to render one table.
 ## What was a genuine gap, and the fix
 
 The one endpoint that returned an entire table with no bound at all was
-`GET /sources` — the literal "thousands of sources" case FABLE names.
+`GET /sources` — the literal "thousands of sources" case UI specification names.
 `CorpusPage.tsx`'s sources tab fetched every row in one response and did
 every bit of search/sort/scroll handling against that full array in memory.
 
@@ -95,7 +95,7 @@ confirmed no residual diff beyond the intended source changes.
   by construction in realistic use (a handful of model/prompt registry
   entries, as many ontology proposals or dream runs or clustering runs as a
   user has actually triggered by hand) — not the "thousands of sources /
-  tens of thousands of chunks" scale FABLE names. Adding pagination here
+  tens of thousands of chunks" scale UI specification names. Adding pagination here
   would be speculative engineering against a size these tables don't
   reach; if that changes, the same `limit`/`offset`/`total` pattern applied
   to `/sources` in this item is the one to reuse.

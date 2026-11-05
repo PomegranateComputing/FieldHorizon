@@ -308,9 +308,9 @@ def test_a_record_without_an_affirmative_statement_is_quarantined():
 
     assert decision == Decision.QUARANTINE
     assert result.blocked
-    assert "no affirmative public-domain statement" in (
-        stack.get(RightsComponent.SOURCE_TEXT).notes
-    )
+    source_text = stack.get(RightsComponent.SOURCE_TEXT)
+    assert source_text is not None
+    assert "no affirmative public-domain statement" in source_text.notes
 
 
 def test_the_date_is_never_used_as_rights_evidence():

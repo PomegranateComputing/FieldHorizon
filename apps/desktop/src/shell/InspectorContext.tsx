@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
 /**
- * FABLE Sec.9's right inspector is contextual to whatever's selected in the
+ * UI specification Sec.9's right inspector is contextual to whatever's selected in the
  * center workspace -- one shared selection, not a per-screen ad hoc prop
  * chain, since later screens (RETRIEVAL, CYCLES, PROVENANCE) will set it too.
  * A plain discriminated-union id (not JSX) so Inspector.tsx owns how each
