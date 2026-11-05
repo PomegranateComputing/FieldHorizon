@@ -17,7 +17,7 @@ interface RegistryHit {
 }
 
 /**
- * FABLE Sec.12: results grouped by type, real backend data only -- never a
+ * UI specification Sec.12: results grouped by type, real backend data only -- never a
  * second retrieval engine. Each group below maps to something that
  * genuinely exists server-side:
  *   sources      -> GET /sources?q=      (server-side substring match)

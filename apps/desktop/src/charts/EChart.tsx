@@ -11,7 +11,7 @@ import { downloadDataUrl } from "../shell/exportFile";
 echarts.use([LineChart, RadarChart, GridComponent, LegendComponent, RadarComponent, TitleComponent, TooltipComponent, CanvasRenderer]);
 
 /**
- * FABLE Sec.10.2's "Charts sober (ECharts), garnet/ivory palette, no
+ * UI specification Sec.10.2's "Charts sober (ECharts), garnet/ivory palette, no
  * decoration without data." One thin wrapper, tree-shaken imports (only
  * the chart/component types WEATHER and CANON actually use), no
  * echarts-for-react dependency for something this small. Colors are the
@@ -35,7 +35,7 @@ export const CHART_COLORS = {
 export const CHART_PALETTE: string[] = [CHART_COLORS.cold, CHART_COLORS.gold, CHART_COLORS.terminal, CHART_COLORS.boneDim];
 
 /**
- * exportFilename is opt-in per chart (FABLE Sec.18's per-content-type PNG
+ * exportFilename is opt-in per chart (UI specification Sec.18's per-content-type PNG
  * export) -- WEATHER's 7 small sparklines don't each need their own export
  * button, but the one radar chart genuinely worth saving does. getDataURL()
  * is ECharts' own built-in raster export; no extra library needed the way

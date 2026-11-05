@@ -201,6 +201,7 @@ dev = [
     { name = "mypy" },
     { name = "pytest" },
     { name = "ruff" },
+    { name = "sqlite-vec" },
 ]
 pg = [
     { name = "psycopg", extra = ["binary"] },
@@ -222,6 +223,7 @@ requires-dist = [
     { name = "requests", specifier = "==2.34.2" },
     { name = "rich", specifier = "==15.0.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = "==0.15.20" },
+    { name = "sqlite-vec", marker = "extra == 'dev'", specifier = "==0.1.9" },
     { name = "sqlite-vec", marker = "extra == 'vec'", specifier = "==0.1.9" },
     { name = "uvicorn", specifier = "==0.51.0" },
 ]

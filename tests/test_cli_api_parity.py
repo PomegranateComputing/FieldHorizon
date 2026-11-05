@@ -11,7 +11,7 @@ from fieldhorizon.server import create_app
 from fieldhorizon.temporal import TemporalCanonRepository
 
 # Implementation Brief IV, Phase UI-2 item 5: CLI and API are two presentations
-# of the same FieldHorizonEngine facade (FABLE Sec.8.2 -- "the CLI and the API
+# of the same FieldHorizonEngine facade (UI specification Sec.8.2 -- "the CLI and the API
 # must call the same application layer"). These tests seed one database and
 # check both entry points report the same underlying facts, not just that
 # neither one crashes.

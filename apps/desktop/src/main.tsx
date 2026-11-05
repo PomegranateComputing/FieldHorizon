@@ -9,7 +9,7 @@ import "./styles/index.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    // Server state, not client state (FABLE Sec.8.6): a modest stale time
+    // Server state, not client state (UI specification Sec.8.6): a modest stale time
     // avoids refetching on every focus/mount for data that's cheap to poll
     // but doesn't change every second, without masking real updates for long.
     queries: { staleTime: 5_000, refetchOnWindowFocus: true },

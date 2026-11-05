@@ -24,13 +24,13 @@ interface ConnectionContextValue extends ConnectionState {
   /**
    * Stop then relaunch with whatever config launchManagedBackend was last
    * called with (Phase UI-6 item 5's command palette "Restart managed
-   * backend" -- FABLE Sec.11's own example command). Throws if nothing has
+   * backend" -- UI specification Sec.11's own example command). Throws if nothing has
    * been launched yet this session; canRestartManagedBackend below is the
    * honest guard the palette checks before even offering the command.
    */
   restartManagedBackend: () => Promise<void>;
   canRestartManagedBackend: boolean;
-  /** null on the web build -- a browser tab cannot spawn a local process (FABLE Sec.8.4, Sec.14). */
+  /** null on the web build -- a browser tab cannot spawn a local process (UI specification Sec.8.4, Sec.14). */
   canManageBackend: boolean;
   /**
    * Raw health/capabilities, ResourceState-shaped so TopBar/SideNav/SystemPage

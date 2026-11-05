@@ -116,7 +116,7 @@ def apply_proposal(cfg: AppConfig, number: int, actor: str = ACTOR_CLI) -> Path:
     is never left in a half-merged, uncommitted state either way.
 
     Emits ProposalApplied on success or ProposalApplyFailed on either
-    failure path -- FABLE Sec.14 requires this app's destructive actions
+    failure path -- UI specification Sec.14 requires this app's destructive actions
     (this is its most consequential one: a merge plus a real git commit)
     to be event-logged, not just confirmed in the UI.
     """

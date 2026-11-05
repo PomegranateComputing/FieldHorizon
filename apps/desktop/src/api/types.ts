@@ -133,7 +133,7 @@ export interface ErrorResponse {
   correlation_id: string;
 }
 
-/** FABLE Sec.8.3's minimum SSE envelope, as fieldhorizon/server.py's _sse_envelope actually emits it. */
+/** UI specification Sec.8.3's minimum SSE envelope, as fieldhorizon/server.py's _sse_envelope actually emits it. */
 export interface EventEnvelope {
   event_id: string;
   run_id: string;

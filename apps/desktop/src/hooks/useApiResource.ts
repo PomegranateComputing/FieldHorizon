@@ -4,7 +4,7 @@ export type ResourceState<T> = { status: "loading" } | { status: "error"; error:
 
 /**
  * The small shared shape every top-bar/nav-gating fetch in the shell needs:
- * loading/error/loaded, optionally polled. Not FABLE Sec.17's full state
+ * loading/error/loaded, optionally polled. Not UI specification Sec.17's full state
  * model (that's Phase UI-3 item 5) -- just enough for this item's shell to
  * avoid a blank page or an eternal spinner on its own three read-only calls.
  */

@@ -3,7 +3,7 @@
 Tauri 2 + React + TypeScript + Vite. One frontend, two delivery targets:
 
 * **Desktop** — `npm run tauri dev` / `npm run tauri build`, packaged with a
-  managed or attached local backend (`src-tauri/src/backend.rs`, FABLE §8.4).
+  managed or attached local backend (`src-tauri/src/backend.rs`, UI specification §8.4).
 * **Web** — `npm run build` output served by the existing FastAPI server at
   `/ui` (see `../../fieldhorizon/server.py`'s static mount, Phase UI-3 item 2).
 

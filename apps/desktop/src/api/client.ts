@@ -262,7 +262,7 @@ export function getMetrics(): Promise<MetricsResponse> {
 }
 
 /**
- * Paginated + server-searched (FABLE Sec.15: a corpus of thousands of
+ * Paginated + server-searched (UI specification Sec.15: a corpus of thousands of
  * sources must never come back as one unbounded transfer). signal is
  * threaded through so CorpusPage's live search can cancel a stale in-flight
  * request rather than risk an older response overwriting a newer one.

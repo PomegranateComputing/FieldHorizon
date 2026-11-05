@@ -1,5 +1,5 @@
 /**
- * Panel/border/shadow/texture treatment (FABLE Sec.6.3-6.4), ported from the
+ * Panel/border/shadow/texture treatment (UI specification Sec.6.3-6.4), ported from the
  * real site's own idiom: near-zero radius on every rectangular surface,
  * hairline borders, near-invisible additive texture that never competes with
  * legibility (styles.css:38-46, 65-75, 77-85).
@@ -17,7 +17,7 @@ body {
 }
 
 /*
- * FABLE Sec.16: visible focus. Nothing in this codebase ever set
+ * UI specification Sec.16: visible focus. Nothing in this codebase ever set
  * `outline: none`, so keyboard focus was never actively suppressed -- but it
  * also was never styled, leaving every focusable element at whatever bare
  * default the browser/OS happens to render on a near-black background,
@@ -68,7 +68,7 @@ hr,
 
 /**
  * Near-invisible additive texture (grain + scanline + grid), opt-in per
- * surface via these utility classes rather than applied globally -- FABLE
+ * surface via these utility classes rather than applied globally -- UI specification
  * Sec.6.4: "aucun effet ne doit nuire a la lisibilite," so these stay purely
  * decorative and never carry information.
  */

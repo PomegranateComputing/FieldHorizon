@@ -667,7 +667,7 @@ def test_metrics_endpoint_tracks_request_count(tmp_path):
 
 
 def test_error_response_matches_structured_error_model(tmp_path):
-    """FABLE Sec.13: every error is {schema_version, code, title, detail, remediation, correlation_id} -- never a raw traceback."""
+    """UI specification Sec.13: every error is {schema_version, code, title, detail, remediation, correlation_id} -- never a raw traceback."""
     client = make_client(tmp_path)
     response = client.get("/fingerprint/999", headers=auth_headers())
     assert response.status_code == 404
@@ -697,7 +697,7 @@ def test_capabilities_endpoint_reflects_real_computed_state(tmp_path):
 
 
 def test_capabilities_rust_pressure_core_toggles_with_real_binary_presence(tmp_path):
-    """Confirms rust_pressure_core is introspected live, not a hand-maintained constant (FABLE Sec.3.2's 'no fake facade' guarantee)."""
+    """Confirms rust_pressure_core is introspected live, not a hand-maintained constant (UI specification Sec.3.2's 'no fake facade' guarantee)."""
     client = make_client(tmp_path)
 
     with patch("fieldhorizon.diagnostics.rust_binary_path") as mock_path:
@@ -1174,7 +1174,7 @@ def test_apply_proposal_endpoint_wiring_with_a_mocked_ontology_and_parity_check(
     Mirrors test_proposals.py's own apply-success test: DEFAULT_ONTOLOGY_PATH
     is a module-level constant, not derived from cfg, so an unpatched call
     here would merge into and git-commit the *real* repo's ontology.yaml --
-    exactly what FABLE Sec.10.6's "never auto-apply" is guarding against.
+    exactly what UI specification Sec.10.6's "never auto-apply" is guarding against.
     This test only proves the route itself is wired to engine.proposal_apply,
     not apply_proposal's own logic (already covered in test_proposals.py).
     """

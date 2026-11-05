@@ -39,7 +39,7 @@ export function ProvenancePage() {
     retry: retryUnlessNotFound,
   });
 
-  // The reproducible cycle bundle (FABLE Sec.18) only makes sense for a
+  // The reproducible cycle bundle (UI specification Sec.18) only makes sense for a
   // numeric cycle id -- an axiom-id lineage lookup has no single cycle row
   // to assemble config/evidence/scores/events around. Checked by actually
   // resolving GET /cycles/{id}, not just the numeric shape of the string,

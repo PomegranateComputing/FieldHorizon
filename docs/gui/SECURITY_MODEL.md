@@ -1,6 +1,6 @@
 # Security Model (Phase UI-3 item 1, hardened in Phase UI-6 item 1)
 
-FABLE §14's threat model, as actually implemented, not aspirational.
+UI specification §14's threat model, as actually implemented, not aspirational.
 
 ## What this app is
 

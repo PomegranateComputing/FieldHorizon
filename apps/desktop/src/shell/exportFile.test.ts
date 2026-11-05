@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { downloadCsv, downloadDataUrl, downloadJson, downloadMarkdown } from "./exportFile";
 
-describe("exportFile (FABLE Sec.18: every export carries the attribution block)", () => {
+describe("exportFile (UI specification Sec.18: every export carries the attribution block)", () => {
   let clickedHref = "";
   let clickedDownload = "";
   let createdBlobs: Blob[] = [];

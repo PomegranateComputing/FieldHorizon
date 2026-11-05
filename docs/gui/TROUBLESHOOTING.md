@@ -64,7 +64,7 @@ properties to its wrapper from the start.
 
 ## Writing a new Playwright verification script: French renders by default
 
-FABLE §7 makes French the default UI language, and it stayed that way
+UI specification §7 makes French the default UI language, and it stayed that way
 across dev-server restarts within a session in a couple of cases this
 project hit directly. A `getByRole("button", { name: /export/i })` or
 `getByPlaceholder(/cycle id/i)` written assuming English text will

@@ -13,14 +13,14 @@ import "./shell.css";
 import { SideNav } from "./SideNav";
 import { TopBar } from "./TopBar";
 
-/** FABLE Sec.9's global layout: top bar, side nav, center workspace, right inspector, bottom console. */
+/** UI specification Sec.9's global layout: top bar, side nav, center workspace, right inspector, bottom console. */
 export function AppShell() {
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   // The DB operations workstation needs the width: its own context bar replaces the corpus inspector.
   const workstation = useLocation().pathname.startsWith("/db");
 
-  // FABLE Sec.11/12: Ctrl/Cmd+K for the command palette, Ctrl/Cmd+Shift+K for
+  // UI specification Sec.11/12: Ctrl/Cmd+K for the command palette, Ctrl/Cmd+Shift+K for
   // global search -- global, not gated on focus, matching every app that
   // uses this shortcut family (VSCode, Slack, Linear...).
   useEffect(() => {

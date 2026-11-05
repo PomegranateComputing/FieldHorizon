@@ -18,7 +18,7 @@
 .weather-panel {
   padding: 1rem;
   margin-bottom: 1rem;
-  /* FABLE Sec.25's own acceptance criterion ("exploite correctement un
+  /* UI specification Sec.25's own acceptance criterion ("exploite correctement un
      écran 2560x1440") -- 900px left most of a wide/ultrawide screen as
      dead space next to the inspector panel. 1400px keeps the radar chart
      from stretching to an unreadable width while letting the history/

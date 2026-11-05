@@ -24,7 +24,7 @@ export const DB_SECTIONS: NavSection[] = [
 ];
 
 /**
- * FABLE Sec.9's own list plus Brief IV's four additions (WEATHER, SCHOOLS,
+ * UI specification Sec.9's own list plus Brief IV's four additions (WEATHER, SCHOOLS,
  * COUNCILS, DREAMS), in the order specified for this item.
  */
 export const NAV_SECTIONS: NavSection[] = [
@@ -52,7 +52,7 @@ export const ALL_SECTIONS: NavSection[] = [...DB_SECTIONS, ...NAV_SECTIONS];
 export type NavVisibility = "visible" | "experimental" | "hidden";
 
 /**
- * present -> visible; partial -> shown but marked experimental (FABLE Sec.9:
+ * present -> visible; partial -> shown but marked experimental (UI specification Sec.9:
  * "masquées ou marquées expérimentales"); absent -> hidden; capabilities not
  * loaded yet, or no capabilityKey at all -> visible (nothing to gate on).
  */

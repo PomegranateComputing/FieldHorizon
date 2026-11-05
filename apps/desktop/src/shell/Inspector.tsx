@@ -5,7 +5,7 @@ import { getSchoolMembers, getSourceChunks, getSourceDetail } from "../api/clien
 import { useInspectorSelection } from "./InspectorContext";
 
 /**
- * FABLE Sec.9's right inspector: metadata, properties, node detail, scores,
+ * UI specification Sec.9's right inspector: metadata, properties, node detail, scores,
  * source, tags, relations, secondary actions -- contextual to whatever's
  * selected in the center workspace (Phase UI-4 item 2: CORPUS is the first
  * screen to select something). "Provenance" is deliberately not shown here:

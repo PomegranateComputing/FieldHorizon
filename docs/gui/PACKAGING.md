@@ -1,6 +1,6 @@
 # Packaging (Phase UI-7)
 
-Linux first (FABLE §22). See `docs/gui/PACKAGING_MODEL.md` for the full
+Linux first (UI specification §22). See `docs/gui/PACKAGING_MODEL.md` for the full
 narrative — why the bundle targets were narrowed, the exact live
 verification performed, and the reasoning behind the external-backend
 architecture. This doc is the concise "how to build it, what you get."
@@ -38,7 +38,7 @@ Python, Ollama, any model weights, the `fieldhorizon` package, or a
 database. The backend is managed as an **external** process — the
 built app spawns a real Python + Field Horizon checkout the user already
 has (`src-tauri/src/backend.rs`'s `launch_backend`), never a compiled-in
-sidecar. This is a deliberate architectural choice (FABLE offers "sidecar
+sidecar. This is a deliberate architectural choice (UI specification offers "sidecar
 or external" as an either/or), not a gap — see `PACKAGING_MODEL.md` for
 why turning the Python backend into an actual frozen sidecar binary would
 be a materially larger, different undertaking.

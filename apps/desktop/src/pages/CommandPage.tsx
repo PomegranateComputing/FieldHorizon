@@ -20,13 +20,13 @@ import { useEventStreamContext } from "../shell/EventStreamContext";
 import "./CommandPage.css";
 
 /**
- * FABLE Sec.10.2. Two of the field list's tiles are deliberately absent, not
+ * UI specification Sec.10.2. Two of the field list's tiles are deliberately absent, not
  * omitted by oversight: "files d'exécution" (execution queues) has no real
  * backing -- the engine serializes /cycle behind a single lock, not a queue,
  * so this shows busy/idle instead of a fabricated depth. "Liens sémantiques"
  * has no referent anywhere in the codebase at all (provenance_edges is
  * lineage, not a similarity graph) -- inventing a count for it would be
- * exactly the kind of fake facade FABLE Sec.3.2 forbids, so it's not here.
+ * exactly the kind of fake facade UI specification Sec.3.2 forbids, so it's not here.
  */
 const FAILURE_EVENT_TYPES = ["CycleFailed", "CouncilFailed", "DreamFailed"];
 

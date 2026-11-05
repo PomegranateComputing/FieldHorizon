@@ -182,7 +182,7 @@ class SemanticNode:
 
 
 def top_semantic_nodes(cfg: AppConfig, kind: str, limit: int = 20) -> list[SemanticNode]:
-    """Most-frequent nodes of one kind -- a real, bounded starting point for exploration (FABLE Sec.10.8: never dump the whole graph)."""
+    """Most-frequent nodes of one kind -- a real, bounded starting point for exploration (UI specification Sec.10.8: never dump the whole graph)."""
     table, column = _TABLE_FOR_KIND[kind]
     with connect(cfg.database) as conn:
         rows = conn.execute(
@@ -211,7 +211,7 @@ def semantic_neighbors(cfg: AppConfig, kind: str, label: str, limit: int = 15) -
     """
     Co-occurrence neighborhood: every OTHER concept/entity/motif tagged on
     a chunk this node is also tagged on, ranked by shared chunk count.
-    Progressive expansion (FABLE Sec.10.8) -- one node's real neighbors at
+    Progressive expansion (UI specification Sec.10.8) -- one node's real neighbors at
     a time, never the whole graph; total_neighbor_count reports the true
     count even when the returned list is capped, so the UI can show an
     honest "showing N of M" density warning instead of silently truncating.

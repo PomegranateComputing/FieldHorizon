@@ -1,4 +1,4 @@
-//! Managed-backend controls (FABLE Sec.8.4, Sec.14).
+//! Managed-backend controls (UI specification Sec.8.4, Sec.14).
 //!
 //! The frontend can never pass a raw shell string here -- every field is a
 //! discrete argument threaded straight into `std::process::Command`, which

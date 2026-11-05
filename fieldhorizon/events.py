@@ -70,7 +70,7 @@ EVT_DREAM_FAILED = "DreamFailed"
 # Ontology proposal review (fieldhorizon.proposals, Implementation Brief IV
 # Phase UI-6 item 1). Apply and reject are this app's two clearest
 # destructive actions (apply merges into ontology.yaml and git-commits;
-# reject removes a proposal from the pending queue) -- FABLE Sec.14 requires
+# reject removes a proposal from the pending queue) -- UI specification Sec.14 requires
 # both confirmed AND event-logged; neither emitted anything before this.
 EVT_PROPOSAL_APPLIED = "ProposalApplied"
 EVT_PROPOSAL_REJECTED = "ProposalRejected"

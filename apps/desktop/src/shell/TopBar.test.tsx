@@ -30,7 +30,7 @@ describe("TopBar i18n switch", () => {
     await i18n.changeLanguage("fr");
   });
 
-  it("renders French labels by default (FABLE Sec.7: French is the recommended initial language)", async () => {
+  it("renders French labels by default (UI specification Sec.7: French is the recommended initial language)", async () => {
     await i18n.changeLanguage("fr");
     render(<TopBar onOpenPalette={() => {}} onOpenSearch={() => {}} />);
     expect(screen.getByText(/bdd/i)).toBeInTheDocument();

@@ -29,7 +29,7 @@ export interface ManagedBackendConfig {
 }
 
 /**
- * Spawn/stop/detect a backend process this app itself launched (FABLE
+ * Spawn/stop/detect a backend process this app itself launched (UI specification
  * Sec.8.4). Only present on the Tauri adapter -- a browser tab cannot spawn
  * a local process, so the web adapter's `backend` is always null.
  */

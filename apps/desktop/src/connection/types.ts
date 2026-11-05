@@ -7,7 +7,7 @@ export type StartupStepId =
   | "starting_event_channel"
   | "ready";
 
-/** FABLE Sec.10.1's own ordered list. */
+/** UI specification Sec.10.1's own ordered list. */
 export const STARTUP_STEP_ORDER: StartupStepId[] = [
   "locating_configuration",
   "opening_database",

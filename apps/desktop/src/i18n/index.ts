@@ -20,7 +20,7 @@ function initialLanguage(): SupportedLanguage {
   if (isSupportedLanguage(stored)) {
     return stored;
   }
-  // FABLE Sec.7: French is the recommended initial language. Engine
+  // UI specification Sec.7: French is the recommended initial language. Engine
   // vocabulary (CANON, HERESY, nav section names like COMMAND/CORPUS, ...)
   // is never translated -- it's the app's own vocabulary, not UI chrome.
   return "fr";

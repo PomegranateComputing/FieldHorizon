@@ -3481,7 +3481,7 @@
         "type": "object"
       },
       "MultiCycleRequest": {
-        "description": "Only the parameters run_multi_cycle really accepts (Phase UI-4 item 4's\nCYCLES launcher: \"expose only parameters the engine really accepts\") --\nFABLE Sec.10.6's fuller field list (workspace, planner mode, context\nbudget, seed, tags, notes, ...) has no real backing anywhere in this\nengine and is not represented here.",
+        "description": "Only the parameters run_multi_cycle really accepts (Phase UI-4 item 4's\nCYCLES launcher: \"expose only parameters the engine really accepts\") --\nUI specification Sec.10.6's fuller field list (workspace, planner mode, context\nbudget, seed, tags, notes, ...) has no real backing anywhere in this\nengine and is not represented here.",
         "properties": {
           "agent_model": {
             "anyOf": [
@@ -7453,7 +7453,7 @@
     },
     "/proposals/{number}/apply": {
       "post": {
-        "description": "Merges the proposal into ontology.yaml, parity-checks, and\ngit-commits (proposals.apply_proposal) -- never call this without\nthe frontend's own explicit confirmation step (FABLE Sec.10.6:\n\"apply requires explicit confirmation and shows the parity-check\nresult. Never auto-apply.\"). A parity failure's full pytest output\nis preserved in the error detail, not summarized away.",
+        "description": "Merges the proposal into ontology.yaml, parity-checks, and\ngit-commits (proposals.apply_proposal) -- never call this without\nthe frontend's own explicit confirmation step (UI specification Sec.10.6:\n\"apply requires explicit confirmation and shows the parity-check\nresult. Never auto-apply.\"). A parity failure's full pytest output\nis preserved in the error detail, not summarized away.",
         "operationId": "post_apply_proposal_proposals__number__apply_post",
         "parameters": [
           {

@@ -6,7 +6,7 @@ the result of building it.
 
 ## The one non-negotiable: no second engine
 
-FABLE's and the user's own standing instruction was explicit: do not create
+UI specification's and the user's own standing instruction was explicit: do not create
 a second FastAPI layer or a second event system. Every route in
 `fieldhorizon/server.py` is a thin wrapper over the exact same
 `FieldHorizonEngine` facade (`fieldhorizon/engine.py`) the CLI
@@ -91,7 +91,7 @@ target directly.
   hidden, `partial` → shown with an "EXP" badge, everything else →
   visible) all derive from the same array, so they can't drift apart.
 * **i18n**: `react-i18next`, French and English, French is the documented
-  default (FABLE §7). Every user-facing string in every screen goes
+  default (UI specification §7). Every user-facing string in every screen goes
   through `t()` — confirmed screen-by-screen during this session's
   Playwright verification passes, which always ran a French-default check
   and an English-switch check.

@@ -14,7 +14,7 @@ function basename(path: string): string {
   return parts[parts.length - 1] || path;
 }
 
-/** FABLE Sec.9's top bar: workspace name, backend state, active database, active model, planner mode, active cycles, language, command-palette/global-search access. */
+/** UI specification Sec.9's top bar: workspace name, backend state, active database, active model, planner mode, active cycles, language, command-palette/global-search access. */
 export function TopBar({ onOpenPalette, onOpenSearch }: { onOpenPalette: () => void; onOpenSearch: () => void }) {
   const { t, i18n } = useTranslation();
   const health = useHealth();

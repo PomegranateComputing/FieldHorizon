@@ -1,23 +1,15 @@
-# FABLE MASTER PROMPT
+# Command Interface — Product and engineering specification
 
 ## FIELD HORIZON // COMMAND INTERFACE
 
 ### Client léger local, interface graphique complète et centre de contrôle épistémique
 
-Tu interviens comme :
+Cette spécification couvre l’architecture Python/FastAPI et Rust/Tauri, le client
+React/TypeScript, la conception des interfaces, la visualisation, la qualité,
+le packaging et la documentation.
 
-* architecte logiciel principal ;
-* ingénieur Python senior ;
-* ingénieur Rust/Tauri ;
-* développeur React/TypeScript senior ;
-* product designer spécialisé dans les interfaces denses ;
-* ingénieur UX pour outils scientifiques et techniques ;
-* spécialiste de visualisation de graphes ;
-* responsable QA, packaging et documentation.
-
-Ta mission n'est pas de produire une maquette décorative.
-
-Tu dois **auditer, concevoir, implémenter, tester, documenter et livrer un véritable client graphique opérationnel pour Field Horizon**, exploitant autant que possible toutes les capacités réellement présentes dans le projet.
+Elle définit les exigences d’un client graphique opérationnel exploitant les
+capacités réellement présentes dans Field Horizon.
 
 Le logiciel doit être utilisable quotidiennement comme centre de contrôle de Field Horizon.
 
@@ -326,7 +318,6 @@ Elle ne doit pas ressembler à :
 * un dashboard de cryptomonnaie ;
 * une copie de Discord ;
 * une copie de Notion ;
-* une copie de ChatGPT ;
 * une interface « glassmorphism » ;
 * un produit SaaS générique ;
 * une accumulation de cartes arrondies ;
@@ -1790,7 +1781,7 @@ Il doit être :
 * technique sans être stérile ;
 * inquiétant sans devenir adolescent ;
 * littéraire sans sacrifier la précision ;
-* moderne sans ressembler à tous les produits IA de l'année ;
+* moderne, avec une identité visuelle propre ;
 * parfaitement cohérent avec Pomegranate Interactive.
 
 La première impression doit être :
@@ -1871,9 +1862,7 @@ Procéder dans cet ordre.
 * limitations restantes ;
 * commits propres.
 
-Ne t'arrête pas après avoir produit une architecture ou un squelette.
-
-Continue jusqu'à obtenir une application réellement lançable.
+Chaque phase doit aboutir à des fonctionnalités vérifiables ; la livraison comprend une application réellement lançable.
 
 ---
 
@@ -1991,15 +1980,9 @@ Ne jamais annoncer « production ready » si les critères ne sont pas satisfait
 
 ---
 
-# 31. DERNIÈRE DIRECTIVE
+# 31. CRITÈRES DE LIVRAISON
 
-Ne construis pas une peau graphique autour d'un terminal.
-
-Ne construis pas un chatbot.
-
-Ne construis pas un prototype jetable.
-
-Construis le **poste de commandement complet de Field Horizon** :
+Le client constitue le **poste de commandement complet de Field Horizon** :
 
 * un lieu où les corpus deviennent navigables ;
 * où les cycles deviennent observables ;
@@ -2011,4 +1994,4 @@ Construis le **poste de commandement complet de Field Horizon** :
 
 Le résultat doit pouvoir devenir l'une des pièces centrales de Pomegranate Interactive.
 
-Commence immédiatement par l'audit réel du dépôt et du site, puis poursuis l'implémentation jusqu'à obtenir un client fonctionnel, testé, documenté et lançable.
+La livraison s'appuie sur l'audit du dépôt et du site et fournit un client fonctionnel, testé, documenté et lançable.

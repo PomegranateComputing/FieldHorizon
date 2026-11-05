@@ -9,9 +9,9 @@ import { useEventStreamContext } from "../shell/EventStreamContext";
 import "./CyclesPage.css";
 
 /**
- * FABLE Sec.10.6/10.7. The launcher exposes only parameters run_multi_cycle
+ * UI specification Sec.10.6/10.7. The launcher exposes only parameters run_multi_cycle
  * really accepts -- workspace/planner-mode/context-budget/seed/tags/notes
- * from FABLE's own field list have no real backing anywhere in this engine
+ * from UI specification's own field list have no real backing anywhere in this engine
  * and are not here. No Pause button: cycles run synchronously end to end,
  * the backend has no suspend mechanism at all.
  */

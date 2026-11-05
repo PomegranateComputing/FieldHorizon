@@ -6,7 +6,7 @@ const CANNOT_REACH_BACKEND_REMEDIATION_KEY = "startup.cannotReachBackend";
 
 /**
  * Maps the real, already-computed GET /health and GET /capabilities results
- * onto FABLE Sec.10.1's ordered startup narrative -- not a fake progress bar,
+ * onto UI specification Sec.10.1's ordered startup narrative -- not a fake progress bar,
  * an honest re-presentation of the same checks the backend already runs on
  * every request. Nothing here is invented: if a step's real signal doesn't
  * exist yet (no response), it stays "pending", never a fabricated "ok".
@@ -44,7 +44,7 @@ export function deriveStartupSteps(
     {
       id: "checking_schema",
       // "degraded" here means an old-but-usable schema (a migration is
-      // needed, not that anything is broken) -- FABLE Sec.8.4's "signaler
+      // needed, not that anything is broken) -- UI specification Sec.8.4's "signaler
       // les migrations nécessaires," surfaced via detail rather than
       // blocking startup outright.
       status: schemaFailed ? "error" : schemaDegraded ? "degraded" : "ok",

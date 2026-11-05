@@ -21,7 +21,7 @@ import type {
 } from "../api/types";
 
 /**
- * FABLE Sec.18's reproducible cycle bundle. Every section below maps to
+ * UI specification Sec.18's reproducible cycle bundle. Every section below maps to
  * something genuinely stored or computable for a real cycle.
  *
  * `evaluation` keeps three things apart (GET /cycles/{id}/evaluation):

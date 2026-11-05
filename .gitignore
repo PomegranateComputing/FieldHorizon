@@ -65,3 +65,7 @@ data/manifestos/_auto/
 # Local qualification workspaces (venvs, isolated databases, tokens, evidence).
 # Reports worth keeping are copied into docs/.
 _qualification/
+
+# Reproducible source snapshots and editor backup configurations
+FieldHorizon_ARCHITECTURE_REVIEW_*.txt
+*.before-*

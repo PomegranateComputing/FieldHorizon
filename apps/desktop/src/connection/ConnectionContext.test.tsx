@@ -24,7 +24,7 @@ describe("ConnectionContext's real poll/backoff state machine (Phase UI-6 item 4
     getCapabilitiesMock.mockResolvedValue(OK_CAPABILITIES);
     // First poll succeeds (real connection established), second poll fails
     // (the backend process died), third poll succeeds again (it was
-    // restarted) -- exactly FABLE's "backend killed mid-cycle... reconnects."
+    // restarted) -- exactly UI specification's "backend killed mid-cycle... reconnects."
     getHealthMock
       .mockResolvedValueOnce(OK_HEALTH)
       .mockRejectedValueOnce(new ApiError(0, "FH_UNREACHABLE", "backend unreachable"))

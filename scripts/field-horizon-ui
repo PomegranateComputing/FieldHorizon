@@ -6,7 +6,7 @@ set -m # job control: each backgrounded job below gets its own process group,
        # npm's dev-server child ends up reparented away from npm almost
        # immediately, so killing by PID alone leaves it running orphaned.
 
-# Dev mode (FABLE Sec.21): backend + frontend + streamed logs, from the repo
+# Dev mode (UI specification Sec.21): backend + frontend + streamed logs, from the repo
 # root, with real prerequisite checks and clean process teardown -- never a
 # destructive install, never leaving an orphaned child behind.
 

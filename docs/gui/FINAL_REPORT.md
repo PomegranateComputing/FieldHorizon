@@ -1,7 +1,7 @@
 # Final Report — Field Horizon // Command Interface (Phase UI-7)
 
 Implementation Brief IV, branch `feature/field-horizon-command-interface`.
-Per FABLE §30.
+Per UI specification §30.
 
 ## Résumé
 
@@ -126,7 +126,7 @@ COUNCILS, DREAMS, PROVENANCE, CONTRADICTIONS, EVALUATION, MODELS, SYSTEM,
 SETTINGS), taken against the real development database, English UI, this
 session.
 
-## Acceptance criteria (FABLE §25), walked explicitly
+## Acceptance criteria (UI specification §25), walked explicitly
 
 | # | Criterion | Status | Evidence |
 |---|---|---|---|
@@ -166,7 +166,7 @@ checks described," not as a guarantee beyond what those checks cover.
 
 * **EMERGENCE MONITOR** was not built — no real Basilisk/emergence/
   anomaly/recursion/attractor detection logic exists in the repository to
-  visualize (FABLE §19's own conditional). `EMERGENCE_MONITOR_SPEC.md`
+  visualize (UI specification §19's own conditional). `EMERGENCE_MONITOR_SPEC.md`
   documents detection criteria for if that logic is ever added.
 * **Global search** doesn't cover semantic profiles or settings/params —
   no searchable data model exists for either.

@@ -16,7 +16,7 @@ type Tab = "sources" | "manifest" | "ingest";
 const SOURCES_PAGE_SIZE = 200;
 const SEARCH_DEBOUNCE_MS = 300;
 
-/** Delays the effective query key until typing pauses (FABLE Sec.15's debounce requirement) -- a live per-keystroke search against the server would otherwise fire one request per character. */
+/** Delays the effective query key until typing pauses (UI specification Sec.15's debounce requirement) -- a live per-keystroke search against the server would otherwise fire one request per character. */
 function useDebouncedValue<T>(value: T, delayMs: number): T {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
@@ -34,7 +34,7 @@ function SourcesTab() {
   const [sortKey, setSortKey] = useState<SortKey>("title");
   const parentRef = useRef<HTMLDivElement>(null);
 
-  // Server-paginated and server-searched (FABLE Sec.15: "ne pas transférer
+  // Server-paginated and server-searched (UI specification Sec.15: "ne pas transférer
   // l'intégralité de la base au frontend pour afficher un tableau") -- a
   // corpus of thousands of sources loads page by page, not in one response.
   // signal comes from TanStack Query's own AbortController, so a debounced

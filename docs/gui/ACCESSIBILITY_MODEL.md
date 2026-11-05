@@ -1,6 +1,6 @@
 # Accessibility Model (Phase UI-6 item 3)
 
-FABLE §16's requirements, audited against the real app before anything was
+UI specification §16's requirements, audited against the real app before anything was
 changed: keyboard navigation, visible focus, sufficient contrast,
 `prefers-reduced-motion`, and status never conveyed by color alone.
 

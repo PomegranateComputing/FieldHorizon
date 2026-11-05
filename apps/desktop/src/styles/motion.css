@@ -1,5 +1,5 @@
 /**
- * Motion explains a state change (FABLE Sec.6.5) -- nothing here is
+ * Motion explains a state change (UI specification Sec.6.5) -- nothing here is
  * decorative-only. Ported from the real site's own idiom (styles.css:287,
  * 495-501, 542-545): progressive reveal, a pulsing liveness dot, and a
  * global prefers-reduced-motion guard the site already honors.
@@ -35,7 +35,7 @@
 
 /**
  * A subtle status-change flash for the console/inspector when a contradiction
- * surfaces -- FABLE Sec.6.5's "changement subtil lors d'une contradiction,"
+ * surfaces -- UI specification Sec.6.5's "changement subtil lors d'une contradiction,"
  * not a permanent effect: it runs once and settles.
  */
 @keyframes contradiction-flash {
